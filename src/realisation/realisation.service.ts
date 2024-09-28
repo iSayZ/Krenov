@@ -11,6 +11,7 @@ export class RealisationsService {
   async create(createRealisationDto: CreateRealisationDto): Promise<Realisation> {
     const createdRealisation = new this.realisationModel(createRealisationDto); // Correction ici
     return createdRealisation.save(); // Utilisez la méthode save sur le modèle créé
+    
   }
 
   async findAll(): Promise<Realisation[]> {
@@ -19,9 +20,11 @@ export class RealisationsService {
 
   async findOne(id: string): Promise<Realisation | null> {
     const realisation = await this.realisationModel.findById(id).exec(); // Utilisez 'realisationModel'
+
     if (!realisation) {
         throw new NotFoundException(`Realisation with ID ${id} not found`);
     }
+
     return realisation;
   }
 
@@ -37,5 +40,15 @@ export class RealisationsService {
     }
   
     return updatedRealisation;
+  }
+
+  async deleteRealisation(id: string): Promise<{message: string}> {
+    const result = await this.realisationModel.deleteOne({ _id: id }).exec();
+    
+    if (result.deletedCount === 0) {
+      throw new NotFoundException(`Réalisation avec ID ${id} non trouvée`);
+    }
+
+    return { message: `Réalisation avec ID ${id} supprimée avec succès` };
   }
 }

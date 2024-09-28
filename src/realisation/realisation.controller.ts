@@ -1,8 +1,8 @@
-import { Controller, Get, Post, Body, UseInterceptors, UploadedFiles, Param, } from '@nestjs/common'; // Importation des décorateurs nécessaires
+import { Controller, Get, Post, Delete, Body, UseInterceptors, UploadedFiles, Param, } from '@nestjs/common'; // Importation des décorateurs nécessaires
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { RealisationsService } from './realisation.service';
 import { CreateRealisationDto } from './dto/create-realisation.dto';
-import { FindOneParams } from './dto/find-one-params.dto';
+import { FindOneParams } from '../common/dto/find-one-params.dto';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 
@@ -21,7 +21,7 @@ export class RealisationsController {
   // Constructeur pour injecter le service des realisations
   constructor(private readonly realisationsService: RealisationsService) {}
 
-  @Post('upload')
+  @Post()
   @UseInterceptors(FilesInterceptor('images', 10, { storage })) // Utilise le champ 'images' pour l'upload
   async create(@UploadedFiles() files: Express.Multer.File[], @Body() createRealisationDto: CreateRealisationDto) {
     const imageUrls = files.map(file => `/${file.filename}`); // Gérer le chemin des fichiers
@@ -40,5 +40,10 @@ export class RealisationsController {
   @Get(':id')
   async findOne(@Param() params: FindOneParams) {
     return this.realisationsService.findOne(params.id);
+  }
+
+  @Delete(':id')
+  async deleteRealisation(@Param() params: FindOneParams) {
+    return this.realisationsService.deleteRealisation(params.id);
   }
 }
