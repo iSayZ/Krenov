@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Delete, Body, UseInterceptors, UploadedFiles, Param, } from '@nestjs/common'; // Importation des décorateurs nécessaires
+import { Controller, Get, Post, Delete, Put, Body, UseInterceptors, UploadedFiles, Param, } from '@nestjs/common'; // Importation des décorateurs nécessaires
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { RealisationsService } from './realisation.service';
 import { CreateRealisationDto } from './dto/create-realisation.dto';
+import { UpdateRealisationDto } from './dto/update-realisation.dto';
 import { FindOneParams } from '../common/dto/find-one-params.dto';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
@@ -13,7 +14,7 @@ const storage = diskStorage({
       const uniqueSuffix = Date.now() + '-' + Math.random().toString(36).substring(2, 15);
       cb(null, `${uniqueSuffix}${extname(file.originalname)}`); // Enregistre le fichier avec un nom unique
     },
-  });
+});
 
 // Déclaration du contrôleur avec un chemin de base 'realisations'
 @Controller('realisations') 
@@ -24,6 +25,7 @@ export class RealisationsController {
   @Post()
   @UseInterceptors(FilesInterceptor('images', 10, { storage })) // Utilise le champ 'images' pour l'upload
   async create(@UploadedFiles() files: Express.Multer.File[], @Body() createRealisationDto: CreateRealisationDto) {
+    
     const imageUrls = files.map(file => `/${file.filename}`); // Gérer le chemin des fichiers
     // Ajoutez les URLs au DTO
     createRealisationDto.imageUrls = imageUrls;
@@ -40,6 +42,15 @@ export class RealisationsController {
   @Get(':id')
   async findOne(@Param() params: FindOneParams) {
     return this.realisationsService.findOne(params.id);
+  }
+
+  @Put(':id')
+  @UseInterceptors(FilesInterceptor('images', 10, { storage })) // Utilise le champ 'images' pour l'upload
+  async updateRealisation(@UploadedFiles() files: Express.Multer.File[], @Body() updateRealisationDto: UpdateRealisationDto, @Param() params: FindOneParams) {
+
+    const imageUrls = files.map(file => `/${file.filename}`); // Gérer le chemin des fichiers
+    updateRealisationDto.imageUrls = imageUrls;
+    return this.realisationsService.updateRealisation(params.id, updateRealisationDto);
   }
 
   @Delete(':id')

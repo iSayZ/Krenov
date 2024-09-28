@@ -5,16 +5,16 @@ export type RealisationDocument = Realisation & Document;
 
 @Schema()
 export class Realisation {
-  @Prop({ required: true })
+  @Prop({ type: String, required: true })
   title: string;
 
-  @Prop({ required: true })
+  @Prop({ type: String, required: true })
   content: string;
 
-  @Prop({ type: [String] })
-  images: string[];
+  @Prop({ type: [String], required: false })
+  imageUrls: string[];
 
-  @Prop()
+  @Prop({ type: Date, required: true, default: Date.now })
   date: Date;
 }
 

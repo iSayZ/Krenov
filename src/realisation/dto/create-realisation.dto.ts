@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsArray, IsDateString, IsOptional } from 'class-validator';
+import { IsString, IsNotEmpty, IsArray, IsOptional } from 'class-validator';
 
 export class CreateRealisationDto {
     @IsString()
@@ -13,8 +13,4 @@ export class CreateRealisationDto {
     @IsString({ each: true })
     @IsOptional()
     imageUrls: string[];
-
-    @IsDateString()
-    @IsNotEmpty()
-    date: Date;
   }
