@@ -9,12 +9,14 @@ import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    // Load envFile
     ConfigModule.forRoot({
       envFilePath: '.env',
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public', 'uploads'), // URL = localhost:3000/img.png
+      rootPath: join(__dirname, '..', 'public', 'uploads'), // URL to load an image = localhost:PORT/filename.png
     }),
+    // Connect to MongoDB
     MongooseModule.forRoot(process.env.MONGODB_URI),
     RealisationsModule
   ],

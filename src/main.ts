@@ -5,12 +5,12 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const port = process.env.PORT || 3000;
-  // Activer le Validation Pipe globalement
+  const port = process.env.PORT || 3310;
+  // Enable global Validation Pipe
   app.useGlobalPipes(new ValidationPipe({
-    whitelist: true, // Supprime les propriétés non définies dans le DTO
-    forbidNonWhitelisted: true, // Lance une erreur si des propriétés non définies sont présentes
-    transform: true, // Transforme automatiquement les payloads en instances de DTO
+    whitelist: true, // Removes properties not defined in the DTO
+    forbidNonWhitelisted: true, // Throws an error if non-defined properties are present
+    transform: true, // Automatically transforms payloads into DTO instances
   }));
   
   await app.listen(port);
