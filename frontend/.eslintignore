@@ -1,0 +1,27 @@
+# Ignorer les dossiers de dépendances
+node_modules/
+
+# Ignorer les dossiers de build et de sortie
+.next/
+out/
+dist/
+build/
+
+# Ignorer les fichiers de configuration et scripts
+*.config.js
+*.config.ts
+*.spec.ts
+*.test.ts
+*.spec.tsx
+*.test.tsx
+
+# Ignorer les fichiers générés automatiquement
+coverage/
+public/
+static/
+
+# Ignorer les fichiers de type declaration
+*.d.ts
+
+# Ignorer les fichiers d'environnement
+.env*

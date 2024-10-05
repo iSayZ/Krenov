@@ -1,3 +1,39 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "next/core-web-vitals",
+    "plugin:tailwindcss/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "parser": "@typescript-eslint/parser", // Utilisation du parser TypeScript pour ESLint
+  "parserOptions": {
+    "ecmaVersion": 12,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true // Support JSX pour React
+    }
+  },
+  "plugins": [
+    "react", // Plugin React
+    "@typescript-eslint", // Plugin TypeScript pour ESLint
+    "tailwindcss" // Plugin pour vérifier les classes Tailwind
+  ],
+  "rules": {
+    // Règles spécifiques de TailwindCSS
+    "tailwindcss/classnames-order": "warn", // Avertissement pour l'ordre des classes Tailwind
+    "tailwindcss/no-custom-classname": "off", // Désactiver la règle qui interdit les classes CSS personnalisées
+    // Autres règles possibles à ajuster
+    "@typescript-eslint/no-unused-vars": "warn", // Avertissement sur les variables inutilisées
+    "react/react-in-jsx-scope": "off", // Désactiver l'import obligatoire de React (Next.js le fait automatiquement)
+    "react/prop-types": "off", // Désactiver les PropTypes (vu qu'on utilise TypeScript)
+    "no-mixed-spaces-and-tabs": "off", // Désactiver si Prettier gère
+    "@typescript-eslint/no-require-imports": "error",
+    "prettier/prettier": "error"
+  }
 }

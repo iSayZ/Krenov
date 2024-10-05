@@ -7,13 +7,16 @@ import { UpdateRealisationDto } from './dto/update-realisation.dto';
 import { promises as fs } from 'fs';
 import { join } from 'path';
 
-@Injectable() 
+@Injectable()
 export class RealisationsService {
-  constructor(@InjectModel(Realisation.name) private realisationModel: Model<RealisationDocument>) {}
+  constructor(
+    @InjectModel(Realisation.name)
+    private realisationModel: Model<RealisationDocument>
+  ) {}
 
   private async deleteImage(imageUrl: string): Promise<void> {
     const filePath = join(__dirname, '..', '..', 'public', 'uploads', imageUrl); // Complete path of the image
-    
+
     try {
       // Check if the file exists before attempting to delete it
       await fs.access(filePath);
@@ -22,7 +25,9 @@ export class RealisationsService {
     } catch (err) {
       // If the file does not exist, return an error
       if (err.code === 'ENOENT') {
-        console.warn(`File ${imageUrl} not found, it may have already been deleted`);
+        console.warn(
+          `File ${imageUrl} not found, it may have already been deleted`
+        );
         return;
       }
       // Handle other potential errors
@@ -31,10 +36,11 @@ export class RealisationsService {
     }
   }
 
-  async create(createRealisationDto: CreateRealisationDto): Promise<Realisation> {
+  async create(
+    createRealisationDto: CreateRealisationDto
+  ): Promise<Realisation> {
     const createdRealisation = new this.realisationModel(createRealisationDto);
     return createdRealisation.save();
-
   }
 
   async findAll(): Promise<Realisation[]> {
@@ -45,57 +51,71 @@ export class RealisationsService {
     const realisation = await this.realisationModel.findById(id).exec();
 
     if (!realisation) {
-        throw new NotFoundException(`Realisation with ID ${id} not found`);
+      throw new NotFoundException(`Realisation with ID ${id} not found`);
     }
 
     return realisation;
   }
 
-  async updateRealisation(id: string, updateRealisationDto: UpdateRealisationDto): Promise<Realisation | null> {
+  async updateRealisation(
+    id: string,
+    updateRealisationDto: UpdateRealisationDto
+  ): Promise<Realisation | null> {
     // Get the realisation to update
     const realisation = await this.realisationModel.findById(id).exec();
-    
+
     if (!realisation) {
       throw new NotFoundException(`Réalisation avec ID ${id} non trouvée`);
     }
 
     // Delete the image if there is an image to delete
     if (updateRealisationDto.imagesToDelete) {
-      await Promise.all(updateRealisationDto.imagesToDelete.map((imageUrl) => this.deleteImage(imageUrl)));
-      realisation.imageUrls = realisation.imageUrls.filter(image => !updateRealisationDto.imagesToDelete.includes(image));
+      await Promise.all(
+        updateRealisationDto.imagesToDelete.map((imageUrl) =>
+          this.deleteImage(imageUrl)
+        )
+      );
+      realisation.imageUrls = realisation.imageUrls.filter(
+        (image) => !updateRealisationDto.imagesToDelete.includes(image)
+      );
     }
 
     // Add the new image uploaded
-    updateRealisationDto.imageUrls = [...realisation.imageUrls, ...updateRealisationDto.imageUrls]
+    updateRealisationDto.imageUrls = [
+      ...realisation.imageUrls,
+      ...updateRealisationDto.imageUrls,
+    ];
 
-    const updatedRealisation = await this.realisationModel.findByIdAndUpdate(
-      id,
-      updateRealisationDto,
-      { new: true }
-    ).exec();
-  
+    const updatedRealisation = await this.realisationModel
+      .findByIdAndUpdate(id, updateRealisationDto, { new: true })
+      .exec();
+
     if (!updatedRealisation) {
       throw new Error(`Réalisation avec ID ${id} non trouvée`);
     }
-  
+
     return updatedRealisation;
   }
 
-  async deleteRealisation(id: string): Promise<{message: string}> {
+  async deleteRealisation(id: string): Promise<{ message: string }> {
     // Get the realisation to delete
     const realisation = await this.realisationModel.findById(id).exec();
-    
+
     if (!realisation) {
       throw new NotFoundException(`Réalisation avec ID ${id} non trouvée`);
     }
 
     // Delete all images before deleting the realisation
-    await Promise.all(realisation.imageUrls.map((imageUrl) => this.deleteImage(imageUrl)));
+    await Promise.all(
+      realisation.imageUrls.map((imageUrl) => this.deleteImage(imageUrl))
+    );
 
     const result = await this.realisationModel.deleteOne({ _id: id }).exec();
-    
+
     if (result.deletedCount === 0) {
-      throw new NotFoundException(`Réalisation avec ID ${id} non trouvée lors de la suppression`);
+      throw new NotFoundException(
+        `Réalisation avec ID ${id} non trouvée lors de la suppression`
+      );
     }
 
     return { message: `Réalisation avec ID ${id} supprimée avec succès` };

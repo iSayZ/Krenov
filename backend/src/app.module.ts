@@ -18,10 +18,9 @@ import { ConfigModule } from '@nestjs/config';
     }),
     // Connect to MongoDB
     MongooseModule.forRoot(process.env.MONGODB_URI),
-    RealisationsModule
+    RealisationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-
 export class AppModule {}

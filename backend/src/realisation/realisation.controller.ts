@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Delete, Put, Body, UseInterceptors, UploadedFiles, Param, } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Delete,
+  Put,
+  Body,
+  UseInterceptors,
+  UploadedFiles,
+  Param,
+} from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { RealisationsService } from './realisation.service';
 import { CreateRealisationDto } from './dto/create-realisation.dto';
@@ -9,29 +19,32 @@ import { extname } from 'path';
 
 // Storage config for multer
 const storage = diskStorage({
-    destination: './public/uploads',
-    filename: (req, file, cb) => {
-      const uniqueSuffix = Date.now() + '-' + Math.random().toString(36).substring(2, 15);
-      cb(null, `${uniqueSuffix}${extname(file.originalname)}`);
-    },
+  destination: './public/uploads',
+  filename: (req, file, cb) => {
+    const uniqueSuffix =
+      Date.now() + '-' + Math.random().toString(36).substring(2, 15);
+    cb(null, `${uniqueSuffix}${extname(file.originalname)}`);
+  },
 });
 
-@Controller('realisations') 
+@Controller('realisations')
 export class RealisationsController {
   constructor(private readonly realisationsService: RealisationsService) {}
 
   @Post()
   @UseInterceptors(FilesInterceptor('images', 10, { storage })) // Intercept images in the 'images' key
-  async create(@UploadedFiles() files: Express.Multer.File[], @Body() createRealisationDto: CreateRealisationDto) {
-    
-    const imageUrls = files.map(file => `/${file.filename}`);
+  async create(
+    @UploadedFiles() files: Express.Multer.File[],
+    @Body() createRealisationDto: CreateRealisationDto
+  ) {
+    const imageUrls = files.map((file) => `/${file.filename}`);
     createRealisationDto.imageUrls = imageUrls;
     return this.realisationsService.create(createRealisationDto);
   }
 
   @Get()
   async findAll() {
-    return this.realisationsService.findAll(); 
+    return this.realisationsService.findAll();
   }
 
   @Get(':id')
@@ -41,11 +54,17 @@ export class RealisationsController {
 
   @Put(':id')
   @UseInterceptors(FilesInterceptor('images', 10, { storage })) // Intercept images in the 'images' key
-  async updateRealisation(@UploadedFiles() files: Express.Multer.File[], @Body() updateRealisationDto: UpdateRealisationDto, @Param() params: FindOneParams) {
-
-    const imageUrls = files.map(file => `/${file.filename}`);
+  async updateRealisation(
+    @UploadedFiles() files: Express.Multer.File[],
+    @Body() updateRealisationDto: UpdateRealisationDto,
+    @Param() params: FindOneParams
+  ) {
+    const imageUrls = files.map((file) => `/${file.filename}`);
     updateRealisationDto.imageUrls = imageUrls;
-    return this.realisationsService.updateRealisation(params.id, updateRealisationDto);
+    return this.realisationsService.updateRealisation(
+      params.id,
+      updateRealisationDto
+    );
   }
 
   @Delete(':id')
