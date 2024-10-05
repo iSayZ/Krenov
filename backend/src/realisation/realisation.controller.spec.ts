@@ -45,7 +45,7 @@ describe('RealisationsController', () => {
         imageUrls: [],
       };
       mockRealisationsService.create.mockResolvedValue('new realisation');
-      
+
       const result = await controller.create([], dto);
       expect(service.create).toHaveBeenCalledWith(dto);
       expect(result).toEqual('new realisation');
@@ -57,7 +57,7 @@ describe('RealisationsController', () => {
     it('should return an array of realisations', async () => {
       const realisations = [{ title: 'Test Title' }];
       mockRealisationsService.findAll.mockResolvedValue(realisations);
-      
+
       const result = await controller.findAll();
       expect(result).toEqual(realisations);
       expect(service.findAll).toHaveBeenCalled();
@@ -83,12 +83,16 @@ describe('RealisationsController', () => {
         title: 'Updated Title',
         content: 'Updated Content',
         imageUrls: [],
-        imagesToDelete: []
+        imagesToDelete: [],
       };
       const updatedRealisation = { title: 'Updated Title' };
-      mockRealisationsService.updateRealisation.mockResolvedValue(updatedRealisation);
-      
-      const result = await controller.updateRealisation([], dto, { id: 'some-id' });
+      mockRealisationsService.updateRealisation.mockResolvedValue(
+        updatedRealisation
+      );
+
+      const result = await controller.updateRealisation([], dto, {
+        id: 'some-id',
+      });
       expect(service.updateRealisation).toHaveBeenCalledWith('some-id', dto);
       expect(result).toEqual(updatedRealisation);
     });
