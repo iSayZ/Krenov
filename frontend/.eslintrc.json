@@ -34,6 +34,37 @@
     "react/prop-types": "off", // Désactiver les PropTypes (vu qu'on utilise TypeScript)
     "no-mixed-spaces-and-tabs": "off", // Désactiver si Prettier gère
     "@typescript-eslint/no-require-imports": "error",
-    "prettier/prettier": "error"
+    "prettier/prettier": "error",
+    "react/no-unescaped-entities": "off",
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index",
+          "object",
+          "type"
+        ],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        },
+        "pathGroups": [
+          {
+            "pattern": "@/components/**",
+            "group": "internal",
+            "position": "before"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["builtin"]
+      }
+    ],
+    "import/no-duplicates": "error", // interdit les imports en double
+    "import/group-exports": "error" // groupe les exports par source
   }
 }
