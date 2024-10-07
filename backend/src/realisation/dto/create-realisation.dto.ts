@@ -1,6 +1,20 @@
-import { IsString, IsNotEmpty, IsArray, IsOptional } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsArray,
+  IsOptional,
+  IsNumber,
+} from 'class-validator';
 
 export class CreateRealisationDto {
+  @IsNumber()
+  @IsNotEmpty()
+  order: number;
+
+  @IsString()
+  @IsNotEmpty()
+  slug: string;
+
   @IsString()
   @IsNotEmpty()
   title: string;
@@ -13,4 +27,16 @@ export class CreateRealisationDto {
   @IsString({ each: true })
   @IsOptional()
   imageUrls: string[];
+
+  @IsArray()
+  @IsString({ each: true })
+  tags: string[];
+
+  @IsString()
+  @IsNotEmpty()
+  status: string;
+
+  @IsString()
+  @IsNotEmpty()
+  author: string;
 }

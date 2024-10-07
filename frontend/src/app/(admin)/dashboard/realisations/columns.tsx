@@ -3,12 +3,14 @@
 
 import { ColumnDef } from '@tanstack/react-table';
 import {
-  MoreHorizontal,
   Clipboard,
-  PencilLine,
-  Trash2,
   ExternalLink,
+  MoreHorizontal,
+  PencilLine,
+  Search,
+  Trash2,
 } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useRef } from 'react';
@@ -24,6 +26,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -31,13 +34,21 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuPortal,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
+import { deleteRealisation } from '@/api/realisationsApi';
+import { formatDateForUX } from '@/lib/dateUtils';
 import { Realisation } from '@/types/realisation.interface';
 
-export const columns: ColumnDef<Realisation>[] = [
+export const columns = (
+  onRealisationDeleted: (id: string) => void
+): ColumnDef<Realisation>[] => [
   {
     id: 'select',
     header: ({ table }) => (
@@ -61,16 +72,70 @@ export const columns: ColumnDef<Realisation>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: '_id',
-    header: 'ID',
+    id: 'header',
+    header: 'En-tête',
+    cell: ({ row }) => {
+      const realisation = row.original;
+      return (
+        <Link
+          href="https://www.nd-renov.fr/upload/Image/renovation-interieure.jpg"
+          target="_blank"
+          className="block w-[100px]"
+        >
+          <AspectRatio ratio={1 / 1}>
+            <Image
+              src="https://www.nd-renov.fr/upload/Image/renovation-interieure.jpg"
+              alt={`En-tête de la réalisation ${realisation._id}`}
+              fill
+              className="rounded-md object-cover shadow-lg"
+            />
+          </AspectRatio>
+        </Link>
+      );
+    },
+  },
+  {
+    accessorKey: 'slug',
+    header: 'Slug',
   },
   {
     accessorKey: 'title',
     header: 'Titre',
   },
   {
-    accessorKey: 'date',
-    header: 'Date de création',
+    accessorKey: 'updatedAt',
+    header: 'Dernière modification',
+    cell: ({ row }) => {
+      const date = row.original.updatedAt;
+      return formatDateForUX(date.toString());
+    },
+  },
+  {
+    accessorKey: 'status',
+    header: 'Statut',
+    cell: ({ row }) => {
+      const status = row.original.status;
+      switch (status) {
+        case 'active':
+          return (
+            <>
+              <p className="font-semibold text-lime-500">Activé</p>
+            </>
+          );
+        case 'desactive':
+          return (
+            <>
+              <p className="font-semibold text-red-600">Désactivé</p>
+            </>
+          );
+        case 'draft':
+          return (
+            <>
+              <p className="font-semibold text-amber-500">Brouillon</p>
+            </>
+          );
+      }
+    },
   },
   {
     id: 'actions',
@@ -78,6 +143,11 @@ export const columns: ColumnDef<Realisation>[] = [
     cell: ({ row }) => {
       const realisation = row.original;
       const router = useRouter();
+
+      // Function to go at the realisation modification page
+      const handleShowDetails = () => {
+        router.push(`/dashboard/realisations/${realisation.slug}`);
+      };
 
       // Function to go at the realisation modification page
       const handleModify = () => {
@@ -95,21 +165,13 @@ export const columns: ColumnDef<Realisation>[] = [
       // Function to delete an realisation
       const handleDelete = async () => {
         try {
-          const response = await fetch(`/api/realisations/${realisation._id}`, {
-            method: 'DELETE',
-          });
-
-          if (!response.ok) {
-            throw new Error('Erreur lors de la suppression de la réalisation');
-          }
-
-          alert('Réalisation supprimée avec succès.');
-
-          router.refresh();
+          await deleteRealisation(realisation._id);
+          console.log('Réalisation supprimée avec succès.');
+          onRealisationDeleted(realisation._id);
         } catch (error) {
-          console.error(error);
-          alert(
-            "Une erreur s'est produite lors de la suppression de la réalisation."
+          console.error(
+            'Erreur lors de la suppression de la réalisation:',
+            error
           );
         }
       };
@@ -127,10 +189,14 @@ export const columns: ColumnDef<Realisation>[] = [
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(realisation._id)}
+                onClick={() => navigator.clipboard.writeText(realisation.slug)}
               >
                 <Clipboard className="mr-2 size-4" />
-                <span>Copier l'ID de la réalisation</span>
+                <span>Copier le slug de la réalisation</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleShowDetails}>
+                <Search className="mr-2 size-4" />
+                <span>Voir tous les détails</span>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={handleModify}>
                 <PencilLine className="mr-2 size-4" />
@@ -146,6 +212,27 @@ export const columns: ColumnDef<Realisation>[] = [
                   <span>Voir la réalisation</span>
                 </Link>
               </DropdownMenuItem>
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>
+                  <span>Changer le statut</span>
+                </DropdownMenuSubTrigger>
+                <DropdownMenuPortal>
+                  <DropdownMenuSubContent>
+                    <DropdownMenuItem>
+                      <span className="mr-2 size-2 rounded-full bg-lime-500" />
+                      <span>Activer</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <span className="mr-2 size-2 rounded-full bg-red-600" />
+                      <span>Désactiver</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <span className="mr-2 size-2 rounded-full bg-amber-500" />
+                      <span>Mettre en brouillon</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuSubContent>
+                </DropdownMenuPortal>
+              </DropdownMenuSub>
             </DropdownMenuContent>
           </DropdownMenu>
           <AlertDialog>

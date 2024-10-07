@@ -1,33 +1,14 @@
 'use client';
 
-import {
-  List,
-  SquarePlus,
-  CircleGauge,
-  House,
-  Settings,
-  LogOut,
-} from 'lucide-react';
+import { CircleGauge } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React from 'react';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator,
-} from '@/components/ui/dropdown-menu';
 import { ToggleButtonTheme } from '@/components/ui/toggleButtonTheme';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+
+import AsideMenu from './components/asideMenu';
+import ProfileButton from './components/profileButton';
 
 const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -44,7 +25,7 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
               className={
                 pathname === '/dashboard'
                   ? 'text-foreground'
-                  : 'text-muted-foreground'
+                  : 'text-muted-foreground delay-100 hover:text-foreground'
               }
             >
               Accueil
@@ -54,7 +35,7 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
               className={
                 pathname === '/dashboard/realisations'
                   ? 'text-foreground'
-                  : 'text-muted-foreground'
+                  : 'text-muted-foreground delay-100 hover:text-foreground'
               }
             >
               Réalisations
@@ -66,78 +47,13 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
           </div>
           <nav className="flex space-x-4">
             <ToggleButtonTheme />
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline">
-                  <Avatar className="mr-2 size-4">
-                    <AvatarImage src="https://github.com/shadcn.png" />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                  Admin123
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem>
-                  <House className="mr-2 size-4" />
-                  <span>Retour au site</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <Settings className="mr-2 size-4" />
-                  <span>Paramètres</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <LogOut className="mr-2 size-4" />
-                  <span>Se déconnecter</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <ProfileButton />
           </nav>
         </div>
         <div className="flex h-full overflow-hidden">
           <div className="flex w-auto flex-none flex-col border-r border-solid border-border bg-muted font-semibold">
             <nav className="flex flex-col space-y-2 p-2">
-              {/* <Link href="/dashboard" className="hover:underline hover:decoration-solid p-6">
-            Accueil
-          </Link> */}
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Link
-                      href="/dashboard/realisations"
-                      className={
-                        pathname === '/dashboard/realisations'
-                          ? 'rounded-full bg-primary p-2 text-secondary'
-                          : 'p-2'
-                      }
-                    >
-                      <List />
-                    </Link>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Liste des réalisations</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Link
-                      href="/dashboard/realisations/creation"
-                      className={
-                        pathname === '/dashboard/realisations/creation'
-                          ? 'rounded-full bg-primary p-2 text-secondary'
-                          : 'p-2'
-                      }
-                    >
-                      <SquarePlus />
-                    </Link>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Ajouter une réalisation</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <AsideMenu />
             </nav>
           </div>
           <div className="grow overflow-auto p-6">{children}</div>

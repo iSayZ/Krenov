@@ -1,6 +1,22 @@
-import { IsString, IsNotEmpty, IsArray, IsOptional } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsArray,
+  IsOptional,
+  IsNumber,
+} from 'class-validator';
 
 export class UpdateRealisationDto {
+  @IsNumber()
+  @IsNotEmpty()
+  @IsOptional()
+  order: number;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  slug: string;
+
   @IsString()
   @IsNotEmpty()
   @IsOptional()
@@ -20,4 +36,19 @@ export class UpdateRealisationDto {
   @IsString({ each: true })
   @IsOptional()
   imagesToDelete: string[];
+
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  tags: string[];
+
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  status: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  author: string;
 }

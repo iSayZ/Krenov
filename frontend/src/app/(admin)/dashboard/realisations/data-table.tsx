@@ -39,20 +39,28 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+import { deleteRealisation } from '@/api/realisationsApi';
+
+interface DataWithId {
+  _id: string;
 }
 
-export function DataTable<TData, TValue>({
+interface DataTableProps<TData extends DataWithId, TValue> {
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
+  onRealisationDeleted: (id: string) => void;
+}
+
+export function DataTable<TData extends DataWithId, TValue>({
   columns,
   data,
+  onRealisationDeleted,
 }: DataTableProps<TData, TValue>) {
-  const [pageIndex, setPageIndex] = useState<number>(0); // Page courante
-  const [pageSize, setPageSize] = useState<number>(9); // Taille de page
-  const [totalItems, setTotalItems] = useState<number>(data.length); // Nombre total d'éléments
-  const totalPages = Math.ceil(totalItems / pageSize); // Calcul du nombre total de pages
-  const [paginatedData, setPaginatedData] = useState<TData[]>([]); // Données paginées
+  const [pageIndex, setPageIndex] = useState<number>(0);
+  const [pageSize, setPageSize] = useState<number>(5);
+  const [totalItems, setTotalItems] = useState<number>(data.length);
+  const totalPages = Math.ceil(totalItems / pageSize);
+  const [paginatedData, setPaginatedData] = useState<TData[]>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
@@ -61,15 +69,15 @@ export function DataTable<TData, TValue>({
 
   const [rowSelection, setRowSelection] = React.useState({});
 
-  // Calculer les données paginées
+  // Calcul data of pagination
   useEffect(() => {
     const start = pageIndex * pageSize;
     const end = start + pageSize;
-    setPaginatedData(data.slice(start, end)); // Découper les données selon pageIndex et pageSize
+    setPaginatedData(data.slice(start, end));
   }, [data, pageIndex, pageSize]);
 
   const table = useReactTable({
-    data: paginatedData, // Passer les données paginées ici
+    data: paginatedData,
     columns,
     getCoreRowModel: getCoreRowModel(),
     onColumnFiltersChange: setColumnFilters,
@@ -83,10 +91,23 @@ export function DataTable<TData, TValue>({
     },
   });
 
-  const handleDeleteSelection = () => {
-    const selectedRow = table.getFilteredSelectedRowModel().rows[0]?.original;
-    const rowWithId = selectedRow as { _id: string }; // ou le type approprié
-    console.log(rowWithId._id);
+  const handleDeleteSelection = async () => {
+    const selectedRows = table
+      .getFilteredSelectedRowModel()
+      .rows.map((row) => row.original);
+
+    for (const realisation of selectedRows) {
+      try {
+        await deleteRealisation(realisation._id);
+        onRealisationDeleted(realisation._id);
+        console.log(`Réalisation ${realisation._id} supprimée avec succès.`);
+      } catch (error) {
+        console.error(
+          `Erreur lors de la suppression de la réalisation ${realisation._id}:`,
+          error
+        );
+      }
+    }
   };
 
   return (
@@ -117,10 +138,10 @@ export function DataTable<TData, TValue>({
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel onClick={handleDeleteSelection}>
-                    Annuler
-                  </AlertDialogCancel>
-                  <AlertDialogAction>Supprimer</AlertDialogAction>
+                  <AlertDialogCancel>Annuler</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleDeleteSelection}>
+                    Supprimer
+                  </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>

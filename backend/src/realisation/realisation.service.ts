@@ -39,6 +39,17 @@ export class RealisationsService {
   async create(
     createRealisationDto: CreateRealisationDto
   ): Promise<Realisation> {
+    // If the slug already exist, add a number in the end
+    let uniqueSlug = createRealisationDto.slug;
+    let counter = 1;
+
+    while (await this.realisationModel.findOne({ slug: uniqueSlug }).exec()) {
+      uniqueSlug = `${createRealisationDto.slug}-${counter}`;
+      counter++;
+    }
+
+    createRealisationDto.slug = uniqueSlug;
+
     const createdRealisation = new this.realisationModel(createRealisationDto);
     return createdRealisation.save();
   }
@@ -47,11 +58,11 @@ export class RealisationsService {
     return this.realisationModel.find().exec();
   }
 
-  async findOne(id: string): Promise<Realisation | null> {
-    const realisation = await this.realisationModel.findById(id).exec();
+  async findOne(slug: string): Promise<Realisation | null> {
+    const realisation = await this.realisationModel.findOne({ slug }).exec();
 
     if (!realisation) {
-      throw new NotFoundException(`Realisation with ID ${id} not found`);
+      throw new NotFoundException(`Realisation with slug "${slug}" not found`);
     }
 
     return realisation;
@@ -85,6 +96,17 @@ export class RealisationsService {
       ...realisation.imageUrls,
       ...updateRealisationDto.imageUrls,
     ];
+
+    // If the slug already exist, add a number in the end
+    let uniqueSlug = updateRealisationDto.slug;
+    let counter = 1;
+
+    while (await this.realisationModel.findOne({ slug: uniqueSlug }).exec()) {
+      uniqueSlug = `${updateRealisationDto.slug}-${counter}`;
+      counter++;
+    }
+
+    updateRealisationDto.slug = uniqueSlug;
 
     const updatedRealisation = await this.realisationModel
       .findByIdAndUpdate(id, updateRealisationDto, { new: true })

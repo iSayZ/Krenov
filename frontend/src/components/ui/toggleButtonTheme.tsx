@@ -12,7 +12,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-// Renommez votre fonction pour qu'elle commence par une majuscule
 export function ToggleButtonTheme() {
   const { setTheme } = useTheme();
 

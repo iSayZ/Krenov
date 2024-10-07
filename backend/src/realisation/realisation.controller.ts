@@ -16,6 +16,7 @@ import { UpdateRealisationDto } from './dto/update-realisation.dto';
 import { FindOneParams } from '../common/dto/find-one-params.dto';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
+import { FindOneSlug } from './dto/find-one-slug.dto';
 
 // Storage config for multer
 const storage = diskStorage({
@@ -47,9 +48,9 @@ export class RealisationsController {
     return this.realisationsService.findAll();
   }
 
-  @Get(':id')
-  async findOne(@Param() params: FindOneParams) {
-    return this.realisationsService.findOne(params.id);
+  @Get(':slug')
+  async findOne(@Param() params: FindOneSlug) {
+    return this.realisationsService.findOne(params.slug);
   }
 
   @Put(':id')
