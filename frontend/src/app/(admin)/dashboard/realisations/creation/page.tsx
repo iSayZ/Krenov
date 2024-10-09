@@ -1,38 +1,37 @@
-"use client";
+'use client';
 
+import dynamic from 'next/dynamic';
 import { useEffect } from 'react';
 
 import { Section } from '../../components/topbarMenu';
 import { useVisitedSection } from '../../VisitedSectionContext';
 
-import dynamic from "next/dynamic";
-
 const section: Section = {
   items: [
     {
-        path: '/dashboard',
-        name: 'Accueil'
+      path: '/dashboard',
+      name: 'Dashboard',
     },
     {
       path: '/dashboard/realisations',
-      name: 'Réalisations'
-    }
-],
+      name: 'Réalisations',
+    },
+  ],
   page: {
-      path: '/dashboard/realisation/creation',
-      name: 'Créer une réalisation'
-  }
+    path: '/dashboard/realisation/creation',
+    name: 'Créer une réalisation',
+  },
 };
 
-const Editor = dynamic(() => import("../editor/Editor"), { ssr: false });
+const Editor = dynamic(() => import('../editor/Editor'), { ssr: false });
 
 const App: React.FC = () => {
-    // Update the section for breadcrumb into topbarMenu 
-    const { setVisitedSection } = useVisitedSection();
+  // Update the section for breadcrumb into topbarMenu
+  const { setVisitedSection } = useVisitedSection();
 
-    useEffect(() => {
-        setVisitedSection(section);
-    }, [setVisitedSection]);
+  useEffect(() => {
+    setVisitedSection(section);
+  }, [setVisitedSection]);
 
   return (
     <div className="flex flex-col gap-6">

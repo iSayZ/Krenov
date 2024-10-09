@@ -1,39 +1,37 @@
-"use client";
+'use client';
 
-import { useEffect } from 'react';
+import { useParams } from 'next/navigation';
+import React, { useEffect } from 'react';
 
 import { Section } from '../../../components/topbarMenu';
 import { useVisitedSection } from '../../../VisitedSectionContext';
-
-import { useParams } from 'next/navigation';
-import React from 'react';
 
 const EditRealisation: React.FC = () => {
   const params = useParams<{ slug: string }>();
   const slug = params.slug;
 
-  // Update the section for breadcrumb into topbarMenu 
+  // Update the section for breadcrumb into topbarMenu
   const { setVisitedSection } = useVisitedSection();
 
   const section: Section = {
     items: [
       {
-          path: '/dashboard',
-          name: 'Accueil'
+        path: '/dashboard',
+        name: 'Dashboard',
       },
       {
         path: '/dashboard/realisations',
-        name: 'Réalisations'
-      }
+        name: 'Réalisations',
+      },
     ],
     page: {
-        path: '/dashboard/realisation/:slug/edition',
-        name: `Édition de ${slug}`
-    }
+      path: '/dashboard/realisation/:slug/edition',
+      name: `Édition de ${slug}`,
+    },
   };
 
   useEffect(() => {
-      setVisitedSection(section);
+    setVisitedSection(section);
   }, [setVisitedSection]);
 
   return <h1 className="text-2xl font-bold">Edition de {slug}</h1>;

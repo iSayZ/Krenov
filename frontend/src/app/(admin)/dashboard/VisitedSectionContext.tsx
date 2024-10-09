@@ -1,4 +1,5 @@
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+import React, { createContext, ReactNode, useContext, useState } from 'react';
+
 import { Section } from './components/topbarMenu';
 
 interface VisitedSectionContextType {
@@ -6,28 +7,38 @@ interface VisitedSectionContextType {
   setVisitedSection: React.Dispatch<React.SetStateAction<Section>>;
 }
 
-const VisitedSectionContext = createContext<VisitedSectionContextType | undefined>(undefined);
+const VisitedSectionContext = createContext<
+  VisitedSectionContextType | undefined
+>(undefined);
 
-export const VisitedSectionProvider: React.FC<{children: ReactNode}> = ({ children }) => {
+const VisitedSectionProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [visitedSection, setVisitedSection] = useState<Section>({
     items: [],
     page: {
       path: '/dashboard',
-      name: 'Accueil'
-    }
+      name: 'Dashboard',
+    },
   });
 
   return (
-    <VisitedSectionContext.Provider value={{ visitedSection, setVisitedSection }}>
+    <VisitedSectionContext.Provider
+      value={{ visitedSection, setVisitedSection }}
+    >
       {children}
     </VisitedSectionContext.Provider>
   );
 };
 
-export const useVisitedSection = () => {
+const useVisitedSection = () => {
   const context = useContext(VisitedSectionContext);
   if (context === undefined) {
-    throw new Error('useVisitedSection must be used within a VisitedSectionProvider');
+    throw new Error(
+      'useVisitedSection must be used within a VisitedSectionProvider'
+    );
   }
   return context;
 };
+
+export { useVisitedSection, VisitedSectionProvider };

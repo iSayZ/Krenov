@@ -1,6 +1,6 @@
 'use client';
 
-import { House, ChartNoAxesCombined, Newspaper } from 'lucide-react';
+import { ChartNoAxesCombined, House, Newspaper } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React from 'react';
@@ -25,7 +25,7 @@ const sections: MenuLink[] = [
   {
     path: '/dashboard',
     icon: <House />,
-    tooltipText: 'Accueil',
+    tooltipText: 'Accueil du dashboard',
   },
   {
     path: '/dashboard/realisations',
@@ -47,27 +47,28 @@ const AsideMenu: React.FC = () => {
   const returnMenuLinksJsx = (section: MenuLink[]): JSX.Element => {
     return (
       <>
-        {section.map((menuLink) => (
-          <TooltipProvider>
+        {section.map((menuLink, index) => (
+          <TooltipProvider key={index}>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
                   href={menuLink.path}
                   className={
-                    menuLink.childrenPath ? 
-                      (pathname.includes(menuLink.childrenPath) ? 
-                        'rounded-full bg-primary p-2 text-secondary'
-                        : 'p-2')
-                      :
-                      (pathname === menuLink.path ?
-                      'rounded-full bg-primary p-2 text-secondary'
-                      : 'p-2')
+                    menuLink.childrenPath
+                      ? pathname.includes(menuLink.childrenPath)
+                        ? 'rounded-full bg-primary p-2 text-secondary'
+                        : 'p-2'
+                      : pathname === menuLink.path
+                        ? 'rounded-full bg-primary p-2 text-secondary'
+                        : 'p-2'
                   }
                 >
                   {menuLink.icon}
                 </Link>
               </TooltipTrigger>
-              <TooltipContent side='right'>{menuLink.tooltipText}</TooltipContent>
+              <TooltipContent side="right">
+                {menuLink.tooltipText}
+              </TooltipContent>
             </Tooltip>
           </TooltipProvider>
         ))}

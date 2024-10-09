@@ -27,6 +27,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -45,11 +46,13 @@ import {
 import { deleteRealisation, updateRealisation } from '@/api/realisationsApi';
 import { formatDateForUX } from '@/lib/dateUtils';
 import { Realisation } from '@/types/realisation.interface';
-import { Badge } from '@/components/ui/badge';
 
 export const columns = (
   onRealisationDeleted: (id: string) => void,
-  onRealisationStatusChanged: (id: string, newStatus: Realisation['status']) => void
+  onRealisationStatusChanged: (
+    id: string,
+    newStatus: Realisation['status']
+  ) => void
 ): ColumnDef<Realisation>[] => [
   {
     id: 'select',
@@ -118,12 +121,12 @@ export const columns = (
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Dernière modification
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className="ml-2 size-4" />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => {
       const date = row.original.updatedAt;
@@ -139,19 +142,25 @@ export const columns = (
         case 'active':
           return (
             <>
-              <Badge className="font-semibold bg-lime-500 hover:bg-lime-500">Activé</Badge>
+              <Badge className="bg-lime-500 font-semibold hover:bg-lime-500">
+                Activé
+              </Badge>
             </>
           );
         case 'desactive':
           return (
             <>
-              <Badge className="font-semibold bg-red-600 hover:bg-red-600">Désactivé</Badge>
+              <Badge className="bg-red-600 font-semibold hover:bg-red-600">
+                Désactivé
+              </Badge>
             </>
           );
         case 'draft':
           return (
             <>
-              <Badge className="font-semibold bg-amber-500 hover:bg-amber-500">Brouillon</Badge>
+              <Badge className="bg-amber-500 font-semibold hover:bg-amber-500">
+                Brouillon
+              </Badge>
             </>
           );
       }
@@ -201,9 +210,11 @@ export const columns = (
       };
 
       // Function to change a status of a realisation
-      const handleChangeStatus = async (statusSelected: Realisation['status']) => {
+      const handleChangeStatus = async (
+        statusSelected: Realisation['status']
+      ) => {
         try {
-          await updateRealisation(realisation._id, {status: statusSelected});
+          await updateRealisation(realisation._id, { status: statusSelected });
           console.log('Statut de la réalisation changé avec succès.');
           onRealisationStatusChanged(realisation._id, statusSelected);
         } catch (error) {
@@ -212,7 +223,7 @@ export const columns = (
             error
           );
         }
-      }
+      };
 
       return (
         <>
@@ -252,15 +263,26 @@ export const columns = (
                 </DropdownMenuSubTrigger>
                 <DropdownMenuPortal>
                   <DropdownMenuSubContent>
-                    <DropdownMenuItem disabled={realisation.status === 'active' ? true : false} onClick={() => handleChangeStatus('active')}>
+                    <DropdownMenuItem
+                      disabled={realisation.status === 'active' ? true : false}
+                      onClick={() => handleChangeStatus('active')}
+                    >
                       <span className="mr-2 size-2 rounded-full bg-lime-500" />
                       <span>Activer</span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem disabled={realisation.status === 'desactive' ? true : false} onClick={() => handleChangeStatus('desactive')}>
+                    <DropdownMenuItem
+                      disabled={
+                        realisation.status === 'desactive' ? true : false
+                      }
+                      onClick={() => handleChangeStatus('desactive')}
+                    >
                       <span className="mr-2 size-2 rounded-full bg-red-600" />
                       <span>Désactiver</span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem disabled={realisation.status === 'draft' ? true : false} onClick={() => handleChangeStatus('draft')}>
+                    <DropdownMenuItem
+                      disabled={realisation.status === 'draft' ? true : false}
+                      onClick={() => handleChangeStatus('draft')}
+                    >
                       <span className="mr-2 size-2 rounded-full bg-amber-500" />
                       <span>Mettre en brouillon</span>
                     </DropdownMenuItem>

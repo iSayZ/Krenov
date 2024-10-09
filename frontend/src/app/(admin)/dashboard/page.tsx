@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useEffect } from 'react';
 
@@ -8,17 +8,17 @@ import { useVisitedSection } from './VisitedSectionContext';
 const section: Section = {
   items: [],
   page: {
-      path: '/dashboard',
-      name: 'Accueil'
-  }
+    path: '/dashboard',
+    name: 'Dashboard',
+  },
 };
 
 const Index: React.FC = () => {
-  // Update the section for breadcrumb into topbarMenu 
+  // Update the section for breadcrumb into topbarMenu
   const { setVisitedSection } = useVisitedSection();
 
   useEffect(() => {
-      setVisitedSection(section);
+    setVisitedSection(section);
   }, [setVisitedSection]);
 
   return <h1 className="text-2xl font-bold">Accueil du dashboard</h1>;

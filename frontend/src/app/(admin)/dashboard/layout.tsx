@@ -4,16 +4,14 @@ import React from 'react';
 
 import { ToggleButtonTheme } from '@/components/ui/toggleButtonTheme';
 
-import TopbarMenu from './components/topbarMenu';
 import AsideMenu from './components/asideMenu';
 import ProfileButton from './components/profileButton';
+import TopbarMenu from './components/topbarMenu';
 import { VisitedSectionProvider } from './VisitedSectionContext';
-
 
 const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-
   return (
     <VisitedSectionProvider>
       <div className="h-screen w-screen bg-background p-10 text-foreground">
@@ -24,7 +22,7 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
                 <AsideMenu />
               </nav>
             </div>
-            <div className='flex flex-col w-full grow overflow-auto p-4 gap-4 bg-muted/40'>
+            <div className="flex w-full grow flex-col gap-4 overflow-auto bg-muted/40 p-4">
               <div className="flex w-full items-center justify-between font-semibold">
                 <div>
                   <TopbarMenu />
@@ -34,9 +32,7 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
                   <ProfileButton />
                 </nav>
               </div>
-              <div className='size-full'>
-                {children}
-              </div>
+              <div className="size-full">{children}</div>
             </div>
           </div>
         </div>

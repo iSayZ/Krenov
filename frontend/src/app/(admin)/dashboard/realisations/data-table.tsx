@@ -11,6 +11,14 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import {
+  ArrowLeftRight,
+  PencilLine,
+  PlusCircleIcon,
+  Settings,
+  Trash2,
+} from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 
 import {
@@ -42,17 +50,14 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from '@/components/ui/tooltip';
 
 import { deleteRealisation } from '@/api/realisationsApi';
-import { ArrowLeftRight, PencilLine, PlusCircleIcon, Settings, Trash2 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import { Realisation } from '@/types/realisation.interface';
 
 interface DataWithIdAndSlug {
@@ -64,7 +69,10 @@ interface DataTableProps<TData extends DataWithIdAndSlug, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   onRealisationDeleted: (id: string) => void;
-  onRealisationStatusChanged: (id: string, newStatus: Realisation['status']) => void;
+  onRealisationStatusChanged: (
+    id: string,
+    newStatus: Realisation['status']
+  ) => void;
 }
 
 export function DataTable<TData extends DataWithIdAndSlug, TValue>({
@@ -88,12 +96,12 @@ export function DataTable<TData extends DataWithIdAndSlug, TValue>({
       _id: false,
       desc: false,
       tags: false,
-      author: false
+      author: false,
     });
 
   const [rowSelection, setRowSelection] = React.useState({});
 
-  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [sorting, setSorting] = React.useState<SortingState>([]);
 
   // Calcul data of pagination
   useEffect(() => {
@@ -129,7 +137,8 @@ export function DataTable<TData extends DataWithIdAndSlug, TValue>({
 
   // Function to go to the edition page
   const handleModify = () => {
-    const selectedRow = table.getFilteredSelectedRowModel().rows[0].original.slug;
+    const selectedRow =
+      table.getFilteredSelectedRowModel().rows[0].original.slug;
     router.push(`/dashboard/realisations/${selectedRow}/edition`);
   };
 
@@ -155,7 +164,7 @@ export function DataTable<TData extends DataWithIdAndSlug, TValue>({
 
   // Function to go to the order page
   const goToSortingPage = () => {
-    router.push('/dashboard/realisations/ordre');
+    router.push('/dashboard/realisations/odre');
   };
 
   return (
@@ -169,124 +178,139 @@ export function DataTable<TData extends DataWithIdAndSlug, TValue>({
           }
           className="mr-4 max-w-96 bg-background"
         />
-        <div className='space-x-2 ml-auto flex items-center'>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button onClick={handleCreate} variant="outline" size="icon">
-                <PlusCircleIcon className="size-5" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Nouvelle réalisation</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button onClick={handleModify} variant="outline" size="icon" disabled={table.getFilteredSelectedRowModel().rows.length === 1 ? false : true}>
-                <PencilLine className="size-5" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Modifier la réalisation</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger>
-            <DropdownMenu>
-              <AlertDialog>
-                <AlertDialogTrigger className="ml-auto" asChild>
-                <Button variant="destructive" size="icon" disabled={table.getFilteredSelectedRowModel().rows.length > 0 ? false : true}>
-                  <Trash2 className="size-5" />
+        <div className="ml-auto flex items-center space-x-2">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button onClick={handleCreate} variant="outline" size="icon">
+                  <PlusCircleIcon className="size-5" />
                 </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Confirmer la Suppression</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Êtes-vous sûr de vouloir supprimer ces réalisations ? Cette
-                      action est irréversible et toutes les données associées
-                      seront définitivement perdues. Veuillez confirmer votre
-                      choix pour continuer.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Annuler</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleDeleteSelection}>
-                      Supprimer
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </DropdownMenu>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Supprimer la sélection</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button onClick={goToSortingPage} variant="outline" size="icon">
-                <ArrowLeftRight className="size-5" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Modifier les ordres d'affichage</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Nouvelle réalisation</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
                 <Button
-                  variant="outline" size="icon"
+                  onClick={handleModify}
+                  variant="outline"
+                  size="icon"
+                  disabled={
+                    table.getFilteredSelectedRowModel().rows.length === 1
+                      ? false
+                      : true
+                  }
                 >
-                  <Settings className='size-5'/>
+                  <PencilLine className="size-5" />
                 </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>
-                  Affichage
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {table
-                  .getAllColumns()
-                  .filter((column) => column.getCanHide())
-                  .map((column) => {
-                    return (
-                      <DropdownMenuCheckboxItem
-                        key={column.id}
-                        className="capitalize"
-                        checked={column.getIsVisible()}
-                        onCheckedChange={(value) =>
-                          column.toggleVisibility(!!value)
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Modifier la réalisation</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <DropdownMenu>
+                  <AlertDialog>
+                    <AlertDialogTrigger className="ml-auto" asChild>
+                      <Button
+                        variant="destructive"
+                        size="icon"
+                        disabled={
+                          table.getFilteredSelectedRowModel().rows.length > 0
+                            ? false
+                            : true
                         }
                       >
-                        {column.id === "updatedAt" ?
-                        'Dernière modification' :
-                        column.columnDef.header?.toString()}
-                      </DropdownMenuCheckboxItem>
-                    );
-                  })}
-              </DropdownMenuContent>
-            </DropdownMenu>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Paramètres des colonnes</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+                        <Trash2 className="size-5" />
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Confirmer la Suppression
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Êtes-vous sûr de vouloir supprimer ces réalisations ?
+                          Cette action est irréversible et toutes les données
+                          associées seront définitivement perdues. Veuillez
+                          confirmer votre choix pour continuer.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Annuler</AlertDialogCancel>
+                        <AlertDialogAction onClick={handleDeleteSelection}>
+                          Supprimer
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </DropdownMenu>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Supprimer la sélection</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button onClick={goToSortingPage} variant="outline" size="icon">
+                  <ArrowLeftRight className="size-5" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Réorganiser les ordres de publication</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="icon">
+                      <Settings className="size-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>Affichage</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    {table
+                      .getAllColumns()
+                      .filter((column) => column.getCanHide())
+                      .map((column) => {
+                        return (
+                          <DropdownMenuCheckboxItem
+                            key={column.id}
+                            className="capitalize"
+                            checked={column.getIsVisible()}
+                            onCheckedChange={(value) =>
+                              column.toggleVisibility(!!value)
+                            }
+                          >
+                            {column.id === 'updatedAt'
+                              ? 'Dernière modification'
+                              : column.columnDef.header?.toString()}
+                          </DropdownMenuCheckboxItem>
+                        );
+                      })}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Paramètres des colonnes</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </div>
-      <div className="rounded-md border shadow-sm bg-background">
+      <div className="rounded-md border bg-background shadow-sm">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

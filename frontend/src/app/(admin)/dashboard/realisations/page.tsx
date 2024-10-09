@@ -2,36 +2,37 @@
 
 import React, { useEffect, useState } from 'react';
 
-import { columns } from './columns';
-import { DataTable } from './data-table';
-
 import { fetchAllRealisations } from '@/api/realisationsApi';
 import { Realisation } from '@/types/realisation.interface';
+
 import { Section } from '../components/topbarMenu';
 import { useVisitedSection } from '../VisitedSectionContext';
 
+import { columns } from './columns';
+import { DataTable } from './data-table';
+
 const section: Section = {
   items: [
-      {
-          path: '/dashboard',
-          name: 'Accueil'
-      }
+    {
+      path: '/dashboard',
+      name: 'Dashboard',
+    },
   ],
   page: {
-      path: '/dashboard/realisations',
-      name: 'Réalisations'
-  }
+    path: '/dashboard/realisations',
+    name: 'Réalisations',
+  },
 };
 
 const Realisations: React.FC = () => {
   const [realisations, setRealisations] = useState<Realisation[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // Update the section for breadcrumb into topbarMenu 
+  // Update the section for breadcrumb into topbarMenu
   const { setVisitedSection } = useVisitedSection();
 
   useEffect(() => {
-      setVisitedSection(section);
+    setVisitedSection(section);
   }, [setVisitedSection]);
 
   // Call API
@@ -58,22 +59,29 @@ const Realisations: React.FC = () => {
   };
 
   // Function to refresh the data-table with good status
-  const handleRealisationStatusChanged = (changedId: string, newStatus: Realisation['status']) => {
+  const handleRealisationStatusChanged = (
+    changedId: string,
+    newStatus: Realisation['status']
+  ) => {
     setRealisations((prevRealisations) =>
       prevRealisations.map((realisation) =>
         realisation._id === changedId
           ? { ...realisation, status: newStatus }
-          : realisation 
-      ))
+          : realisation
+      )
+    );
   };
 
-  const columnsWithActions = columns(handleRealisationDeleted, handleRealisationStatusChanged);
-  
+  const columnsWithActions = columns(
+    handleRealisationDeleted,
+    handleRealisationStatusChanged
+  );
+
   if (loading) {
     return (
       <div className="flex size-full items-center justify-center">
         <div
-          className="text-foreground inline-block size-12 animate-spin rounded-full border-[3px] border-current border-t-transparent"
+          className="inline-block size-12 animate-spin rounded-full border-[3px] border-current border-t-transparent text-foreground"
           role="status"
           aria-label="loading"
         ></div>
@@ -87,7 +95,8 @@ const Realisations: React.FC = () => {
         columns={columnsWithActions}
         data={realisations}
         onRealisationDeleted={handleRealisationDeleted}
-        onRealisationStatusChanged={handleRealisationStatusChanged}      />
+        onRealisationStatusChanged={handleRealisationStatusChanged}
+      />
     </div>
   );
 };
