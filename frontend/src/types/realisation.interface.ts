@@ -3,10 +3,12 @@ export interface Realisation {
   order: number;
   slug: string;
   title: string;
+  desc: string;
   content: string;
+  header: string;
   imageUrls: string[];
   tags: string[];
-  status: string;
+  status: 'active' | 'desactive' | 'draft';
   author: string;
   createdAt: Date;
   updatedAt: Date;

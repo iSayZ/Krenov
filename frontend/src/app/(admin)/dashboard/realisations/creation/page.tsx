@@ -1,7 +1,45 @@
-import React from 'react';
+"use client";
 
-const CreateRealisation: React.FC = () => {
-  return <h1 className="text-2xl font-bold">Ajouter une réalisation</h1>;
+import { useEffect } from 'react';
+
+import { Section } from '../../components/topbarMenu';
+import { useVisitedSection } from '../../VisitedSectionContext';
+
+import dynamic from "next/dynamic";
+
+const section: Section = {
+  items: [
+    {
+        path: '/dashboard',
+        name: 'Accueil'
+    },
+    {
+      path: '/dashboard/realisations',
+      name: 'Réalisations'
+    }
+],
+  page: {
+      path: '/dashboard/realisation/creation',
+      name: 'Créer une réalisation'
+  }
 };
 
-export default CreateRealisation;
+const Editor = dynamic(() => import("../editor/Editor"), { ssr: false });
+
+const App: React.FC = () => {
+    // Update the section for breadcrumb into topbarMenu 
+    const { setVisitedSection } = useVisitedSection();
+
+    useEffect(() => {
+        setVisitedSection(section);
+    }, [setVisitedSection]);
+
+  return (
+    <div className="flex flex-col gap-6">
+      <h1 className="text-2xl font-bold">Contenu de la publication</h1>
+      <Editor />
+    </div>
+  );
+};
+
+export default App;

@@ -7,11 +7,34 @@ import { DataTable } from './data-table';
 
 import { fetchAllRealisations } from '@/api/realisationsApi';
 import { Realisation } from '@/types/realisation.interface';
+import { Section } from '../components/topbarMenu';
+import { useVisitedSection } from '../VisitedSectionContext';
+
+const section: Section = {
+  items: [
+      {
+          path: '/dashboard',
+          name: 'Accueil'
+      }
+  ],
+  page: {
+      path: '/dashboard/realisations',
+      name: 'Réalisations'
+  }
+};
 
 const Realisations: React.FC = () => {
   const [realisations, setRealisations] = useState<Realisation[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
+  // Update the section for breadcrumb into topbarMenu 
+  const { setVisitedSection } = useVisitedSection();
+
+  useEffect(() => {
+      setVisitedSection(section);
+  }, [setVisitedSection]);
+
+  // Call API
   useEffect(() => {
     const loadRealisations = async () => {
       try {
@@ -34,8 +57,18 @@ const Realisations: React.FC = () => {
     );
   };
 
-  const columnsWithActions = columns(handleRealisationDeleted);
+  // Function to refresh the data-table with good status
+  const handleRealisationStatusChanged = (changedId: string, newStatus: Realisation['status']) => {
+    setRealisations((prevRealisations) =>
+      prevRealisations.map((realisation) =>
+        realisation._id === changedId
+          ? { ...realisation, status: newStatus }
+          : realisation 
+      ))
+  };
 
+  const columnsWithActions = columns(handleRealisationDeleted, handleRealisationStatusChanged);
+  
   if (loading) {
     return (
       <div className="flex size-full items-center justify-center">
@@ -50,12 +83,11 @@ const Realisations: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-2xl font-bold">Liste des réalisations</h1>
       <DataTable
         columns={columnsWithActions}
         data={realisations}
         onRealisationDeleted={handleRealisationDeleted}
-      />
+        onRealisationStatusChanged={handleRealisationStatusChanged}      />
     </div>
   );
 };

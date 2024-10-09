@@ -55,7 +55,7 @@ export class RealisationsService {
   }
 
   async findAll(): Promise<Realisation[]> {
-    return this.realisationModel.find().exec();
+    return this.realisationModel.find().sort({ updatedAt: -1 }).exec();
   }
 
   async findOne(slug: string): Promise<Realisation | null> {
@@ -91,11 +91,13 @@ export class RealisationsService {
       );
     }
 
-    // Add the new image uploaded
-    updateRealisationDto.imageUrls = [
-      ...realisation.imageUrls,
-      ...updateRealisationDto.imageUrls,
-    ];
+    if (realisation.imageUrls && updateRealisationDto.imagesToDelete) {
+      // Add the new image uploaded
+      updateRealisationDto.imageUrls = [
+        ...realisation.imageUrls,
+        ...updateRealisationDto.imageUrls,
+      ];
+    }
 
     // If the slug already exist, add a number in the end
     let uniqueSlug = updateRealisationDto.slug;

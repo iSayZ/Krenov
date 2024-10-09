@@ -25,7 +25,17 @@ export class UpdateRealisationDto {
   @IsString()
   @IsNotEmpty()
   @IsOptional()
+  desc: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
   content: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  header: string;
 
   @IsArray()
   @IsString({ each: true })

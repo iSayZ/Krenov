@@ -1,6 +1,6 @@
 'use client';
 
-import { List, SquarePlus, House, ChartNoAxesCombined } from 'lucide-react';
+import { House, ChartNoAxesCombined, Newspaper } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React from 'react';
@@ -17,50 +17,28 @@ interface MenuLink {
   path: string;
   icon: JSX.Element;
   tooltipText: string;
-}
-
-// Interface definition for a section
-interface Section {
-  menuLinks: MenuLink[];
-}
-
-// Interface definition for the sections object
-interface Sections {
-  index: Section;
-  realisations: Section;
+  childrenPath?: string;
 }
 
 // Typing the sections object
-const sections: Sections = {
-  index: {
-    menuLinks: [
-      {
-        path: '/dashboard',
-        icon: <House />,
-        tooltipText: 'Accueil du dashboard',
-      },
-      {
-        path: '/dashboard/statistiques',
-        icon: <ChartNoAxesCombined />,
-        tooltipText: 'Statistiques du site',
-      },
-    ],
+const sections: MenuLink[] = [
+  {
+    path: '/dashboard',
+    icon: <House />,
+    tooltipText: 'Accueil',
   },
-  realisations: {
-    menuLinks: [
-      {
-        path: '/dashboard/realisations',
-        icon: <List />,
-        tooltipText: 'Liste des réalisations',
-      },
-      {
-        path: '/dashboard/realisations/creation',
-        icon: <SquarePlus />,
-        tooltipText: 'Ajouter une réalisation',
-      },
-    ],
+  {
+    path: '/dashboard/realisations',
+    icon: <Newspaper />,
+    tooltipText: 'Les réalisations',
+    childrenPath: 'realisations',
   },
-};
+  {
+    path: '/dashboard/statistiques',
+    icon: <ChartNoAxesCombined />,
+    tooltipText: 'Statistiques du site',
+  },
+];
 
 const AsideMenu: React.FC = () => {
   const pathname = usePathname();
@@ -70,21 +48,26 @@ const AsideMenu: React.FC = () => {
     return (
       <>
         {section.map((menuLink) => (
-          <TooltipProvider key={menuLink.path}>
+          <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
                   href={menuLink.path}
                   className={
-                    pathname === menuLink.path
-                      ? 'rounded-full bg-primary p-2 text-secondary'
-                      : 'p-2'
+                    menuLink.childrenPath ? 
+                      (pathname.includes(menuLink.childrenPath) ? 
+                        'rounded-full bg-primary p-2 text-secondary'
+                        : 'p-2')
+                      :
+                      (pathname === menuLink.path ?
+                      'rounded-full bg-primary p-2 text-secondary'
+                      : 'p-2')
                   }
                 >
                   {menuLink.icon}
                 </Link>
               </TooltipTrigger>
-              <TooltipContent>{menuLink.tooltipText}</TooltipContent>
+              <TooltipContent side='right'>{menuLink.tooltipText}</TooltipContent>
             </Tooltip>
           </TooltipProvider>
         ))}
@@ -92,18 +75,7 @@ const AsideMenu: React.FC = () => {
     );
   };
 
-  // Function to return the appropriate aside menu based on the URL
-  const returnAsideMenu = (): JSX.Element | null => {
-    if (pathname.includes('realisations')) {
-      return returnMenuLinksJsx(sections.realisations.menuLinks);
-    } else if (pathname.startsWith('/dashboard')) {
-      return returnMenuLinksJsx(sections.index.menuLinks);
-    } else {
-      return null;
-    }
-  };
-
-  const asideMenu = returnAsideMenu();
+  const asideMenu = returnMenuLinksJsx(sections);
 
   return <>{asideMenu}</>;
 };

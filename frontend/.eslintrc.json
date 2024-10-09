@@ -25,6 +25,7 @@
     "tailwindcss" // Plugin pour vérifier les classes Tailwind
   ],
   "rules": {
+    "prettier/prettier": "off",
     // Règles spécifiques de TailwindCSS
     "tailwindcss/classnames-order": "warn", // Avertissement pour l'ordre des classes Tailwind
     "tailwindcss/no-custom-classname": "off", // Désactiver la règle qui interdit les classes CSS personnalisées

@@ -38,8 +38,13 @@ export class RealisationsController {
     @UploadedFiles() files: Express.Multer.File[],
     @Body() createRealisationDto: CreateRealisationDto
   ) {
-    const imageUrls = files.map((file) => `/${file.filename}`);
-    createRealisationDto.imageUrls = imageUrls;
+
+    if (files) {
+      const imageUrls = files.map((file) => `/${file.filename}`);
+      createRealisationDto.imageUrls = imageUrls;
+      createRealisationDto.header = imageUrls[0];
+    }
+
     return this.realisationsService.create(createRealisationDto);
   }
 
@@ -60,8 +65,12 @@ export class RealisationsController {
     @Body() updateRealisationDto: UpdateRealisationDto,
     @Param() params: FindOneParams
   ) {
-    const imageUrls = files.map((file) => `/${file.filename}`);
-    updateRealisationDto.imageUrls = imageUrls;
+
+    if (files) {
+      const imageUrls = files.map((file) => `/${file.filename}`);
+      updateRealisationDto.imageUrls = imageUrls;
+    }
+
     return this.realisationsService.updateRealisation(
       params.id,
       updateRealisationDto

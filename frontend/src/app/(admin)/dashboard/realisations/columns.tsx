@@ -7,8 +7,8 @@ import {
   ExternalLink,
   MoreHorizontal,
   PencilLine,
-  Search,
   Trash2,
+  ArrowUpDown,
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -42,12 +42,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-import { deleteRealisation } from '@/api/realisationsApi';
+import { deleteRealisation, updateRealisation } from '@/api/realisationsApi';
 import { formatDateForUX } from '@/lib/dateUtils';
 import { Realisation } from '@/types/realisation.interface';
+import { Badge } from '@/components/ui/badge';
 
 export const columns = (
-  onRealisationDeleted: (id: string) => void
+  onRealisationDeleted: (id: string) => void,
+  onRealisationStatusChanged: (id: string, newStatus: Realisation['status']) => void
 ): ColumnDef<Realisation>[] => [
   {
     id: 'select',
@@ -80,7 +82,7 @@ export const columns = (
         <Link
           href="https://www.nd-renov.fr/upload/Image/renovation-interieure.jpg"
           target="_blank"
-          className="block w-[100px]"
+          className="block w-[75px]"
         >
           <AspectRatio ratio={1 / 1}>
             <Image
@@ -95,6 +97,10 @@ export const columns = (
     },
   },
   {
+    accessorKey: '_id',
+    header: 'ID',
+  },
+  {
     accessorKey: 'slug',
     header: 'Slug',
   },
@@ -103,8 +109,22 @@ export const columns = (
     header: 'Titre',
   },
   {
+    accessorKey: 'desc',
+    header: 'Description',
+  },
+  {
     accessorKey: 'updatedAt',
-    header: 'Dernière modification',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Dernière modification
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
     cell: ({ row }) => {
       const date = row.original.updatedAt;
       return formatDateForUX(date.toString());
@@ -112,30 +132,38 @@ export const columns = (
   },
   {
     accessorKey: 'status',
-    header: 'Statut',
+    header: 'Status',
     cell: ({ row }) => {
       const status = row.original.status;
       switch (status) {
         case 'active':
           return (
             <>
-              <p className="font-semibold text-lime-500">Activé</p>
+              <Badge className="font-semibold bg-lime-500 hover:bg-lime-500">Activé</Badge>
             </>
           );
         case 'desactive':
           return (
             <>
-              <p className="font-semibold text-red-600">Désactivé</p>
+              <Badge className="font-semibold bg-red-600 hover:bg-red-600">Désactivé</Badge>
             </>
           );
         case 'draft':
           return (
             <>
-              <p className="font-semibold text-amber-500">Brouillon</p>
+              <Badge className="font-semibold bg-amber-500 hover:bg-amber-500">Brouillon</Badge>
             </>
           );
       }
     },
+  },
+  {
+    accessorKey: 'tags',
+    header: 'Mot clés',
+  },
+  {
+    accessorKey: 'author',
+    header: 'Auteur',
   },
   {
     id: 'actions',
@@ -144,16 +172,12 @@ export const columns = (
       const realisation = row.original;
       const router = useRouter();
 
-      // Function to go at the realisation modification page
-      const handleShowDetails = () => {
-        router.push(`/dashboard/realisations/${realisation.slug}`);
-      };
-
-      // Function to go at the realisation modification page
+      // Function to go to the edition page
       const handleModify = () => {
-        router.push(`/dashboard/realisations/${realisation._id}/edition`);
+        router.push(`/dashboard/realisations/${realisation.slug}/edition`);
       };
 
+      // Open popup to confirm deleting
       const deleteConfirmTrigger = useRef<HTMLButtonElement | null>(null);
 
       const handleShowDeleteConfirm = () => {
@@ -162,7 +186,7 @@ export const columns = (
         }
       };
 
-      // Function to delete an realisation
+      // Function to delete a realisation
       const handleDelete = async () => {
         try {
           await deleteRealisation(realisation._id);
@@ -175,6 +199,20 @@ export const columns = (
           );
         }
       };
+
+      // Function to change a status of a realisation
+      const handleChangeStatus = async (statusSelected: Realisation['status']) => {
+        try {
+          await updateRealisation(realisation._id, {status: statusSelected});
+          console.log('Statut de la réalisation changé avec succès.');
+          onRealisationStatusChanged(realisation._id, statusSelected);
+        } catch (error) {
+          console.error(
+            'Erreur lors du changement de statut de la réalisation:',
+            error
+          );
+        }
+      }
 
       return (
         <>
@@ -193,10 +231,6 @@ export const columns = (
               >
                 <Clipboard className="mr-2 size-4" />
                 <span>Copier le slug de la réalisation</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleShowDetails}>
-                <Search className="mr-2 size-4" />
-                <span>Voir tous les détails</span>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={handleModify}>
                 <PencilLine className="mr-2 size-4" />
@@ -218,15 +252,15 @@ export const columns = (
                 </DropdownMenuSubTrigger>
                 <DropdownMenuPortal>
                   <DropdownMenuSubContent>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem disabled={realisation.status === 'active' ? true : false} onClick={() => handleChangeStatus('active')}>
                       <span className="mr-2 size-2 rounded-full bg-lime-500" />
                       <span>Activer</span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem disabled={realisation.status === 'desactive' ? true : false} onClick={() => handleChangeStatus('desactive')}>
                       <span className="mr-2 size-2 rounded-full bg-red-600" />
                       <span>Désactiver</span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem disabled={realisation.status === 'draft' ? true : false} onClick={() => handleChangeStatus('draft')}>
                       <span className="mr-2 size-2 rounded-full bg-amber-500" />
                       <span>Mettre en brouillon</span>
                     </DropdownMenuItem>

@@ -21,7 +21,15 @@ export class CreateRealisationDto {
 
   @IsString()
   @IsNotEmpty()
+  desc: string;
+
+  @IsString()
+  @IsNotEmpty()
   content: string;
+
+  @IsString()
+  @IsNotEmpty()
+  header: string;
 
   @IsArray()
   @IsString({ each: true })
