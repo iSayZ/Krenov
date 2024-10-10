@@ -1,6 +1,6 @@
 'use client';
 
-import { ChartNoAxesCombined, House, Newspaper } from 'lucide-react';
+import { ChartNoAxesCombined, House, Newspaper, Settings } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React from 'react';
@@ -37,6 +37,12 @@ const sections: MenuLink[] = [
     path: '/dashboard/statistiques',
     icon: <ChartNoAxesCombined />,
     tooltipText: 'Statistiques du site',
+  },
+  {
+    path: '/dashboard/:id/parametres',
+    icon: <Settings />,
+    tooltipText: 'Paramètres profil',
+    childrenPath: 'parametres',
   },
 ];
 

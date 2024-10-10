@@ -8,8 +8,8 @@ import { Realisation } from '@/types/realisation.interface';
 import { Section } from '../components/topbarMenu';
 import { useVisitedSection } from '../VisitedSectionContext';
 
-import { columns } from './columns';
-import { DataTable } from './data-table';
+import { columns } from './components/columns';
+import { DataTable } from './components/data-table';
 
 const section: Section = {
   items: [

@@ -1,6 +1,7 @@
 import { House, LogOut, Settings } from 'lucide-react';
 import Link from 'next/link';
-import React from 'react';
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -14,6 +15,12 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 const ProfileButton: React.FC = () => {
+  const router = useRouter();
+
+  const goToSettingsPage = () => {
+    router.push('/dashboard/:id/parametres');
+  };
+
   return (
     <>
       <DropdownMenu>
@@ -32,7 +39,7 @@ const ProfileButton: React.FC = () => {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Mon profil</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={goToSettingsPage}>
             <Settings className="mr-2 size-4" />
             <span>Paramètres</span>
           </DropdownMenuItem>

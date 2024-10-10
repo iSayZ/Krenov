@@ -148,7 +148,7 @@ const EditRealisation: React.FC = () => {
         Déplacez les images des articles en fonction de l'ordre d'affichage
         désiré.
       </h2>
-      <p className="italic">
+      <p className="italic text-muted-foreground">
         Seuls les articles ayant l'état "
         <span className="font-semibold text-lime-500">Activé</span>" seront
         visibles.
