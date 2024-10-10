@@ -73,16 +73,16 @@ const EditRealisation: React.FC = () => {
   const section: Section = {
     items: [
       {
-        path: '/dashboard',
+        path: '/admin/dashboard',
         name: 'Dashboard',
       },
       {
-        path: '/dashboard/realisations',
+        path: '/admin/dashboard/realisations',
         name: 'Réalisations',
       },
     ],
     page: {
-      path: '/dashboard/realisation/ordre',
+      path: '/admin/dashboard/realisation/ordre',
       name: `Réorganisation de l'ordre d'affichage`,
     },
   };

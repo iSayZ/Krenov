@@ -9,16 +9,16 @@ import { useVisitedSection } from '../../VisitedSectionContext';
 const section: Section = {
   items: [
     {
-      path: '/dashboard',
+      path: '/admin/dashboard',
       name: 'Dashboard',
     },
     {
-      path: '/dashboard/realisations',
+      path: '/admin/dashboard/realisations',
       name: 'Réalisations',
     },
   ],
   page: {
-    path: '/dashboard/realisation/creation',
+    path: '/admin/dashboard/realisation/creation',
     name: 'Créer une réalisation',
   },
 };

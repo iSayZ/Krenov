@@ -2,8 +2,8 @@
 
 import {
   ColumnDef,
-  SortingState,
   ColumnFiltersState,
+  SortingState,
   VisibilityState,
   flexRender,
   getCoreRowModel,
@@ -19,7 +19,7 @@ import {
   Trash2,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   AlertDialog,
@@ -132,14 +132,14 @@ export function DataTable<TData extends DataWithIdAndSlug, TValue>({
 
   // Function to go to the creation page
   const handleCreate = () => {
-    router.push('/dashboard/realisations/creation');
+    router.push('/admin/dashboard/realisations/creation');
   };
 
   // Function to go to the edition page
   const handleModify = () => {
     const selectedRow =
       table.getFilteredSelectedRowModel().rows[0].original.slug;
-    router.push(`/dashboard/realisations/${selectedRow}/edition`);
+    router.push(`/admin/dashboard/realisations/${selectedRow}/edition`);
   };
 
   // Function to delete a realisation selection
@@ -164,7 +164,7 @@ export function DataTable<TData extends DataWithIdAndSlug, TValue>({
 
   // Function to go to the order page
   const goToSortingPage = () => {
-    router.push('/dashboard/realisations/odre');
+    router.push('/admin/dashboard/realisations/odre');
   };
 
   return (

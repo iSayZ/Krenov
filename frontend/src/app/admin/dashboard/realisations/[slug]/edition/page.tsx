@@ -16,16 +16,16 @@ const EditRealisation: React.FC = () => {
   const section: Section = {
     items: [
       {
-        path: '/dashboard',
+        path: '/admin/dashboard',
         name: 'Dashboard',
       },
       {
-        path: '/dashboard/realisations',
+        path: '/admin/dashboard/realisations',
         name: 'Réalisations',
       },
     ],
     page: {
-      path: '/dashboard/realisation/:slug/edition',
+      path: '/admin/dashboard/realisation/:slug/edition',
       name: `Édition de ${slug}`,
     },
   };

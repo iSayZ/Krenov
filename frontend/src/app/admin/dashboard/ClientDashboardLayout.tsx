@@ -1,16 +1,15 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 
 import { ToggleButtonTheme } from '@/components/ui/toggleButtonTheme';
 
 import AsideMenu from './components/asideMenu';
 import ProfileButton from './components/profileButton';
-import SheetMenuSettings from './components/SheetMenuSettings';
 import TopbarMenu from './components/topbarMenu';
 import { VisitedSectionProvider } from './VisitedSectionContext';
 
-const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
+const ClientDashboardLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   return (
@@ -42,4 +41,4 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-export default DashboardLayout;
+export default ClientDashboardLayout;

@@ -23,23 +23,23 @@ interface MenuLink {
 // Typing the sections object
 const sections: MenuLink[] = [
   {
-    path: '/dashboard',
+    path: '/admin/dashboard',
     icon: <House />,
     tooltipText: 'Accueil du dashboard',
   },
   {
-    path: '/dashboard/realisations',
+    path: '/admin/dashboard/realisations',
     icon: <Newspaper />,
     tooltipText: 'Les réalisations',
     childrenPath: 'realisations',
   },
   {
-    path: '/dashboard/statistiques',
+    path: '/admin/dashboard/statistiques',
     icon: <ChartNoAxesCombined />,
     tooltipText: 'Statistiques du site',
   },
   {
-    path: '/dashboard/:id/parametres',
+    path: '/admin/dashboard/:id/parametres',
     icon: <Settings />,
     tooltipText: 'Paramètres profil',
     childrenPath: 'parametres',

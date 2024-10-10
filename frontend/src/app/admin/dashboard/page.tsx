@@ -8,7 +8,7 @@ import { useVisitedSection } from './VisitedSectionContext';
 const section: Section = {
   items: [],
   page: {
-    path: '/dashboard',
+    path: '/admin/dashboard',
     name: 'Dashboard',
   },
 };
@@ -21,7 +21,14 @@ const Index: React.FC = () => {
     setVisitedSection(section);
   }, [setVisitedSection]);
 
-  return <h1 className="text-2xl font-bold">Accueil du dashboard</h1>;
+  return (
+    <>
+      <h1 className="text-3xl font-bold">Bonjour Alexis !</h1>
+      <p className="text-sm italic">
+        Dernière connexion le 8 octobre 2024 à 19:17
+      </p>
+    </>
+  );
 };
 
 export default Index;

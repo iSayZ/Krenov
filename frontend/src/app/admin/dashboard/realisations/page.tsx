@@ -14,12 +14,12 @@ import { DataTable } from './components/data-table';
 const section: Section = {
   items: [
     {
-      path: '/dashboard',
+      path: '/admin/dashboard',
       name: 'Dashboard',
     },
   ],
   page: {
-    path: '/dashboard/realisations',
+    path: '/admin/dashboard/realisations',
     name: 'Réalisations',
   },
 };

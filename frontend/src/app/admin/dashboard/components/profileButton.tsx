@@ -1,7 +1,7 @@
 import { House, LogOut, Settings } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React from 'react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -18,7 +18,7 @@ const ProfileButton: React.FC = () => {
   const router = useRouter();
 
   const goToSettingsPage = () => {
-    router.push('/dashboard/:id/parametres');
+    router.push('/admin/dashboard/:id/parametres');
   };
 
   return (

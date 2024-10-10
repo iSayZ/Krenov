@@ -10,7 +10,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -30,12 +29,12 @@ import { useVisitedSection } from '../../VisitedSectionContext';
 const section: Section = {
   items: [
     {
-      path: '/dashboard',
+      path: '/admin/dashboard',
       name: 'Dashboard',
     },
   ],
   page: {
-    path: '/dashboard/:id/parametres',
+    path: '/admin/dashboard/:id/parametres',
     name: 'Paramètres du profil',
   },
 };
@@ -70,8 +69,12 @@ const ProfileSettings: React.FC = () => {
             <CardContent className="flex justify-evenly">
               <div className="w-1/2 space-y-4">
                 <div className="space-y-1">
-                  <Label htmlFor="pseudo">Pseudo</Label>
-                  <Input id="pseudo" defaultValue="iSayZ" className="w-1/3" />
+                  <Label htmlFor="email">Adresse mail</Label>
+                  <Input
+                    id="email"
+                    defaultValue="john.doe@gmail.com"
+                    className="w-1/2"
+                  />
                 </div>
                 <div className="space-y-1">
                   <Label htmlFor="role">Rôle</Label>

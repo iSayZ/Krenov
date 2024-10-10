@@ -3,12 +3,12 @@
 
 import { ColumnDef } from '@tanstack/react-table';
 import {
+  ArrowUpDown,
   Clipboard,
   ExternalLink,
   MoreHorizontal,
   PencilLine,
   Trash2,
-  ArrowUpDown,
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -183,7 +183,9 @@ export const columns = (
 
       // Function to go to the edition page
       const handleModify = () => {
-        router.push(`/dashboard/realisations/${realisation.slug}/edition`);
+        router.push(
+          `/admin/dashboard/realisations/${realisation.slug}/edition`
+        );
       };
 
       // Open popup to confirm deleting

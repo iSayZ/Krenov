@@ -8,12 +8,12 @@ import { useVisitedSection } from '../VisitedSectionContext';
 const section: Section = {
   items: [
     {
-      path: '/dashboard',
+      path: '/admin/dashboard',
       name: 'Dashboard',
     },
   ],
   page: {
-    path: '/dashboard/statistiques',
+    path: '/admin/dashboard/statistiques',
     name: 'Statistiques',
   },
 };
