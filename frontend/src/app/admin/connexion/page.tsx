@@ -1,6 +1,7 @@
+'use client';
+
 import Image from 'next/image';
 
-import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -12,8 +13,80 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useState } from 'react';
+import { login } from '@/api/authApi';
+import { useRouter } from 'next/navigation';
 
 const Login: React.FC = () => {
+  const router = useRouter();
+
+  const [formData, setFormData] = useState<{ email: string; password: string }>(
+    {
+      email: '',
+      password: '',
+    }
+  );
+
+  const [errorMsg, setErrorMsg] = useState<{
+    email: string;
+    password: string;
+    other: string;
+  }>({
+    email: '',
+    password: '',
+    other: '',
+  });
+
+  // Handle change for the inputs
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    // Mettre à jour les données du formulaire
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+
+    // Vérifier si le champ est vide pour mettre à jour les erreurs
+    if (name === 'email') {
+      setErrorMsg((prevError) => ({
+        ...prevError,
+        email: '',
+      }));
+    }
+
+    if (name === 'password') {
+      setErrorMsg((prevError) => ({
+        ...prevError,
+        password: '',
+      }));
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (formData.email === '') {
+      return setErrorMsg({
+        ...errorMsg,
+        email: 'Le champ email est obligatoire.',
+      });
+    }
+
+    if (formData.password === '') {
+      return setErrorMsg({
+        ...errorMsg,
+        password: 'Le champ mot de passe est obligatoire.',
+      });
+    }
+
+    try {
+      const response = await login(formData);
+      router.push('/admin/dashboard');
+    } catch (error) {
+      console.error(error);
+      setErrorMsg({ ...errorMsg, other: error.response.data.message });
+    }
+  };
+
   return (
     <div className="flex h-screen w-screen items-center justify-center overflow-hidden">
       <div className="absolute inset-0 w-screen">
@@ -40,19 +113,40 @@ const Login: React.FC = () => {
                 <Input
                   id="email"
                   type="email"
+                  name="email"
                   placeholder="Entrez votre email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className={
+                    errorMsg.email ? 'outline outline-1 outline-red-500' : ''
+                  }
                   required
                 />
+                {errorMsg.email && (
+                  <p className="text-red-500 text-sm">{errorMsg.email}</p>
+                )}
               </div>
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="password">Mot de passe</Label>
                 <Input
                   id="password"
                   type="password"
+                  name="password"
                   placeholder="Entrez votre mot de passe"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className={
+                    errorMsg.password ? 'outline outline-1 outline-red-500' : ''
+                  }
                   required
                 />
+                {errorMsg.password && (
+                  <p className="text-red-500 text-sm">{errorMsg.password}</p>
+                )}
               </div>
+              {errorMsg.other && (
+                <p className="text-red-500 text-sm">{errorMsg.other}</p>
+              )}
             </div>
           </form>
           <p className="cursor-pointer text-sm text-foreground hover:underline">
@@ -60,7 +154,9 @@ const Login: React.FC = () => {
           </p>
         </CardContent>
         <CardFooter>
-          <Button type="submit">Connexion</Button>
+          <Button type="submit" onClick={handleSubmit}>
+            Connexion
+          </Button>
         </CardFooter>
       </Card>
     </div>

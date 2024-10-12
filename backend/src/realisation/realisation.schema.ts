@@ -31,16 +31,16 @@ export class Realisation {
   author: string;
 
   @Prop({ type: Date, required: true, default: Date.now })
-  createdAt: Date;
+  created_at: Date;
 
   @Prop({ type: Date, required: true, default: Date.now })
-  updatedAt: Date;
+  updated_at: Date;
 }
 
 export const RealisationSchema = SchemaFactory.createForClass(Realisation);
 
 // Middleware to update `updatedAt` each time the document is modified
 RealisationSchema.pre('save', function (next) {
-  this.updatedAt = new Date();
+  this.updated_at = new Date();
   next();
 });

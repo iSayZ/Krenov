@@ -8,7 +8,7 @@ import { promises as fs } from 'fs';
 import { join } from 'path';
 
 @Injectable()
-export class RealisationsService {
+export class RealisationService {
   constructor(
     @InjectModel(Realisation.name)
     private realisationModel: Model<RealisationDocument>

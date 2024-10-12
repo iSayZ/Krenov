@@ -1,13 +1,10 @@
-import axios from 'axios';
-
+import axiosInstance from '@/lib/axiosInstance';
 import { Realisation } from '@/types/realisation.interface';
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 // Function to fetch all realisations
 const fetchAllRealisations = async (): Promise<Realisation[]> => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/realisations`);
+    const response = await axiosInstance.get('/realisations');
     return response.data;
   } catch (error) {
     console.error('Erreur lors de la récupération des réalisations:', error);
@@ -18,7 +15,7 @@ const fetchAllRealisations = async (): Promise<Realisation[]> => {
 // Function to fetch a realisation by its slug
 const fetchRealisationBySlug = async (slug: string): Promise<Realisation> => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/realisations/${slug}`);
+    const response = await axiosInstance.get(`/realisations/${slug}`);
     return response.data;
   } catch (error) {
     console.error(
@@ -35,10 +32,7 @@ const updateRealisation = async (
   data: Partial<Realisation>
 ): Promise<Realisation> => {
   try {
-    const response = await axios.put(
-      `${API_BASE_URL}/realisations/${id}`,
-      data
-    );
+    const response = await axiosInstance.put(`/realisations/${id}`, data);
     return response.data;
   } catch (error) {
     console.error(
@@ -52,7 +46,7 @@ const updateRealisation = async (
 // Function to delete a realisation by its ID
 const deleteRealisation = async (id: string): Promise<void> => {
   try {
-    await axios.delete(`${API_BASE_URL}/realisations/${id}`);
+    await axiosInstance.delete(`/realisations/${id}`);
   } catch (error) {
     console.error(
       `Erreur lors de la suppression de la réalisation avec ID ${id}:`,

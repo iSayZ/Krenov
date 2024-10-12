@@ -6,12 +6,14 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { RealisationsModule } from './realisation/realisation.module';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     // Load envFile
     ConfigModule.forRoot({
       envFilePath: '.env',
+      isGlobal: true,
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public', 'uploads'), // URL to load an image = localhost:PORT/filename.png
@@ -19,6 +21,7 @@ import { ConfigModule } from '@nestjs/config';
     // Connect to MongoDB
     MongooseModule.forRoot(process.env.MONGODB_URI),
     RealisationsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
