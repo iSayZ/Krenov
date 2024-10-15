@@ -3,7 +3,7 @@
 import { useParams } from 'next/navigation';
 import React, { useEffect } from 'react';
 
-import { Section } from '../../../components/topbarMenu';
+import { Section } from '../../../components/TopbarMenu';
 import { useVisitedSection } from '../../../VisitedSectionContext';
 
 const EditRealisation: React.FC = () => {

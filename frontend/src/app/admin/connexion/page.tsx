@@ -1,6 +1,8 @@
 'use client';
 
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -13,9 +15,8 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useState } from 'react';
+
 import { login } from '@/api/authApi';
-import { useRouter } from 'next/navigation';
 
 const Login: React.FC = () => {
   const router = useRouter();
@@ -79,7 +80,7 @@ const Login: React.FC = () => {
     }
 
     try {
-      const response = await login(formData);
+      await login(formData);
       router.push('/admin/dashboard');
     } catch (error) {
       console.error(error);
@@ -123,7 +124,7 @@ const Login: React.FC = () => {
                   required
                 />
                 {errorMsg.email && (
-                  <p className="text-red-500 text-sm">{errorMsg.email}</p>
+                  <p className="text-sm text-red-500">{errorMsg.email}</p>
                 )}
               </div>
               <div className="flex flex-col space-y-1.5">
@@ -141,11 +142,11 @@ const Login: React.FC = () => {
                   required
                 />
                 {errorMsg.password && (
-                  <p className="text-red-500 text-sm">{errorMsg.password}</p>
+                  <p className="text-sm text-red-500">{errorMsg.password}</p>
                 )}
               </div>
               {errorMsg.other && (
-                <p className="text-red-500 text-sm">{errorMsg.other}</p>
+                <p className="text-sm text-red-500">{errorMsg.other}</p>
               )}
             </div>
           </form>

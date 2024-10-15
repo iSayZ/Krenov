@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { fetchAllRealisations } from '@/api/realisationsApi';
 import { Realisation } from '@/types/realisation.interface';
 
-import { Section } from '../components/topbarMenu';
+import { Section } from '../components/TopbarMenu';
 import { useVisitedSection } from '../VisitedSectionContext';
 
 import { columns } from './components/columns';

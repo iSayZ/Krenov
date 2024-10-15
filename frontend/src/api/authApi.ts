@@ -4,10 +4,9 @@ import axiosInstance from '@/lib/axiosInstance';
 const login = async (formData: {
   email: string;
   password: string;
-}): Promise<any> => {
+}): Promise<{ message: string }> => {
   try {
     const response = await axiosInstance.post('/auth/login', formData);
-    console.log('login', response.data);
     return response.data;
   } catch (error) {
     console.error('Erreur lors de la connexion :', error);
@@ -15,8 +14,19 @@ const login = async (formData: {
   }
 };
 
+// Function to logout
+const logout = async (): Promise<{ message: string }> => {
+  try {
+    const response = await axiosInstance.post('/auth/logout');
+    return response.data;
+  } catch (error) {
+    console.error('Erreur lors de la déconnexion :', error);
+    throw error;
+  }
+};
+
 // Function to verify access, use header authorization to use middleware
-const verifyAccess = async (token: string): Promise<any> => {
+const verifyAccess = async (token: string): Promise<{ message: string }> => {
   try {
     const response = await axiosInstance.get('/auth/verify-access', {
       headers: {
@@ -30,4 +40,4 @@ const verifyAccess = async (token: string): Promise<any> => {
   }
 };
 
-export { login, verifyAccess };
+export { login, logout, verifyAccess };

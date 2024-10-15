@@ -1,35 +1,26 @@
 import { NextResponse } from 'next/server';
+
+import { dashboardMiddleware } from './middleware/dashboard';
+import { loginMiddleware } from './middleware/login';
+
 import type { NextRequest } from 'next/server';
-import { verifyAccess } from './api/authApi';
-import { fetchAllRealisations } from './api/realisationsApi';
 
-// Protected roads
-const protectedRoutes = ['/admin/dashboard'];
-
-export async function middleware(request: NextRequest) {
-  const token = request.cookies.get('access_token')?.value;
-
-  // If the user doesn't have a token, he's redirected to the login page
-  if (
-    !token &&
-    protectedRoutes.some((route) => request.nextUrl.pathname.startsWith(route))
-  ) {
-    return NextResponse.redirect(new URL('/admin/connexion', request.url));
+async function middleware(request: NextRequest) {
+  // Calling middleware of dashboard road
+  if (request.nextUrl.pathname.startsWith('/admin/dashboard')) {
+    return dashboardMiddleware(request);
   }
 
-  // If the user has a token, we check the token's validity
-  if (token) {
-    try {
-      await verifyAccess(token);
-    } catch (error) {
-      return NextResponse.redirect(new URL('/admin/connexion', request.url));
-    }
+  // Calling middleware of login road
+  if (request.nextUrl.pathname.startsWith('/admin/connexion')) {
+    return loginMiddleware(request);
   }
 
-  // Continue to the page if everything is correct
   return NextResponse.next();
 }
 
-export const config = {
-  matcher: ['/admin/dashboard/:path*'],
+const config = {
+  matcher: ['/admin/dashboard/:path*', '/admin/connexion'],
 };
+
+export { middleware, config };

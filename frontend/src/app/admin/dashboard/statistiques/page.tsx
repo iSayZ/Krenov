@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 
-import { Section } from '../components/topbarMenu';
+import { Section } from '../components/TopbarMenu';
 import { useVisitedSection } from '../VisitedSectionContext';
 
 const section: Section = {

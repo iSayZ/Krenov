@@ -20,7 +20,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 
-import { Section } from '../../components/topbarMenu';
+import { Section } from '../../components/TopbarMenu';
 import { useVisitedSection } from '../../VisitedSectionContext';
 
 import Item from './components/Item';

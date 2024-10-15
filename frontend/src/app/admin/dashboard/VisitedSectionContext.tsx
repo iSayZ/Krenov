@@ -1,6 +1,6 @@
 import React, { createContext, ReactNode, useContext, useState } from 'react';
 
-import { Section } from './components/topbarMenu';
+import { Section } from './components/TopbarMenu';
 
 interface VisitedSectionContextType {
   visitedSection: Section;

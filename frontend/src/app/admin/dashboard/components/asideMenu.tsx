@@ -39,7 +39,7 @@ const sections: MenuLink[] = [
     tooltipText: 'Statistiques du site',
   },
   {
-    path: '/admin/dashboard/:id/parametres',
+    path: '/admin/dashboard/parametres',
     icon: <Settings />,
     tooltipText: 'Paramètres profil',
     childrenPath: 'parametres',
