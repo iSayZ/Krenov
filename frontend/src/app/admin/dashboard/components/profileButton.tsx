@@ -27,7 +27,7 @@ const ProfileButton: React.FC = () => {
         const profileData = await fetchAdminProfile();
         setProfile(profileData);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     }
 

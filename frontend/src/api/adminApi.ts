@@ -4,7 +4,7 @@ import { AdminProfile, AdminSettings } from '@/types/admin.interface';
 // Function to fetch an user profile
 const fetchAdminProfile = async (): Promise<AdminProfile> => {
   try {
-    const response = await axiosInstance.get(`/admin/profile`);
+    const response = await axiosInstance.get(`/admin/profile`,);
     return response.data;
   } catch (error) {
     console.error(

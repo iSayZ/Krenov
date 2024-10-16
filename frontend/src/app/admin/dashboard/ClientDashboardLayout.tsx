@@ -5,7 +5,7 @@ import React from 'react';
 import { ToggleButtonTheme } from '@/components/ui/toggleButtonTheme';
 
 import AsideMenu from './components/AsideMenu';
-import ProfileButton from './components/ProfileButton';
+import ProfileButton from './components/profileButton';
 import TopbarMenu from './components/TopbarMenu';
 import { VisitedSectionProvider } from './VisitedSectionContext';
 

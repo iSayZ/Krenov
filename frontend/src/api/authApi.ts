@@ -40,4 +40,19 @@ const verifyAccess = async (token: string): Promise<{ message: string }> => {
   }
 };
 
-export { login, logout, verifyAccess };
+// Function to refresh tokens, use header authorization to use middleware
+const refreshTokens = async (token: string): Promise<any> => {
+  try {
+    const response = await axiosInstance.post('/auth/refresh', {}, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  } catch (error) {
+    console.error('Accès non autorisé :', error);
+    throw error;
+  }
+};
+
+export { login, logout, verifyAccess, refreshTokens };

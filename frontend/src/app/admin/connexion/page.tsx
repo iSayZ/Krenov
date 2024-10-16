@@ -17,6 +17,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
 import { login } from '@/api/authApi';
+import axios from 'axios';
 
 const Login: React.FC = () => {
   const router = useRouter();
@@ -42,13 +43,12 @@ const Login: React.FC = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    // Mettre à jour les données du formulaire
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
 
-    // Vérifier si le champ est vide pour mettre à jour les erreurs
+    // Check if the input is empty to refresh error msg
     if (name === 'email') {
       setErrorMsg((prevError) => ({
         ...prevError,
@@ -84,7 +84,17 @@ const Login: React.FC = () => {
       router.push('/admin/dashboard');
     } catch (error) {
       console.error(error);
-      setErrorMsg({ ...errorMsg, other: error.response.data.message });
+      if (axios.isAxiosError(error)) {
+        setErrorMsg({ ...errorMsg, other: error.response?.data.message });
+      } else {
+        setErrorMsg({ ...errorMsg, other: 'Une erreur inattendue est survenue.' });
+      }
+    }
+  };
+
+  const handleKeyDown = (e: { key: string; }) => {
+    if (e.key === 'Enter') {
+        handleSubmit(); // Appelle la fonction de soumission
     }
   };
 
@@ -118,6 +128,7 @@ const Login: React.FC = () => {
                   placeholder="Entrez votre email"
                   value={formData.email}
                   onChange={handleChange}
+                  onKeyDown={handleKeyDown}
                   className={
                     errorMsg.email ? 'outline outline-1 outline-red-500' : ''
                   }
@@ -136,6 +147,7 @@ const Login: React.FC = () => {
                   placeholder="Entrez votre mot de passe"
                   value={formData.password}
                   onChange={handleChange}
+                  onKeyDown={handleKeyDown}
                   className={
                     errorMsg.password ? 'outline outline-1 outline-red-500' : ''
                   }
@@ -155,7 +167,10 @@ const Login: React.FC = () => {
           </p>
         </CardContent>
         <CardFooter>
-          <Button type="submit" onClick={handleSubmit}>
+          <Button 
+            type="button" 
+            onClick={handleSubmit}
+            onKeyDown={handleKeyDown}>
             Connexion
           </Button>
         </CardFooter>

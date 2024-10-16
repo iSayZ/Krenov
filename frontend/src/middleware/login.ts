@@ -4,27 +4,26 @@ import { verifyAccess } from '../api/authApi';
 
 import type { NextRequest } from 'next/server';
 
-// Middleware pour la route de connexion
+// Middleware for connexion road
 async function loginMiddleware(request: NextRequest) {
-  const token = request.cookies.get('access_token')?.value;
+  const accessToken = request.cookies.get('access_token')?.value;
 
-  // Si l'utilisateur a un token, vérifiez sa validité
-  if (token) {
+  // If the user has an acessToken, check it's validity
+  if (accessToken) {
     try {
-      await verifyAccess(token);
-      // Rediriger vers le tableau de bord si le token est valide
+      await verifyAccess(accessToken);
+      // If it's valid, redirect to dashboard
       return NextResponse.redirect(new URL('/admin/dashboard', request.url));
     } catch (error) {
-      // Si le token n'est pas valide, on reste sur la page de connexion
       console.error('Token invalid', error);
     }
   }
 
-  // Continue vers la page de connexion si tout est correct
+  // Stay on connexion page
   return NextResponse.next();
 }
 
-// Exportation de la configuration pour matcher
+// Export configuration for matcher
 const config = {
   matcher: ['/admin/connexion'],
 };
