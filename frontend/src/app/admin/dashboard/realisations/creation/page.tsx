@@ -3,8 +3,8 @@
 import dynamic from 'next/dynamic';
 import { useEffect } from 'react';
 
-import { Section } from '../../components/TopbarMenu';
-import { useVisitedSection } from '../../VisitedSectionContext';
+import { Section } from '../../components/template/TopbarMenu';
+import { useVisitedSection } from '../../context/VisitedSectionContext';
 
 const section: Section = {
   items: [

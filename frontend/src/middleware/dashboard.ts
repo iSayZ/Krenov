@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server';
 
+import { setTokensFromResponse } from '@/lib/cookieManager';
+
 import { verifyAccess, refreshTokens } from '../api/authApi';
 
 import type { NextRequest } from 'next/server';
-import { setTokensFromResponse } from '@/lib/cookieManager';
 
 // Protected roads
 const protectedRoutes = ['/admin/dashboard'];
@@ -14,7 +15,8 @@ async function dashboardMiddleware(request: NextRequest) {
 
   // If the user doesn't have a acessToken and refreshToken, he's redirected to the login page
   if (
-    !accessToken && !refreshToken &&
+    !accessToken &&
+    !refreshToken &&
     protectedRoutes.some((route) => request.nextUrl.pathname.startsWith(route))
   ) {
     return NextResponse.redirect(new URL('/admin/connexion', request.url));
@@ -25,25 +27,41 @@ async function dashboardMiddleware(request: NextRequest) {
     try {
       await verifyAccess(accessToken);
       return NextResponse.next();
-    } catch (error) {
-
+    } catch {
       // If the accessToken is invalid and the user has a refreshToken, try to refresh a new tokens
       if (refreshToken) {
         try {
           const response = await refreshTokens(refreshToken);
-          return setTokensFromResponse(response);
-        } catch (error) {
-          return NextResponse.redirect(new URL('/admin/connexion', request.url));
+          
+          // Generate a response to set cookies
+          const redirectResponse = NextResponse.next();
+
+          // Update the cookies directly in the redirection response
+          setTokensFromResponse(redirectResponse, response);
+
+          return redirectResponse;
+        } catch {
+          return NextResponse.redirect(
+            new URL('/admin/connexion', request.url)
+          );
         }
       }
 
       return NextResponse.redirect(new URL('/admin/connexion', request.url));
     }
-  } else if (refreshToken) {  // If the user has a refreshToken, try to refresh a new tokens
+  } else if (refreshToken) {
+    // If the user has a refreshToken, try to refresh a new tokens
     try {
       const response = await refreshTokens(refreshToken);
-      return setTokensFromResponse(response);
-    } catch (error) {
+      
+      // Generate a response to set cookies
+      const redirectResponse = NextResponse.next();
+
+      // Update the cookies directly in the redirection response
+      setTokensFromResponse(redirectResponse, response);
+
+      return redirectResponse;
+    } catch {
       return NextResponse.redirect(new URL('/admin/connexion', request.url));
     }
   }

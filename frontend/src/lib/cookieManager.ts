@@ -1,16 +1,15 @@
 import { NextResponse } from 'next/server';
 
 // Function to parse and set cookies from the response header
-export function setTokensFromResponse(response: Response) {
-  const nextResponse = NextResponse.next();
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function setTokensFromResponse(nextResponse: NextResponse, response: any): void {
   // Get the header set-cookie
   const setCookie = response.headers.get('set-cookie');
 
   if (setCookie) {
-    const cookies = setCookie.split(',').map(cookie => cookie.trim());
+    const cookies = setCookie.split(',').map((cookie: string) => cookie.trim());
 
-    cookies.forEach(cookie => {
+    cookies.forEach((cookie: string) => {
       const [fullName, ...rest] = cookie.split('=');
       const name = fullName.trim();
       const value = rest.join('=').split(';')[0];
@@ -23,7 +22,7 @@ export function setTokensFromResponse(response: Response) {
           secure: process.env.NODE_ENV === 'production',
           sameSite: 'lax',
           path: '/',
-          maxAge: 3600
+          maxAge: 3600,
         });
       } else if (name === 'refresh_token') {
         nextResponse.cookies.set({
@@ -33,11 +32,9 @@ export function setTokensFromResponse(response: Response) {
           secure: process.env.NODE_ENV === 'production',
           sameSite: 'lax',
           path: '/',
-          maxAge: 604800
+          maxAge: 604800,
         });
       }
     });
   }
-
-  return nextResponse;
 }

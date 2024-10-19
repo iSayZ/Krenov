@@ -3,11 +3,11 @@
 import React from 'react';
 
 import { ToggleButtonTheme } from '@/components/ui/toggleButtonTheme';
-
-import AsideMenu from './components/AsideMenu';
-import ProfileButton from './components/profileButton';
-import TopbarMenu from './components/TopbarMenu';
-import { VisitedSectionProvider } from './VisitedSectionContext';
+import { Toaster } from "@/components/ui/sonner"
+import AsideMenu from './components/template/AsideMenu';
+import ProfileButton from './components/template/ProfileButton';
+import TopbarMenu from './components/template/TopbarMenu';
+import { VisitedSectionProvider } from './context/VisitedSectionContext';
 
 const ClientDashboardLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -37,6 +37,7 @@ const ClientDashboardLayout: React.FC<{ children: React.ReactNode }> = ({
           </div>
         </div>
       </div>
+      <Toaster />
     </VisitedSectionProvider>
   );
 };

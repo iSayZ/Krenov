@@ -11,7 +11,7 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
 
-import { useVisitedSection } from '../VisitedSectionContext';
+import { useVisitedSection } from '../../context/VisitedSectionContext';
 
 interface BreadcrumbLink {
   path: string;

@@ -20,8 +20,8 @@ import React, { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 
-import { Section } from '../../components/TopbarMenu';
-import { useVisitedSection } from '../../VisitedSectionContext';
+import { Section } from '../../components/template/TopbarMenu';
+import { useVisitedSection } from '../../context/VisitedSectionContext';
 
 import Item from './components/Item';
 import SortableItem from './components/SortableItem';

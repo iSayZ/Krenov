@@ -5,8 +5,8 @@ import React, { useEffect, useState } from 'react';
 import { fetchAllRealisations } from '@/api/realisationsApi';
 import { Realisation } from '@/types/realisation.interface';
 
-import { Section } from '../components/TopbarMenu';
-import { useVisitedSection } from '../VisitedSectionContext';
+import { Section } from '../components/template/TopbarMenu';
+import { useVisitedSection } from '../context/VisitedSectionContext';
 
 import { columns } from './components/columns';
 import { DataTable } from './components/data-table';

@@ -4,11 +4,12 @@ import { useEffect, useState } from 'react';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-
 import { fetchAdminSettings } from '@/api/adminApi';
 import { AdminSettings } from '@/types/admin.interface';
-import { Section } from '../components/TopbarMenu';
-import { useVisitedSection } from '../VisitedSectionContext';
+
+import { Section } from '../components/template/TopbarMenu';
+import { useVisitedSection } from '../context/VisitedSectionContext';
+
 import ProfileInformation from './components/ProfileInformation';
 import SecuritySettings from './components/SecuritySettings';
 
@@ -50,10 +51,9 @@ const ProfileSettings: React.FC = () => {
     const loadProfileSettings = async () => {
       try {
         const profileSettingsData = await fetchAdminSettings();
-        console.log(profileSettingsData);
         setProfileSettings(profileSettingsData);
       } catch (error) {
-        console.error('Erreur lors du chargement des réalisations:', error);
+        console.error('Erreur lors du chargement des réalisations :', error);
       } finally {
         setLoading(false);
       }
@@ -63,7 +63,9 @@ const ProfileSettings: React.FC = () => {
   }, []);
 
   // To update new value of settings
-  const handleChangeSettings = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> ) => {
+  const handleChangeSettings = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
 
     setProfileSettings((prevData) => ({
@@ -87,7 +89,7 @@ const ProfileSettings: React.FC = () => {
 
   return (
     <>
-      <div className="flex size-full items-center justify-center">                        
+      <div className="flex size-full items-center justify-center">
         <Tabs defaultValue="account" className="size-full">
           <div className="flex items-center justify-between">
             <TabsList className="grid w-1/3 grid-cols-2">
@@ -97,7 +99,10 @@ const ProfileSettings: React.FC = () => {
             <h2 className="text-xl font-semibold">Paramètres du profil</h2>
           </div>
           <TabsContent value="account" className="pb-4">
-            <ProfileInformation profileSettings={profileSettings} handleChangeSettings={handleChangeSettings} />
+            <ProfileInformation
+              profileSettings={profileSettings}
+              handleChangeSettings={handleChangeSettings}
+            />
           </TabsContent>
           <TabsContent value="password">
             <SecuritySettings profileSettings={profileSettings} />

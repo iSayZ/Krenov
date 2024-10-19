@@ -14,8 +14,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-import { logout } from '@/api/authApi';
 import { fetchAdminProfile } from '@/api/adminApi';
+import { logout } from '@/api/authApi';
 import { AdminProfile } from '@/types/admin.interface';
 
 const ProfileButton: React.FC = () => {
@@ -29,10 +29,10 @@ const ProfileButton: React.FC = () => {
       } catch (error) {
         console.error(error);
       }
-    }
+    };
 
     loadProfile();
-  }, [])
+  }, []);
 
   const router = useRouter();
 
@@ -59,7 +59,9 @@ const ProfileButton: React.FC = () => {
             className="overflow-hidden rounded-full"
           >
             <Avatar className="size-9">
-              <AvatarImage src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${profile?.avatar}`} />
+              <AvatarImage
+                src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${profile?.avatar}`}
+              />
               <AvatarFallback></AvatarFallback>
             </Avatar>
           </Button>

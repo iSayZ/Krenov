@@ -1,5 +1,6 @@
 'use client';
 
+import axios from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -17,9 +18,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
 import { login } from '@/api/authApi';
-import axios from 'axios';
 
-const Login: React.FC = () => {
+const LoginPage: React.FC = () => {
   const router = useRouter();
 
   const [formData, setFormData] = useState<{ email: string; password: string }>(
@@ -80,21 +80,30 @@ const Login: React.FC = () => {
     }
 
     try {
-      await login(formData);
-      router.push('/admin/dashboard');
+      const response = await login(formData);
+
+      if (response.require2FA) {
+            router.push('/admin/connexion/verification-2fa')
+          } else {
+            router.push('/admin/dashboard');
+      }
+
     } catch (error) {
       console.error(error);
       if (axios.isAxiosError(error)) {
         setErrorMsg({ ...errorMsg, other: error.response?.data.message });
       } else {
-        setErrorMsg({ ...errorMsg, other: 'Une erreur inattendue est survenue.' });
+        setErrorMsg({
+          ...errorMsg,
+          other: 'Une erreur inattendue est survenue.',
+        });
       }
     }
   };
 
-  const handleKeyDown = (e: { key: string; }) => {
+  const handleKeyDown = (e: { key: string }) => {
     if (e.key === 'Enter') {
-        handleSubmit(); // Appelle la fonction de soumission
+      handleSubmit();
     }
   };
 
@@ -167,10 +176,11 @@ const Login: React.FC = () => {
           </p>
         </CardContent>
         <CardFooter>
-          <Button 
-            type="button" 
+          <Button
+            type="button"
             onClick={handleSubmit}
-            onKeyDown={handleKeyDown}>
+            onKeyDown={handleKeyDown}
+          >
             Connexion
           </Button>
         </CardFooter>
@@ -179,4 +189,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default LoginPage;
