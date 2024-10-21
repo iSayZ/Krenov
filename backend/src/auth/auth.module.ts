@@ -1,11 +1,15 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
+import { MongooseModule } from '@nestjs/mongoose';
+import {
+  AdminAccount,
+  AdminAccountSchema,
+} from '../admin/admin-account.schema';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { MongooseModule } from '@nestjs/mongoose';
-import { AdminAccount, AdminAccountSchema } from './admin-account.schema';
-import { JwtModule } from '@nestjs/jwt';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { JwtAuthGuard } from './jwt-auth.guard';
+import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
+import { TwoFactorModule } from 'src/twofactor/twofactor.module';
 
 @Module({
   imports: [
@@ -20,9 +24,10 @@ import { JwtAuthGuard } from './jwt-auth.guard';
       }),
       inject: [ConfigService],
     }),
+    forwardRef(() => TwoFactorModule),
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtAuthGuard],
-  exports: [JwtModule],
+  exports: [AuthService, JwtModule],
 })
 export class AuthModule {}

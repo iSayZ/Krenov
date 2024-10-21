@@ -1,8 +1,11 @@
-// Schema for Mongoose
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, UpdateQuery } from 'mongoose';
 
 export type AdminAccountDocument = AdminAccount & Document;
+
+interface AdminAccountUpdate extends UpdateQuery<AdminAccount> {
+  refresh_token?: string;
+}
 
 @Schema({ collection: 'admin_accounts' })
 export class AdminAccount {
@@ -13,7 +16,16 @@ export class AdminAccount {
   password: string;
 
   @Prop({ type: String, required: true })
-  google_auth_secret: string;
+  refresh_token: string;
+
+  @Prop({ type: Boolean, required: true, default: false })
+  two_fa_enabled: boolean;
+
+  @Prop({ type: String, required: true, default: 'null' })
+  two_fa_secret: string;
+
+  @Prop({ type: [String], required: true, default: [] })
+  two_fa_backup_codes: string[];
 
   @Prop({ type: String, required: true })
   access_level: string;
@@ -28,7 +40,13 @@ export class AdminAccount {
 export const AdminAccountSchema = SchemaFactory.createForClass(AdminAccount);
 
 // Middleware to update `updatedAt` each time the document is modified
-AdminAccountSchema.pre('save', function (next) {
-  this.updated_at = new Date();
+AdminAccountSchema.pre('findOneAndUpdate', function (next) {
+  const update = this.getUpdate() as AdminAccountUpdate;
+
+  if (update && (update.refresh_token || update.$set?.refresh_token)) {
+    return next();
+  }
+
+  this.set({ updated_at: new Date() });
   next();
 });

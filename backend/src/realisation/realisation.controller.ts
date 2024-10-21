@@ -18,7 +18,7 @@ import { FindOneParams } from '../common/dto/find-one-params.dto';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { FindOneSlug } from './dto/find-one-slug.dto';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 
 // Storage config for multer
 const storage = diskStorage({

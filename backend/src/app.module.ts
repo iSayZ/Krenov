@@ -7,6 +7,12 @@ import { AppService } from './app.service';
 import { RealisationsModule } from './realisation/realisation.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
+import { AdminModule } from './admin/admin.module';
+import { UploadModule } from './upload/upload.module';
+import { TwoFactorModule } from './twofactor/twofactor.module';
+import { ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
+import { CustomThrottlerGuard } from './guards/custom-throttler.guard';
 
 @Module({
   imports: [
@@ -20,10 +26,25 @@ import { AuthModule } from './auth/auth.module';
     }),
     // Connect to MongoDB
     MongooseModule.forRoot(process.env.MONGODB_URI),
+    ThrottlerModule.forRoot([
+      {
+        ttl: Number(process.env.THROTTLE_TTL),
+        limit: Number(process.env.THROTTLE_LIMIT),
+      },
+    ]),
     RealisationsModule,
     AuthModule,
+    AdminModule,
+    UploadModule,
+    TwoFactorModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: CustomThrottlerGuard,
+    },
+  ],
 })
 export class AppModule {}
