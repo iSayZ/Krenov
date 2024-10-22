@@ -4,8 +4,8 @@ import { ThemeProvider } from '@/components/theme-provider';
 
 export const metadata: Metadata = {
   title: {
-    template: 'K-Renov | Dashboard',
-    default: 'K-Renov | Dashboard',
+    template: `${process.env.NEXT_APP_NAME} | Dashboard`,
+    default: `${process.env.NEXT_APP_NAME} | Dashboard`,
   },
 };
 

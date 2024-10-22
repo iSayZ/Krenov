@@ -1,39 +1,47 @@
 // hooks/use2FACheck.ts
-"use client";
+'use client';
 
 import { useState } from 'react';
+
 import { use2FAStatus } from './use2FAStatus';
+
 import axiosInstance from '@/lib/axiosInstance';
+
 
 interface Use2FACheckResult {
   is2FAModalOpen: boolean;
   setIs2FAModalOpen: (isOpen: boolean) => void;
-  check2FABeforeAction: (action: () => void | Promise<void>, actionName?: string) => void;
+  check2FABeforeAction: (
+    action: () => void | Promise<void>,
+    actionName?: string
+  ) => void;
   handle2FASuccess: () => void;
   currentActionName: string | undefined;
   is2FAEnabled: boolean | null;
   isLoading: boolean;
-  verifyCode: (code: string) => Promise<boolean>;
-}
-
-interface Verify2FAResponse {
-  success: boolean;
-  message?: string;
+  verifyCode: (code: string) => Promise<{ success: boolean; message: string }>;
 }
 
 export function use2FACheck(): Use2FACheckResult {
   const [is2FAModalOpen, setIs2FAModalOpen] = useState<boolean>(false);
-  const [pendingAction, setPendingAction] = useState<(() => void | Promise<void>) | null>(null);
-  const [currentActionName, setCurrentActionName] = useState<string | undefined>(undefined);
-  
-  const { is2FAEnabled, isLoading, error } = use2FAStatus();
+  const [pendingAction, setPendingAction] = useState<
+    (() => void | Promise<void>) | null
+  >(null);
+  const [currentActionName, setCurrentActionName] = useState<
+    string | undefined
+  >(undefined);
 
-  const verifyCode = async (code: string): Promise<boolean> => {
+  const { is2FAEnabled, isLoading } = use2FAStatus();
+
+  const verifyCode = async (
+    code: string
+  ): Promise<{ success: boolean; message: string }> => {
     try {
-      const { data } = await axiosInstance.post<Verify2FAResponse>('/2fa/verify-2fa', { code });
-      return data.success;
-    } catch (err) {
-      return false;
+      const response = await axiosInstance.post('/2fa/verify-2fa', { code });
+      return response.data.success;
+    } catch (error) {
+      console.error('Erreur lors de la verification 2FA :', error);
+      throw error;
     }
   };
 
@@ -69,6 +77,6 @@ export function use2FACheck(): Use2FACheckResult {
     currentActionName,
     is2FAEnabled,
     isLoading,
-    verifyCode
+    verifyCode,
   };
 }

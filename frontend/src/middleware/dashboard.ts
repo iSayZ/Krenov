@@ -32,7 +32,7 @@ async function dashboardMiddleware(request: NextRequest) {
       if (refreshToken) {
         try {
           const response = await refreshTokens(refreshToken);
-          
+
           // Generate a response to set cookies
           const redirectResponse = NextResponse.next();
 
@@ -53,7 +53,7 @@ async function dashboardMiddleware(request: NextRequest) {
     // If the user has a refreshToken, try to refresh a new tokens
     try {
       const response = await refreshTokens(refreshToken);
-      
+
       // Generate a response to set cookies
       const redirectResponse = NextResponse.next();
 

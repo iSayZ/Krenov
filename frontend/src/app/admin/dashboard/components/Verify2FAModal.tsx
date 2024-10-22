@@ -1,10 +1,22 @@
-"use client";
+'use client';
 
+import axios from 'axios';
+import { Lock } from 'lucide-react';
 import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Lock } from "lucide-react";
-import { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator } from '@/components/ui/input-otp';
+
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+  InputOTPSeparator,
+} from '@/components/ui/input-otp';
 
 interface Verify2FAModalProps {
   isOpen: boolean;
@@ -14,12 +26,12 @@ interface Verify2FAModalProps {
   action?: string;
 }
 
-const Verify2FAModal: React.FC<Verify2FAModalProps> = ({ 
-  isOpen, 
-  onClose, 
-  onVerify, 
-  verifyCode, 
-  action 
+const Verify2FAModal: React.FC<Verify2FAModalProps> = ({
+  isOpen,
+  onClose,
+  onVerify,
+  verifyCode,
+  action,
 }) => {
   const [code, setCode] = useState<string>('');
   const [error, setError] = useState<string>('');
@@ -29,7 +41,7 @@ const Verify2FAModal: React.FC<Verify2FAModalProps> = ({
     try {
       setLoading(true);
       setError('');
-      
+
       const isValid = await verifyCode(code);
 
       setCode('');
@@ -41,7 +53,9 @@ const Verify2FAModal: React.FC<Verify2FAModalProps> = ({
       onVerify();
       onClose();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Code incorrect. Veuillez réessayer.');
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -49,43 +63,49 @@ const Verify2FAModal: React.FC<Verify2FAModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-min">
+      <DialogContent className="max-w-min" onInteractOutside={(e) => {
+            e.preventDefault();
+          }}>
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Lock className="size-5" />
             Vérification 2FA requise
           </DialogTitle>
         </DialogHeader>
-        
+
         <div className="flex flex-col gap-4">
           <p className="text-sm text-gray-600">
-            {action ? `L'action "${action}" nécessite` : 'Cette action nécessite'} une 
-            vérification supplémentaire. Veuillez entrer le code généré par votre 
-            application d'authentification.
+            {action
+              ? `L'action "${action}" nécessite`
+              : 'Cette action nécessite'}{' '}
+            une vérification supplémentaire. Veuillez entrer le code généré par
+            votre application d'authentification.
           </p>
-          
-          <InputOTP value={code} onChange={(code) => setCode(code)} maxLength={6}>
-              <InputOTPGroup>
-                  <InputOTPSlot index={0} />
-                  <InputOTPSlot index={1} />
-                  <InputOTPSlot index={2} />
-              </InputOTPGroup>
-              <InputOTPSeparator />
-              <InputOTPGroup>
-                  <InputOTPSlot index={3} />
-                  <InputOTPSlot index={4} />
-                  <InputOTPSlot index={5} />
-              </InputOTPGroup>
+
+          <InputOTP
+            value={code}
+            onChange={(code) => setCode(code)}
+            maxLength={6}
+          >
+            <InputOTPGroup>
+              <InputOTPSlot index={0} />
+              <InputOTPSlot index={1} />
+              <InputOTPSlot index={2} />
+            </InputOTPGroup>
+            <InputOTPSeparator />
+            <InputOTPGroup>
+              <InputOTPSlot index={3} />
+              <InputOTPSlot index={4} />
+              <InputOTPSlot index={5} />
+            </InputOTPGroup>
           </InputOTP>
-          
-          {error && (
-            <p className="text-sm text-red-600">{error}</p>
-          )}
+
+          {error && <p className="text-sm text-red-600">{error}</p>}
         </div>
 
-        <div className='w-full flex justify-center gap-4 mt-2'>
+        <div className="mt-2 flex w-full justify-center gap-4">
           <Button
-            className='w-1/2'
+            className="w-1/2"
             variant="outline"
             onClick={onClose}
             disabled={loading}
@@ -94,7 +114,7 @@ const Verify2FAModal: React.FC<Verify2FAModalProps> = ({
             Annuler
           </Button>
           <Button
-            className='w-1/2'
+            className="w-1/2"
             onClick={handleVerify}
             disabled={code.length !== 6 || loading}
             type="submit"

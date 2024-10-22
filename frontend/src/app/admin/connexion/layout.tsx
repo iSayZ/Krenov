@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: {
-    absolute: 'K-Renov | Connexion Dashboard',
+    absolute: `${process.env.NEXT_APP_NAME} | Connexion Dashboard`,
   },
 };
 

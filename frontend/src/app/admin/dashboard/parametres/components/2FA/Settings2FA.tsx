@@ -1,15 +1,14 @@
 import { ShieldCheck, ShieldX } from 'lucide-react';
+import { useState } from 'react';
 
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 
 import { AdminSettings } from '@/types/admin.interface';
 
 import Activate2FA from './Activate2FA';
-import Info2FA from './Info2FA';
 import Desactivate2FA from './Desactivate2FA';
-import { useState } from 'react';
 import GenerateBackupCode2FA from './GenerateBackup2FA';
+import Info2FA from './Info2FA';
 
 interface Settings2FAProps {
   profileSettings: AdminSettings;
@@ -25,22 +24,24 @@ const Settings2FA: React.FC<Settings2FAProps> = ({ profileSettings }) => {
   };
 
   // Status of 2FA
-  const twoFAEnabled = status2FAUpdated ? newStatus2FA : profileSettings.two_fa_enabled
+  const twoFAEnabled = status2FAUpdated
+    ? newStatus2FA
+    : profileSettings.two_fa_enabled;
 
   return (
-    <div className="flex h-full w-1/2 flex-col gap-6">
+    <div className="flex h-full w-full flex-col gap-6">
       <div className="flex items-center justify-center gap-6">
         <h2 className="text-center text-lg font-semibold">
           Authentification à deux facteurs (2FA)
         </h2>
         <p className="text-lg font-semibold">-</p>
         {twoFAEnabled ? (
-          <Badge className="text-md text-secondary bg-lime-500 font-semibold hover:bg-lime-500">
+          <Badge className="text-md bg-lime-500 font-semibold text-secondary hover:bg-lime-500">
             Activé
             <ShieldCheck className="ml-2 size-5" />
           </Badge>
         ) : (
-          <Badge className="text-md text-secondary bg-red-600 font-semibold hover:bg-red-600">
+          <Badge className="text-md bg-red-600 font-semibold text-secondary hover:bg-red-600">
             Désactivé
             <ShieldX className="ml-2 size-5" />
           </Badge>

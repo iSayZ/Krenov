@@ -1,5 +1,6 @@
 import { Pencil } from 'lucide-react';
 import { ChangeEvent, useRef, useState } from 'react';
+import { toast } from 'sonner';
 
 import { AutosizeTextarea } from '@/components/ui/autosize-textarea';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -13,7 +14,6 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { toast } from "sonner";
 import {
   Tooltip,
   TooltipContent,
@@ -22,8 +22,8 @@ import {
 } from '@/components/ui/tooltip';
 
 import { updateAdminProfile, uploadAvatar } from '@/api/adminApi';
-import { AdminSettings } from '@/types/admin.interface';
 import { formatDateForUX } from '@/lib/dateUtils';
+import { AdminSettings } from '@/types/admin.interface';
 
 interface ProfileProps {
   profileSettings: AdminSettings;
@@ -82,15 +82,15 @@ const ProfileInformation: React.FC<ProfileProps> = ({
 
     try {
       await updateAdminProfile(profileData);
-      toast.success("Votre profil à bien été mis à jour.", {
+      toast.success('Votre profil à bien été mis à jour.', {
         description: formatDateForUX(new Date().toISOString()),
         action: {
-            label: "Fermer",
-            onClick: () => '',
+          label: 'Fermer',
+          onClick: () => '',
         },
-      })
+      });
     } catch (error) {
-      console.error("Erreur lors de la mise à jour du profil :", error);
+      console.error('Erreur lors de la mise à jour du profil :', error);
     }
   };
 
@@ -105,41 +105,14 @@ const ProfileInformation: React.FC<ProfileProps> = ({
       />
       <Card>
         <CardHeader>
-          <CardTitle>Informations</CardTitle>
+          <CardTitle>Profil</CardTitle>
           <CardDescription>
-            Apportez des modifications à vos informations ici. Cliquez sur
+            Apportez ici des modifications à votre profil. Cliquez sur
             enregistrer lorsque vous avez terminé.
           </CardDescription>
         </CardHeader>
-        <CardContent className="flex justify-evenly">
-          <div className="w-1/2 space-y-4">
-            <div className="w-2/3 space-y-1">
-              <Label htmlFor="role">Rôle</Label>
-              <Input
-                id="role"
-                placeholder="Ex: Responsable Marketing, Consultant(e)"
-                value={profileSettings?.role}
-                name="role"
-                onChange={handleChangeSettings}
-              />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="biography">Biographie</Label>
-              <AutosizeTextarea
-                id="biography"
-                maxHeight={200}
-                placeholder="Décrivez votre parcours professionnel, vos compétences clés, et ce qui vous passionne dans votre domaine. Ex: Plus de 10 ans d'expérience dans le secteur, spécialisé(e) dans l'optimisation de processus et l'innovation technologique."
-                value={profileSettings?.biography}
-                name="biography"
-                onChange={handleChangeSettings}
-              />
-            </div>
-            <Button onClick={handleSubmitInformation}>
-              Enregistrer les modifications
-            </Button>
-          </div>
-          <div className="w-[2px] bg-muted-foreground/30" />
-          <div className="flex flex-col items-center justify-center gap-4">
+        <CardContent className="flex justify-around items-center gap-12 max-lg:flex-col max-lg:items-center max-lg:gap-12 mt-6">
+          <div className="flex flex-col items-center justify-center gap-4 mb-auto">
             <div className="relative">
               <Avatar className="size-52">
                 <AvatarImage
@@ -157,7 +130,7 @@ const ProfileInformation: React.FC<ProfileProps> = ({
                     <Button
                       variant="outline"
                       size="icon"
-                      className="absolute right-3 top-3 z-50 rounded-full text-foreground"
+                      className="absolute right-3 top-3 z-10 rounded-full text-foreground"
                       onClick={handleUploadAvatarBtnClick}
                     >
                       <Pencil className="size-5" />
@@ -170,6 +143,34 @@ const ProfileInformation: React.FC<ProfileProps> = ({
               </TooltipProvider>
             </div>
             <h2 className="text-lg font-semibold">Alexis Estrine</h2>
+          </div>
+          <div className="space-y-6 w-2/3 max-lg:w-full">
+            <div className="w-2/3 space-y-1 max-sm:w-full">
+              <Label htmlFor="role">Rôle</Label>
+              <Input
+                id="role"
+                placeholder="Ex: Responsable Marketing, Consultant(e)"
+                value={profileSettings?.role}
+                name="role"
+                onChange={handleChangeSettings}
+              />
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="biography">Biographie</Label>
+              <AutosizeTextarea
+                id="biography"
+                maxHeight={300}
+                placeholder="Décrivez votre parcours professionnel, vos compétences clés, et ce qui vous passionne dans votre domaine. Ex: Plus de 10 ans d'expérience dans le secteur, spécialisé(e) dans l'optimisation de processus et l'innovation technologique."
+                value={profileSettings?.biography}
+                name="biography"
+                onChange={handleChangeSettings}
+              />
+            </div>
+            <div className='w-full flex justify-center'>
+              <Button onClick={handleSubmitInformation}>
+                Enregistrer les modifications
+              </Button>
+            </div>
           </div>
         </CardContent>
       </Card>

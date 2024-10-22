@@ -20,7 +20,7 @@ const section: Section = {
   ],
   page: {
     path: '/admin/dashboard/realisations',
-    name: 'Réalisations',
+    name: 'Liste des réalisations',
   },
 };
 

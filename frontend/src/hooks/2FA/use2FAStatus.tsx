@@ -1,6 +1,7 @@
-"use client";
+'use client';
 
 import { useState, useEffect } from 'react';
+
 import axiosInstance from '@/lib/axiosInstance';
 
 interface TwoFAStatusResponse {
@@ -16,10 +17,15 @@ export function use2FAStatus() {
   useEffect(() => {
     const check2FAStatus = async () => {
       try {
-        const { data } = await axiosInstance.get<TwoFAStatusResponse>('/2fa/status');
+        const { data } =
+          await axiosInstance.get<TwoFAStatusResponse>('/2fa/status');
         setIs2FAEnabled(data.is2FAEnabled);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Erreur lors de la vérification du statut 2FA');
+        setError(
+          err instanceof Error
+            ? err.message
+            : 'Erreur lors de la vérification du statut 2FA'
+        );
       } finally {
         setIsLoading(false);
       }

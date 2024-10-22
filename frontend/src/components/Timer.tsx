@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 interface TimerProps {
   initialMinutes: number; // Optional, to set the initial number of minutes
-  color: string, // Set color to render text
+  color: string; // Set color to render text
   onTimeout: () => void; // Callback function to call when the time is up
 }
 
@@ -33,7 +33,7 @@ const Timer: React.FC<TimerProps> = ({ initialMinutes, color, onTimeout }) => {
   };
 
   return (
-    <div className={`inline-block text-${color}`}>
+    <div className={`text- inline-block${color}`}>
       <h2>{formatTimeLeft()}</h2>
     </div>
   );

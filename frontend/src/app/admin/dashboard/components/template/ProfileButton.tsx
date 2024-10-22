@@ -1,4 +1,4 @@
-import { House, LogOut, Settings } from 'lucide-react';
+import { ChevronsUpDown, House, LogOut, Settings } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -17,6 +17,7 @@ import {
 import { fetchAdminProfile } from '@/api/adminApi';
 import { logout } from '@/api/authApi';
 import { AdminProfile } from '@/types/admin.interface';
+import { useSidebar } from '@/components/ui/sidebar';
 
 const ProfileButton: React.FC = () => {
   const [profile, setProfile] = useState<AdminProfile | null>(null);
@@ -35,6 +36,8 @@ const ProfileButton: React.FC = () => {
   }, []);
 
   const router = useRouter();
+  const { isMobile } = useSidebar();
+  const [open, setOpen] = useState<boolean>(false);
 
   const goToSettingsPage = () => {
     router.push('/admin/dashboard/parametres');
@@ -51,23 +54,53 @@ const ProfileButton: React.FC = () => {
 
   return (
     <>
-      <DropdownMenu>
+      <DropdownMenu open={open} onOpenChange={setOpen}>
         <DropdownMenuTrigger asChild>
           <Button
-            variant="outline"
+            variant="ghost"
             size="icon"
-            className="overflow-hidden rounded-full"
+            className={open ? 'size-full p-2 bg-accent text-accent-foreground' : 'size-full p-2'}
           >
-            <Avatar className="size-9">
-              <AvatarImage
-                src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${profile?.avatar}`}
-              />
-              <AvatarFallback></AvatarFallback>
-            </Avatar>
+              <div className='w-full flex items-center gap-2'>
+                <Avatar className="size-8 rounded-md">
+                  <AvatarImage
+                    src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${profile?.avatar}`}
+                  />
+                  <AvatarFallback></AvatarFallback>
+                </Avatar>
+                <div className='flex flex-col items-start justify-center'>
+                  <p className='font-bold text-sm'>
+                    {profile?.firstname} {profile?.lastname}
+                  </p>
+                  <p className='font-normal text-muted-foreground text-xs'>
+                    Administrateur
+                  </p>
+                </div>
+              </div>
+              <ChevronsUpDown className='text-muted-foreground size-5' />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Mon profil</DropdownMenuLabel>
+        <DropdownMenuContent align="end" side={isMobile ? "bottom" : "right"}>
+          <DropdownMenuLabel>
+            <div className='w-full mr-20'>
+              <div className='w-full flex items-center gap-2'>
+                <Avatar className="size-7 rounded-md">
+                  <AvatarImage
+                    src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${profile?.avatar}`}
+                  />
+                  <AvatarFallback></AvatarFallback>
+                </Avatar>
+                <div className='flex flex-col items-start justify-center'>
+                  <p className='font-bold text-xs'>
+                    {profile?.firstname} {profile?.lastname}
+                  </p>
+                  <p className='font-normal text-muted-foreground text-[0.65rem] leading-[0.9rem]'>
+                    Administrateur
+                  </p>
+                </div>
+              </div>
+            </div>
+          </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={goToSettingsPage}>
             <Settings className="mr-2 size-4" />

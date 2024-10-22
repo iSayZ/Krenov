@@ -1,90 +1,157 @@
-'use client';
-
-import { ChartNoAxesCombined, House, Newspaper, Settings } from 'lucide-react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import React from 'react';
+"use client";
 
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
-
-// Interface definition for a menu link
-interface MenuLink {
-  path: string;
-  icon: JSX.Element;
-  tooltipText: string;
-  childrenPath?: string;
-}
-
-// Typing the sections object
-const sections: MenuLink[] = [
-  {
-    path: '/admin/dashboard',
-    icon: <House />,
-    tooltipText: 'Accueil du dashboard',
-  },
-  {
-    path: '/admin/dashboard/realisations',
-    icon: <Newspaper />,
-    tooltipText: 'Les réalisations',
-    childrenPath: 'realisations',
-  },
-  {
-    path: '/admin/dashboard/statistiques',
-    icon: <ChartNoAxesCombined />,
-    tooltipText: 'Statistiques du site',
-  },
-  {
-    path: '/admin/dashboard/parametres',
-    icon: <Settings />,
-    tooltipText: 'Paramètres profil',
-    childrenPath: 'parametres',
-  },
-];
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuAction,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
+  SidebarRail,
+} from "@/components/ui/sidebar";
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@radix-ui/react-collapsible";
+import { Home, Inbox, Calendar, Search, Settings, SquareTerminal, ChevronRight, House, Newspaper, ChartNoAxesCombined } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import ProfileButton from "./ProfileButton";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
 
 const AsideMenu: React.FC = () => {
+
+  // Menu items.
+  const items = [
+    {
+      title: "Accueil",
+      url: "/admin/dashboard/accueil",
+      slug: "accueil",
+      icon: House,
+      isActive: false,
+    },
+    {
+      title: "Réalisations",
+      url: "/admin/dashboard/realisations",
+      slug: "realisations",
+      icon: Newspaper,
+      isActive: false,
+      items: [
+        {
+          title: "Liste des réalisations",
+          url: "/admin/dashboard/realisations",
+        },
+        {
+          title: "Créer une réalisation",
+          url: "/admin/dashboard/realisations/creation",
+        },
+        {
+          title: "Ordre d'affichage",
+          url: "/admin/dashboard/realisations/ordre",
+        },
+      ],
+    },
+    {
+      title: "Statistiques",
+      url: "/admin/dashboard/statistiques",
+      slug: "statistiques",
+      icon: ChartNoAxesCombined,
+      isActive: false,
+    },
+    {
+      title: "Paramètres",
+      url: "/admin/dashboard/parametres",
+      slug: "parametres",
+      icon: Settings,
+      isActive: false,
+    },
+  ]
+
   const pathname = usePathname();
+  const [currentPath, setCurrentPath] = useState<string>('');
 
-  // Function to return the JSX Element of every menuLinks for a section
-  const returnMenuLinksJsx = (section: MenuLink[]): JSX.Element => {
-    return (
-      <>
-        {section.map((menuLink, index) => (
-          <TooltipProvider key={index}>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                  href={menuLink.path}
-                  className={
-                    menuLink.childrenPath
-                      ? pathname.includes(menuLink.childrenPath)
-                        ? 'rounded-full bg-primary p-2 text-secondary'
-                        : 'p-2'
-                      : pathname === menuLink.path
-                        ? 'rounded-full bg-primary p-2 text-secondary'
-                        : 'p-2'
-                  }
-                >
-                  {menuLink.icon}
+  useEffect(() => {
+    setCurrentPath(pathname);
+  }, [pathname])
+
+  return (
+    <Sidebar variant="inset">
+      <SidebarHeader>
+        <Link href='/admin/dashboard/accueil' className="size-full justify-start flex items-center gap-4 rounded-lg p-2 hover:bg-accent hover:text-accent-foreground">
+          <div className="size-12">
+            <AspectRatio ratio={1 / 1}>
+              <Image src="/assets/images/logo.png" fill alt="Image" className="rounded-md object-cover" />
+            </AspectRatio>
+          </div>
+          <div className="w-[1px] h-full bg-muted-foreground/70" />
+          <div className="flex flex-col items-start font-semibold">
+            <p>
+              {process.env.NEXT_PUBLIC_APP_NAME}
+            </p>
+            <p>
+              Dashboard
+            </p>
+          </div>
+        </Link>
+      </SidebarHeader>
+      <SidebarContent>
+      <SidebarGroup>
+          <SidebarGroupLabel>Menu</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+            {items.map((item) => (
+          <Collapsible key={item.title} asChild defaultOpen={currentPath.includes(item.slug)}>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild tooltip={item.title} isActive={currentPath.includes(item.slug)}>
+                <Link href={item.url}>
+                  <item.icon />
+                  <span>{item.title}</span>
                 </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right">
-                {menuLink.tooltipText}
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+              </SidebarMenuButton>
+              {item.items?.length ? (
+                <>
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuAction className="data-[state=open]:rotate-90">
+                      <ChevronRight />
+                      <span className="sr-only">Toggle</span>
+                    </SidebarMenuAction>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent>
+                    <SidebarMenuSub>
+                      {item.items?.map((subItem) => (
+                        <SidebarMenuSubItem key={subItem.title}>
+                          <SidebarMenuSubButton asChild isActive={subItem.url === currentPath}>
+                            <Link href={subItem.url}>
+                              <span className={pathname === subItem.url ? 'font-medium' : ''} >{subItem.title}</span>
+                            </Link>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      ))}
+                    </SidebarMenuSub>
+                  </CollapsibleContent>
+                </>
+              ) : null}
+            </SidebarMenuItem>
+          </Collapsible>
         ))}
-      </>
-    );
-  };
-
-  const asideMenu = returnMenuLinksJsx(sections);
-
-  return <>{asideMenu}</>;
-};
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+      <SidebarFooter>
+        <ProfileButton />
+      </SidebarFooter>
+      <SidebarRail />
+    </Sidebar>
+  )
+}
 
 export default AsideMenu;

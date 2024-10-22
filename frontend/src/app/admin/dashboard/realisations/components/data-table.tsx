@@ -169,7 +169,7 @@ export function DataTable<TData extends DataWithIdAndSlug, TValue>({
 
   return (
     <div>
-      <div className="flex items-center pb-4">
+      <div className="flex items-center pb-4 max-md:flex-col max-md:flew-wrap max-md:items-start max-md:gap-4">
         <Input
           placeholder="Rechercher par titre..."
           value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
@@ -178,7 +178,7 @@ export function DataTable<TData extends DataWithIdAndSlug, TValue>({
           }
           className="mr-4 max-w-96 bg-background"
         />
-        <div className="ml-auto flex items-center space-x-2">
+        <div className="ml-auto flex items-center space-x-2 max-md:ml-0">
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -360,7 +360,7 @@ export function DataTable<TData extends DataWithIdAndSlug, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
+      <div className="flex items-center justify-end space-x-2 pt-4">
         <div className="flex-1 text-sm text-muted-foreground">
           {table.getFilteredSelectedRowModel().rows.length} sur{' '}
           {table.getFilteredRowModel().rows.length} ligne(s) selectionée(s).

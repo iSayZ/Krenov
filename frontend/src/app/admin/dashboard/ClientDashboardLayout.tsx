@@ -2,43 +2,43 @@
 
 import React from 'react';
 
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { Toaster } from '@/components/ui/sonner';
 import { ToggleButtonTheme } from '@/components/ui/toggleButtonTheme';
-import { Toaster } from "@/components/ui/sonner"
+
 import AsideMenu from './components/template/AsideMenu';
 import ProfileButton from './components/template/ProfileButton';
 import TopbarMenu from './components/template/TopbarMenu';
 import { VisitedSectionProvider } from './context/VisitedSectionContext';
+import { PanelLeft } from 'lucide-react';
 
 const ClientDashboardLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   return (
-    <VisitedSectionProvider>
-      <div className="h-screen w-screen bg-background p-10 text-foreground">
-        <div className="flex size-full rounded-lg border border-solid border-border bg-card shadow-xl">
-          <div className="flex size-full overflow-hidden">
-            <div className="flex w-auto flex-none flex-col border-r border-solid border-border font-semibold">
-              <nav className="flex flex-col space-y-2 p-2">
-                <AsideMenu />
-              </nav>
-            </div>
-            <div className="flex w-full grow flex-col gap-4 overflow-auto bg-muted/40 p-4">
-              <div className="flex w-full items-center justify-between font-semibold">
-                <div>
+    <SidebarProvider>
+      <VisitedSectionProvider>
+        <div className='size-full flex'>
+          <AsideMenu />
+            <SidebarInset>
+              <div className='size-full flex flex-col'>
+                <div className='flex items-center gap-4 w-full px-6 py-5 sticky top-0 z-50 bg-card shadow-sm mb-6 rounded-t-xl'>
+                  <SidebarTrigger />
                   <TopbarMenu />
+                  <div className='flex items-center gap-2 ml-auto'>
+                    <ToggleButtonTheme />
+                    {/* <ProfileButton /> */}
+                  </div>
                 </div>
-                <nav className="flex space-x-2">
-                  <ToggleButtonTheme />
-                  <ProfileButton />
-                </nav>
+                <div className='size-full px-6 pb-6'>
+                  {children}
+                </div>
               </div>
-              <div className="size-full">{children}</div>
-            </div>
-          </div>
+            </SidebarInset>
         </div>
-      </div>
-      <Toaster />
-    </VisitedSectionProvider>
+        <Toaster />
+      </VisitedSectionProvider>
+    </SidebarProvider>
   );
 };
 

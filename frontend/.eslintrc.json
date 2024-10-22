@@ -35,7 +35,6 @@
     "react/prop-types": "off", // Désactiver les PropTypes (vu qu'on utilise TypeScript)
     "no-mixed-spaces-and-tabs": "off", // Désactiver si Prettier gère
     "@typescript-eslint/no-require-imports": "error",
-    "prettier/prettier": "error",
     "react/no-unescaped-entities": "off",
     "import/order": [
       "error",
@@ -67,5 +66,16 @@
     ],
     "import/no-duplicates": "error", // interdit les imports en double
     "import/group-exports": "error" // groupe les exports par source
-  }
+  },
+  "overrides": [
+    {
+      "files": ["**/*.ts", "**/*.tsx"],
+      "env": {
+        "development": true
+      },
+      "rules": {
+        "import/no-unresolved": "off" // Désactiver pendant le développement
+      }
+    }
+  ]
 }

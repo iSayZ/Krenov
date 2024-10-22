@@ -83,11 +83,10 @@ const LoginPage: React.FC = () => {
       const response = await login(formData);
 
       if (response.require2FA) {
-            router.push('/admin/connexion/verification-2fa')
-          } else {
-            router.push('/admin/dashboard');
+        router.push('/admin/connexion/verification-2fa');
+      } else {
+        router.push('/admin/dashboard');
       }
-
     } catch (error) {
       console.error(error);
       if (axios.isAxiosError(error)) {
@@ -108,7 +107,7 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen w-screen items-center justify-center overflow-hidden">
+    <div className="flex h-screen w-screen items-center justify-center overflow-hidden p-4">
       <div className="absolute inset-0 w-screen">
         <Image
           src="https://images.unsplash.com/photo-1620121478247-ec786b9be2fa?q=80&w=2832&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"

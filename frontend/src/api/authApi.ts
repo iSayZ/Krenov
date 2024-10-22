@@ -6,7 +6,7 @@ import axiosInstance from '@/lib/axiosInstance';
 const login = async (formData: {
   email: string;
   password: string;
-}): Promise<{ require2FA: boolean, message: string }> => {
+}): Promise<{ require2FA: boolean; message: string }> => {
   try {
     const response = await axiosInstance.post('/auth/login', formData);
 
@@ -18,9 +18,13 @@ const login = async (formData: {
 };
 
 // Function to verify 2FA to complete login
-const verify2FALogin = async (code2FA: string): Promise<{ success: boolean, message: string }> => {
+const verify2FALogin = async (
+  code2FA: string
+): Promise<{ success: boolean; message: string }> => {
   try {
-    const response = await axiosInstance.post('/auth/verify-2fa', {code: code2FA});
+    const response = await axiosInstance.post('/auth/verify-2fa', {
+      code: code2FA,
+    });
     return response.data.success;
   } catch (error) {
     console.error('Erreur lors de la verification 2FA :', error);
@@ -78,7 +82,10 @@ const verifyIdentity = async (formData: {
   password: string;
 }): Promise<number> => {
   try {
-    const response = await axiosInstance.post('/auth/verify-identity', formData);
+    const response = await axiosInstance.post(
+      '/auth/verify-identity',
+      formData
+    );
     return response.status;
   } catch (error) {
     console.error('Erreur lors de la connexion :', error);
@@ -86,4 +93,11 @@ const verifyIdentity = async (formData: {
   }
 };
 
-export { login, verify2FALogin, logout, verifyAccess, refreshTokens, verifyIdentity };
+export {
+  login,
+  verify2FALogin,
+  logout,
+  verifyAccess,
+  refreshTokens,
+  verifyIdentity,
+};

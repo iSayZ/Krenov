@@ -13,12 +13,12 @@ async function middleware(request: NextRequest) {
   }
 
   // Calling middleware of login road
-  if (request.nextUrl.pathname === ('/admin/connexion')) {
+  if (request.nextUrl.pathname === '/admin/connexion') {
     return loginMiddleware(request);
   }
 
   // Calling middleware of login 2FA road
-  if (request.nextUrl.pathname === ('/admin/connexion/verification-2fa')) {
+  if (request.nextUrl.pathname === '/admin/connexion/verification-2fa') {
     return login2FAMiddleware(request);
   }
 
@@ -26,7 +26,11 @@ async function middleware(request: NextRequest) {
 }
 
 const config = {
-  matcher: ['/admin/dashboard/:path*', '/admin/connexion', '/admin/connexion/verification-2fa'],
+  matcher: [
+    '/admin/dashboard/:path*',
+    '/admin/connexion',
+    '/admin/connexion/verification-2fa',
+  ],
 };
 
 export { middleware, config };

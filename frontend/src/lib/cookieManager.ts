@@ -1,8 +1,11 @@
 import { NextResponse } from 'next/server';
 
 // Function to parse and set cookies from the response header
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function setTokensFromResponse(nextResponse: NextResponse, response: any): void {
+export function setTokensFromResponse(
+  nextResponse: NextResponse,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  response: any
+): void {
   // Get the header set-cookie
   const setCookie = response.headers.get('set-cookie');
 

@@ -14,16 +14,10 @@ type Props = {
 
 const SortableItem = ({ item, ...props }: Props) => {
   // Use the useSortable hook to manage the item's dragging state and attributes
-  const {
-    attributes,
-    isDragging,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-  } = useSortable({
-    id: item.id, // Set the unique ID for the sortable item
-  });
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({
+      id: item.id, // Set the unique ID for the sortable item
+    });
 
   // Styles for the item, applying transformation and transition effects
   const styles = {

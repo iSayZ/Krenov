@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server';
 
+import { setTokensFromResponse } from '@/lib/cookieManager';
+
 import { refreshTokens, verifyAccess } from '../api/authApi';
 
 import type { NextRequest } from 'next/server';
-import { setTokensFromResponse } from '@/lib/cookieManager';
 
 // Middleware for login road
 async function loginMiddleware(request: NextRequest) {
@@ -14,23 +15,25 @@ async function loginMiddleware(request: NextRequest) {
   if (accessToken) {
     try {
       await verifyAccess(accessToken);
-        // If it's valid, redirect to dashboard
-        return NextResponse.redirect(new URL('/admin/dashboard', request.url));
+      // If it's valid, redirect to dashboard
+      return NextResponse.redirect(new URL('/admin/dashboard', request.url));
     } catch {
       // If the accessToken is invalid and the user has a refreshToken, try to refresh a new tokens
       if (refreshToken) {
         try {
           const response = await refreshTokens(refreshToken);
-          
-            // Generate a response to set cookies
-            const redirectResponse = NextResponse.redirect(new URL('/admin/dashboard', request.url));
 
-            // Update the cookies directly in the redirection response
-            setTokensFromResponse(redirectResponse, response);
+          // Generate a response to set cookies
+          const redirectResponse = NextResponse.redirect(
+            new URL('/admin/dashboard', request.url)
+          );
 
-            return redirectResponse;
+          // Update the cookies directly in the redirection response
+          setTokensFromResponse(redirectResponse, response);
+
+          return redirectResponse;
         } catch {
-            return NextResponse.next();
+          return NextResponse.next();
         }
       }
 
@@ -41,15 +44,17 @@ async function loginMiddleware(request: NextRequest) {
     try {
       const response = await refreshTokens(refreshToken);
 
-        // Generate a response to set cookies
-        const redirectResponse = NextResponse.redirect(new URL('/admin/dashboard', request.url));
+      // Generate a response to set cookies
+      const redirectResponse = NextResponse.redirect(
+        new URL('/admin/dashboard', request.url)
+      );
 
-        // Update the cookies directly in the redirection response
-        setTokensFromResponse(redirectResponse, response);
+      // Update the cookies directly in the redirection response
+      setTokensFromResponse(redirectResponse, response);
 
-        return redirectResponse;
+      return redirectResponse;
     } catch {
-        return NextResponse.next();
+      return NextResponse.next();
     }
   }
 

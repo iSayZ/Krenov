@@ -14,8 +14,14 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+  InputOTPSeparator,
+} from '@/components/ui/input-otp';
+
 import { verify2FALogin } from '@/api/authApi';
-import { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator } from '@/components/ui/input-otp';
 
 const Login2FAPage: React.FC = () => {
   const router = useRouter();
@@ -38,20 +44,20 @@ const Login2FAPage: React.FC = () => {
 
       router.push('/admin/dashboard');
     } catch (err) {
-        if (axios.isAxiosError(err)) {
-            if (err.response?.data.message === 'Token invalide') {
-                router.push('/admin/connexion');
-            } else {
-                setError(err.response?.data.message);
-            }
+      if (axios.isAxiosError(err)) {
+        if (err.response?.data.message === 'Token invalide') {
+          router.push('/admin/connexion');
+        } else {
+          setError(err.response?.data.message);
         }
+      }
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex h-screen w-screen items-center justify-center overflow-hidden">
+    <div className="flex h-screen w-screen items-center justify-center overflow-hidden p-4">
       <div className="absolute inset-0 w-screen">
         <Image
           src="https://images.unsplash.com/photo-1620121478247-ec786b9be2fa?q=80&w=2832&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
@@ -62,41 +68,46 @@ const Login2FAPage: React.FC = () => {
       </div>
       <Card className="relative z-10 w-min">
         <CardHeader>
-          <CardTitle className="text-3xl">Vérification à deux facteurs</CardTitle>
-            <CardDescription>
-                Veuillez entrer le code de sécurité généré par votre application d'authentification.
-            </CardDescription>
+          <CardTitle className="text-3xl">
+            Vérification à deux facteurs
+          </CardTitle>
+          <CardDescription>
+            Veuillez entrer le code de sécurité généré par votre application
+            d'authentification.
+          </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
-            <InputOTP value={code} onChange={(code) => setCode(code)} maxLength={6}>
-                <InputOTPGroup>
-                    <InputOTPSlot index={0} />
-                    <InputOTPSlot index={1} />
-                    <InputOTPSlot index={2} />
-                </InputOTPGroup>
-                <InputOTPSeparator />
-                <InputOTPGroup>
-                    <InputOTPSlot index={3} />
-                    <InputOTPSlot index={4} />
-                    <InputOTPSlot index={5} />
-                </InputOTPGroup>
-            </InputOTP>
-            {error && (
-                <p className="text-sm text-red-600">{error}</p>
-            )}
-            <a href='#' className='text-sm hover:underline'>
-                Vous n'avez plus accès à la 2FA ?
-            </a>
+          <InputOTP
+            value={code}
+            onChange={(code) => setCode(code)}
+            maxLength={6}
+          >
+            <InputOTPGroup>
+              <InputOTPSlot index={0} />
+              <InputOTPSlot index={1} />
+              <InputOTPSlot index={2} />
+            </InputOTPGroup>
+            <InputOTPSeparator />
+            <InputOTPGroup>
+              <InputOTPSlot index={3} />
+              <InputOTPSlot index={4} />
+              <InputOTPSlot index={5} />
+            </InputOTPGroup>
+          </InputOTP>
+          {error && <p className="text-sm text-red-600">{error}</p>}
+          <a href="#" className="text-sm hover:underline">
+            Vous n'avez plus accès à la 2FA ?
+          </a>
         </CardContent>
         <CardFooter>
-            <Button
-                className='w-1/2'
-                onClick={handleVerify}
-                disabled={code.length !== 6 || loading}
-                type="submit"
-            >
-                {loading ? 'Vérification...' : 'Vérifier'}
-            </Button>
+          <Button
+            className="w-1/2"
+            onClick={handleVerify}
+            disabled={code.length !== 6 || loading}
+            type="submit"
+          >
+            {loading ? 'Vérification...' : 'Vérifier'}
+          </Button>
         </CardFooter>
       </Card>
     </div>

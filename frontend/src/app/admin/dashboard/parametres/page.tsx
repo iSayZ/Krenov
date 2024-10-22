@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { MouseEventHandler, useEffect, useState } from 'react';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
@@ -33,7 +33,7 @@ const ProfileSettings: React.FC = () => {
   useEffect(() => {
     setVisitedSection(section);
   }, [setVisitedSection]);
-
+  
   const [profileSettings, setProfileSettings] = useState<AdminSettings>({
     email: '',
     two_fa_enabled: false,
@@ -61,6 +61,15 @@ const ProfileSettings: React.FC = () => {
 
     loadProfileSettings();
   }, []);
+
+  // To switch section tab
+  const [sectionValue, setSectionValue] = useState<string>('du Profil');
+
+  const handleSwitchSection = (value: string) => {
+    setSectionValue(value);
+    console.log("SECTION VALUE : ", value);
+  }
+
 
   // To update new value of settings
   const handleChangeSettings = (
@@ -90,21 +99,21 @@ const ProfileSettings: React.FC = () => {
   return (
     <>
       <div className="flex size-full items-center justify-center">
-        <Tabs defaultValue="account" className="size-full">
+        <Tabs defaultValue="profile" className="size-full">
           <div className="flex items-center justify-between">
-            <TabsList className="grid w-1/3 grid-cols-2">
-              <TabsTrigger value="account">Informations</TabsTrigger>
-              <TabsTrigger value="password">Sécurité</TabsTrigger>
+            <TabsList  className="grid w-max grid-cols-2">
+              <TabsTrigger value="profile" onClick={() => handleSwitchSection('du Profil')} className='px-12'>Profil</TabsTrigger>
+              <TabsTrigger value="security" onClick={() => handleSwitchSection('de Sécurité')} className='px-12'>Sécurité</TabsTrigger>
             </TabsList>
-            <h2 className="text-xl font-semibold">Paramètres du profil</h2>
+            <h2 className="text-xl font-semibold max-sm:hidden">Paramètres {sectionValue}</h2>
           </div>
-          <TabsContent value="account" className="pb-4">
+          <TabsContent value="profile">
             <ProfileInformation
               profileSettings={profileSettings}
               handleChangeSettings={handleChangeSettings}
             />
           </TabsContent>
-          <TabsContent value="password">
+          <TabsContent value="security">
             <SecuritySettings profileSettings={profileSettings} />
           </TabsContent>
         </Tabs>

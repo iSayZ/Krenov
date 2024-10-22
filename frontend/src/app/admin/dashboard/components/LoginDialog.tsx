@@ -1,26 +1,30 @@
 'use client';
 
 import axios from 'axios';
+import { Lock } from 'lucide-react';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
+import {
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 
 import { verifyIdentity } from '@/api/authApi';
-import { DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Lock } from 'lucide-react';
 
 interface LoginProps {
-  onLoginSuccess: Function;
+  onLoginSuccess: () => void;
   reason: string;
 }
 
 const LoginDialog: React.FC<LoginProps> = ({ onLoginSuccess, reason }) => {
-  const [formData, setFormData] = useState<{ password: string }>(
-    {
-      password: '',
-    }
-  );
+  const [formData, setFormData] = useState<{ password: string }>({
+    password: '',
+  });
 
   const [errorMsg, setErrorMsg] = useState<{
     password: string;
@@ -34,7 +38,7 @@ const LoginDialog: React.FC<LoginProps> = ({ onLoginSuccess, reason }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    setErrorMsg((prevError) => ({...prevError, other: '' }));
+    setErrorMsg((prevError) => ({ ...prevError, other: '' }));
 
     setFormData((prevData) => ({
       ...prevData,
@@ -61,7 +65,7 @@ const LoginDialog: React.FC<LoginProps> = ({ onLoginSuccess, reason }) => {
     try {
       const response = await verifyIdentity(formData);
       if (response === 201) {
-        setFormData({password: ''});
+        setFormData({ password: '' });
         onLoginSuccess();
       }
     } catch (error) {
@@ -86,21 +90,21 @@ const LoginDialog: React.FC<LoginProps> = ({ onLoginSuccess, reason }) => {
   return (
     <>
       <DialogContent
-          className="max-w-xs"
-          onInteractOutside={(e) => {
-              e.preventDefault();
-          }}
+        className="max-w-xs"
+        onInteractOutside={(e) => {
+          e.preventDefault();
+        }}
       >
-          <DialogHeader className="space-y-4">
-              <DialogTitle className='flex items-center gap-2'>
-                <Lock className='size-5' />
-                Vérification de votre identité
-              </DialogTitle>
-              <DialogDescription>
-                  Veuillez entrer votre mot de passe pour {reason}.
-              </DialogDescription>
-          </DialogHeader>
-          <form onSubmit={(e) => e.preventDefault()}>
+        <DialogHeader className="space-y-4">
+          <DialogTitle className="flex items-center gap-2">
+            <Lock className="size-5" />
+            Vérification de votre identité
+          </DialogTitle>
+          <DialogDescription>
+            Veuillez entrer votre mot de passe pour {reason}.
+          </DialogDescription>
+        </DialogHeader>
+        <form onSubmit={(e) => e.preventDefault()}>
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
               <Input
@@ -125,17 +129,14 @@ const LoginDialog: React.FC<LoginProps> = ({ onLoginSuccess, reason }) => {
             )}
           </div>
         </form>
-        <div className='w-full flex gap-4'>
-          <DialogClose className='w-1/2' asChild>            
-            <Button
-              variant='outline'
-              type="button"
-            >
+        <div className="flex w-full gap-4">
+          <DialogClose className="w-1/2" asChild>
+            <Button variant="outline" type="button">
               Annuler
             </Button>
           </DialogClose>
           <Button
-            className='w-1/2'
+            className="w-1/2"
             type="button"
             onClick={handleSubmit}
             onKeyDown={handleKeyDown}
