@@ -1,6 +1,5 @@
 'use client';
 
-import { PanelLeft } from 'lucide-react';
 import React from 'react';
 
 import {
@@ -12,7 +11,6 @@ import { Toaster } from '@/components/ui/sonner';
 import { ToggleButtonTheme } from '@/components/ui/toggleButtonTheme';
 
 import AsideMenu from './components/template/AsideMenu';
-import ProfileButton from './components/template/ProfileButton';
 import TopbarMenu from './components/template/TopbarMenu';
 import { VisitedSectionProvider } from './context/VisitedSectionContext';
 

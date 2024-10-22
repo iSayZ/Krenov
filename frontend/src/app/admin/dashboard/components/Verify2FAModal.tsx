@@ -22,7 +22,7 @@ interface Verify2FAModalProps {
   isOpen: boolean;
   onClose: () => void;
   onVerify: () => void;
-  verifyCode: (code: string) => Promise<{ success: boolean; message: string; }>;
+  verifyCode: (code: string) => Promise<{ success: boolean; message: string }>;
   action?: string;
 }
 

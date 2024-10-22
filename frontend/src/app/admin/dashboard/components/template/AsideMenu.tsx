@@ -6,12 +6,7 @@ import {
   CollapsibleContent,
 } from '@radix-ui/react-collapsible';
 import {
-  Home,
-  Inbox,
-  Calendar,
-  Search,
   Settings,
-  SquareTerminal,
   ChevronRight,
   House,
   Newspaper,

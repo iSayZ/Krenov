@@ -1,13 +1,15 @@
 'use client';
 
+import { Clock, Eye, File, TrendingDown } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 import { fetchAdminProfile } from '@/api/adminApi';
 import { formatDateForUX } from '@/lib/dateUtils';
 import { AdminProfile } from '@/types/admin.interface';
-import { Clock, Eye, File, TrendingDown } from 'lucide-react';
+
 import { Section } from '../components/template/TopbarMenu';
 import { useVisitedSection } from '../context/VisitedSectionContext';
+
 import IndicatorCard from './components/IndicatorCard';
 import VisitorChart from './components/VisitorChart';
 
@@ -27,7 +29,7 @@ const Index: React.FC = () => {
     const loadProfile = async () => {
       try {
         const profileData = await fetchAdminProfile();
-        console.log(profileData)
+        console.log(profileData);
         setProfile(profileData);
       } catch (error) {
         console.error(error);
@@ -38,7 +40,7 @@ const Index: React.FC = () => {
 
     loadProfile();
   }, []);
-  
+
   // Update the section for breadcrumb into topbarMenu
   const { setVisitedSection } = useVisitedSection();
 
@@ -59,22 +61,44 @@ const Index: React.FC = () => {
   }
 
   return (
-    <div className='size-full flex flex-col gap-6'>
+    <div className="flex size-full flex-col gap-6">
       <div>
-        <h1 className="text-3xl text-foreground font-bold">Bonjour {profile?.firstname} !</h1>
+        <h1 className="text-3xl font-bold text-foreground">
+          Bonjour {profile?.firstname} !
+        </h1>
         <p className="text-sm italic">
           Dernière connexion le {profile && formatDateForUX(profile.last_login)}
         </p>
       </div>
       <div className="container mx-auto">
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
-          <IndicatorCard title='Total des visites' icon={<Eye />} value={130} analyze='+10% par rapport au mois dernier' />
-          <IndicatorCard title='Taux de Rebond' icon={<TrendingDown />} value={55} analyze='-2% par rapport au mois dernier' />
-          <IndicatorCard title='Pages par session' icon={<File />} value={3} analyze='+5% par rapport au mois dernier' />
-          <IndicatorCard title='Durée moy. session' icon={<Clock />} value='146 sec' analyze='+17sec par rapport au mois dernier' />
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
+          <IndicatorCard
+            title="Total des visites"
+            icon={<Eye />}
+            value={130}
+            analyze="+10% par rapport au mois dernier"
+          />
+          <IndicatorCard
+            title="Taux de Rebond"
+            icon={<TrendingDown />}
+            value={55}
+            analyze="-2% par rapport au mois dernier"
+          />
+          <IndicatorCard
+            title="Pages par session"
+            icon={<File />}
+            value={3}
+            analyze="+5% par rapport au mois dernier"
+          />
+          <IndicatorCard
+            title="Durée moy. session"
+            icon={<Clock />}
+            value="146 sec"
+            analyze="+17sec par rapport au mois dernier"
+          />
         </div>
       </div>
-      <div className='w-full mx-auto'>
+      <div className="mx-auto w-full">
         <VisitorChart />
       </div>
     </div>

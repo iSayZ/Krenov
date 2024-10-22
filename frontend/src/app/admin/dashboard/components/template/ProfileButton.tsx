@@ -73,10 +73,10 @@ const ProfileButton: React.FC = () => {
                 <AvatarFallback></AvatarFallback>
               </Avatar>
               <div className="flex flex-col justify-center overflow-hidden text-left">
-                <p className="text-sm font-bold w-full truncate">
+                <p className="w-full truncate text-sm font-bold">
                   {profile?.firstname} {profile?.lastname}
                 </p>
-                <p className="text-xs font-normal text-muted-foreground w-full truncate">
+                <p className="w-full truncate text-xs font-normal text-muted-foreground">
                   {profile?.role}
                 </p>
               </div>
@@ -84,21 +84,24 @@ const ProfileButton: React.FC = () => {
             <ChevronsUpDown className="size-5 text-muted-foreground" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align={isMobile ? 'center' : 'end'} side={isMobile ? 'bottom' : 'right'}>
+        <DropdownMenuContent
+          align={isMobile ? 'center' : 'end'}
+          side={isMobile ? 'bottom' : 'right'}
+        >
           <DropdownMenuLabel>
             <div className="w-full">
-              <div className="flex items-center gap-2 w-52 max-w-60">
+              <div className="flex w-52 max-w-60 items-center gap-2">
                 <Avatar className="size-7 rounded-md">
                   <AvatarImage
                     src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${profile?.avatar}`}
                   />
                   <AvatarFallback></AvatarFallback>
                 </Avatar>
-                <div className="flex flex-col items-start justify-center overflow-hidden w-full text-left">
-                  <p className="text-xs font-bold w-full truncate">
+                <div className="flex w-full flex-col items-start justify-center overflow-hidden text-left">
+                  <p className="w-full truncate text-xs font-bold">
                     {profile?.firstname} {profile?.lastname}
                   </p>
-                  <p className="text-[0.65rem] font-normal leading-[0.9rem] text-muted-foreground w-full truncate">
+                  <p className="w-full truncate text-[0.65rem] font-normal leading-[0.9rem] text-muted-foreground">
                     {profile?.role}
                   </p>
                 </div>
