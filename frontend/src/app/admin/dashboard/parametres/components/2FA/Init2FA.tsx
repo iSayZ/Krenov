@@ -84,7 +84,7 @@ const Init2FA: React.FC<Init2FAProps> = ({
       >
         <DialogHeader className="space-y-4">
           <DialogTitle>Scannez le QR Code</DialogTitle>
-          <DialogDescription className="flex items-center gap-1">
+          <DialogDescription className="flex items-center gap-1 max-md:justify-center">
             <Info className="size-4" />
             Expiration du QR Code dans
             <Timer
@@ -96,7 +96,7 @@ const Init2FA: React.FC<Init2FAProps> = ({
             minutes
           </DialogDescription>
         </DialogHeader>
-        <div className="flex size-full items-center gap-4">
+        <div className="flex size-full items-center gap-4 max-md:flex-col">
           {qrCodeIsExpired ? (
             <div className="flex size-[250px] items-center justify-center">
               <Button onClick={handleRegenerateQrCode}>
@@ -112,7 +112,7 @@ const Init2FA: React.FC<Init2FAProps> = ({
               className="m-auto object-cover"
             />
           )}
-          <div className="space-y-4">
+          <div className="space-y-4 max-md:text-center">
             <h2 className="text-lg font-semibold">Comment ça marche ?</h2>
             <ol className="space-y-2 text-sm">
               <li>

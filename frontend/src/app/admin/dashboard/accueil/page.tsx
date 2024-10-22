@@ -29,7 +29,6 @@ const Index: React.FC = () => {
     const loadProfile = async () => {
       try {
         const profileData = await fetchAdminProfile();
-        console.log(profileData);
         setProfile(profileData);
       } catch (error) {
         console.error(error);
@@ -81,7 +80,7 @@ const Index: React.FC = () => {
           <IndicatorCard
             title="Taux de Rebond"
             icon={<TrendingDown />}
-            value={55}
+            value="55 / 130"
             analyze="-2% par rapport au mois dernier"
           />
           <IndicatorCard

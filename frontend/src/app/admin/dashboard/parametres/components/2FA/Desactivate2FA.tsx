@@ -80,7 +80,7 @@ const Desactivate2FA: React.FC<Desactivate2FAProps> = ({ onUpdate }) => {
                 recommandons fortement de maintenir cette sécurité active pour
                 protéger vos informations sensibles et votre identité en ligne.
               </DialogDescription>
-              <div className="flex w-full justify-end gap-4">
+              <div className="flex w-full justify-end gap-4 max-sm:justify-center">
                 <DialogClose className="min-w-36" asChild>
                   <Button variant="outline">Annuler</Button>
                 </DialogClose>
@@ -111,7 +111,7 @@ const Desactivate2FA: React.FC<Desactivate2FAProps> = ({ onUpdate }) => {
                 d'avis, vous pouvez réactiver la 2FA à tout moment en accédant
                 aux paramètres de votre compte.
               </DialogDescription>
-              <div className="flex justify-end gap-4">
+              <div className="flex justify-end gap-4 max-sm:justify-center">
                 <DialogClose className="min-w-36" asChild>
                   <Button onClick={() => onUpdate(false)}>Continuer</Button>
                 </DialogClose>

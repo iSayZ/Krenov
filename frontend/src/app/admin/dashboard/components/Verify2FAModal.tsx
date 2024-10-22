@@ -77,7 +77,7 @@ const Verify2FAModal: React.FC<Verify2FAModalProps> = ({
         </DialogHeader>
 
         <div className="flex flex-col gap-4">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-muted-foreground">
             {action
               ? `L'action "${action}" nécessite`
               : 'Cette action nécessite'}{' '}

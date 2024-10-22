@@ -69,7 +69,7 @@ const EmailDialog: React.FC = () => {
               <Label htmlFor="new">Confirmation</Label>
               <Input id="new" type="email" className="text-foreground" />
             </div>
-            <Button className="ml-auto mt-2 w-1/2">Enregistrer</Button>
+            <Button className="ml-auto mt-2 w-1/2 max-sm:m-auto">Enregistrer</Button>
           </div>
         </DialogContent>
       </Dialog>
