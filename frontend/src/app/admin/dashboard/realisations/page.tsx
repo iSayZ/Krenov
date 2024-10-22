@@ -14,7 +14,7 @@ import { DataTable } from './components/data-table';
 const section: Section = {
   items: [
     {
-      path: '/admin/dashboard',
+      path: '/admin/dashboard/accueil',
       name: 'Dashboard',
     },
   ],

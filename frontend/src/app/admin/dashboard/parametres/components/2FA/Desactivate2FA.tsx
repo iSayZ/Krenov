@@ -59,9 +59,11 @@ const Desactivate2FA: React.FC<Desactivate2FAProps> = ({ onUpdate }) => {
         >
           Désactiver
         </Button>
-        <DialogContent onInteractOutside={(e) => {
+        <DialogContent
+          onInteractOutside={(e) => {
             e.preventDefault();
-          }}>
+          }}
+        >
           <DialogHeader>
             <div className="space-y-6">
               <DialogTitle className="mr-4">

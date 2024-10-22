@@ -169,7 +169,7 @@ export function DataTable<TData extends DataWithIdAndSlug, TValue>({
 
   return (
     <div>
-      <div className="flex items-center pb-4 max-md:flex-col max-md:flew-wrap max-md:items-start max-md:gap-4">
+      <div className="max-md:flew-wrap flex items-center pb-4 max-md:flex-col max-md:items-start max-md:gap-4">
         <Input
           placeholder="Rechercher par titre..."
           value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}

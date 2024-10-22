@@ -111,8 +111,8 @@ const ProfileInformation: React.FC<ProfileProps> = ({
             enregistrer lorsque vous avez terminé.
           </CardDescription>
         </CardHeader>
-        <CardContent className="flex justify-around items-center gap-12 max-lg:flex-col max-lg:items-center max-lg:gap-12 mt-6">
-          <div className="flex flex-col items-center justify-center gap-4 mb-auto">
+        <CardContent className="mt-6 flex items-center justify-around gap-12 max-lg:flex-col max-lg:items-center max-lg:gap-12">
+          <div className="mb-auto flex flex-col items-center justify-center gap-4">
             <div className="relative">
               <Avatar className="size-52">
                 <AvatarImage
@@ -144,7 +144,7 @@ const ProfileInformation: React.FC<ProfileProps> = ({
             </div>
             <h2 className="text-lg font-semibold">Alexis Estrine</h2>
           </div>
-          <div className="space-y-6 w-2/3 max-lg:w-full">
+          <div className="w-2/3 space-y-6 max-lg:w-full">
             <div className="w-2/3 space-y-1 max-sm:w-full">
               <Label htmlFor="role">Rôle</Label>
               <Input
@@ -166,7 +166,7 @@ const ProfileInformation: React.FC<ProfileProps> = ({
                 onChange={handleChangeSettings}
               />
             </div>
-            <div className='w-full flex justify-center'>
+            <div className="flex w-full justify-center">
               <Button onClick={handleSubmitInformation}>
                 Enregistrer les modifications
               </Button>

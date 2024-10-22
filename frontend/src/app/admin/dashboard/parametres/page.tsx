@@ -1,6 +1,6 @@
 'use client';
 
-import { MouseEventHandler, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
@@ -16,13 +16,13 @@ import SecuritySettings from './components/SecuritySettings';
 const section: Section = {
   items: [
     {
-      path: '/admin/dashboard',
+      path: '/admin/dashboard/accueil',
       name: 'Dashboard',
     },
   ],
   page: {
     path: '/admin/dashboard/parametres',
-    name: 'Paramètres du profil',
+    name: 'Paramètres',
   },
 };
 
@@ -33,7 +33,7 @@ const ProfileSettings: React.FC = () => {
   useEffect(() => {
     setVisitedSection(section);
   }, [setVisitedSection]);
-  
+
   const [profileSettings, setProfileSettings] = useState<AdminSettings>({
     email: '',
     two_fa_enabled: false,
@@ -67,9 +67,7 @@ const ProfileSettings: React.FC = () => {
 
   const handleSwitchSection = (value: string) => {
     setSectionValue(value);
-    console.log("SECTION VALUE : ", value);
-  }
-
+  };
 
   // To update new value of settings
   const handleChangeSettings = (
@@ -101,11 +99,25 @@ const ProfileSettings: React.FC = () => {
       <div className="flex size-full items-center justify-center">
         <Tabs defaultValue="profile" className="size-full">
           <div className="flex items-center justify-between">
-            <TabsList  className="grid w-max grid-cols-2">
-              <TabsTrigger value="profile" onClick={() => handleSwitchSection('du Profil')} className='px-12'>Profil</TabsTrigger>
-              <TabsTrigger value="security" onClick={() => handleSwitchSection('de Sécurité')} className='px-12'>Sécurité</TabsTrigger>
+            <TabsList className="grid w-max grid-cols-2">
+              <TabsTrigger
+                value="profile"
+                onClick={() => handleSwitchSection('du Profil')}
+                className="px-12"
+              >
+                Profil
+              </TabsTrigger>
+              <TabsTrigger
+                value="security"
+                onClick={() => handleSwitchSection('de Sécurité')}
+                className="px-12"
+              >
+                Sécurité
+              </TabsTrigger>
             </TabsList>
-            <h2 className="text-xl font-semibold max-sm:hidden">Paramètres {sectionValue}</h2>
+            <h2 className="text-xl font-semibold max-sm:hidden">
+              Paramètres {sectionValue}
+            </h2>
           </div>
           <TabsContent value="profile">
             <ProfileInformation

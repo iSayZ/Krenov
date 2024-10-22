@@ -23,7 +23,7 @@ interface MenuLink {
 // Typing the sections object
 const sections: MenuLink[] = [
   {
-    path: '/admin/dashboard',
+    path: '/admin/dashboard/accueil',
     icon: <House />,
     tooltipText: 'Accueil du dashboard',
   },

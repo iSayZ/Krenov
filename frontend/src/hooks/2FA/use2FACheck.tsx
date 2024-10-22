@@ -3,10 +3,9 @@
 
 import { useState } from 'react';
 
-import { use2FAStatus } from './use2FAStatus';
-
 import axiosInstance from '@/lib/axiosInstance';
 
+import { use2FAStatus } from './use2FAStatus';
 
 interface Use2FACheckResult {
   is2FAModalOpen: boolean;

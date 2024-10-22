@@ -73,7 +73,7 @@ const EditRealisation: React.FC = () => {
   const section: Section = {
     items: [
       {
-        path: '/admin/dashboard',
+        path: '/admin/dashboard/accueil',
         name: 'Dashboard',
       },
       {

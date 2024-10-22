@@ -13,11 +13,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useSidebar } from '@/components/ui/sidebar';
 
 import { fetchAdminProfile } from '@/api/adminApi';
 import { logout } from '@/api/authApi';
 import { AdminProfile } from '@/types/admin.interface';
-import { useSidebar } from '@/components/ui/sidebar';
 
 const ProfileButton: React.FC = () => {
   const [profile, setProfile] = useState<AdminProfile | null>(null);
@@ -59,43 +59,47 @@ const ProfileButton: React.FC = () => {
           <Button
             variant="ghost"
             size="icon"
-            className={open ? 'size-full p-2 bg-accent text-accent-foreground' : 'size-full p-2'}
+            className={
+              open
+                ? 'size-full bg-accent p-2 text-accent-foreground'
+                : 'size-full p-2'
+            }
           >
-              <div className='w-full flex items-center gap-2'>
-                <Avatar className="size-8 rounded-md">
-                  <AvatarImage
-                    src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${profile?.avatar}`}
-                  />
-                  <AvatarFallback></AvatarFallback>
-                </Avatar>
-                <div className='flex flex-col items-start justify-center'>
-                  <p className='font-bold text-sm'>
-                    {profile?.firstname} {profile?.lastname}
-                  </p>
-                  <p className='font-normal text-muted-foreground text-xs'>
-                    Administrateur
-                  </p>
-                </div>
+            <div className="flex w-full items-center gap-2">
+              <Avatar className="size-8 rounded-md">
+                <AvatarImage
+                  src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${profile?.avatar}`}
+                />
+                <AvatarFallback></AvatarFallback>
+              </Avatar>
+              <div className="flex flex-col justify-center overflow-hidden text-left">
+                <p className="text-sm font-bold w-full truncate">
+                  {profile?.firstname} {profile?.lastname}
+                </p>
+                <p className="text-xs font-normal text-muted-foreground w-full truncate">
+                  {profile?.role}
+                </p>
               </div>
-              <ChevronsUpDown className='text-muted-foreground size-5' />
+            </div>
+            <ChevronsUpDown className="size-5 text-muted-foreground" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" side={isMobile ? "bottom" : "right"}>
+        <DropdownMenuContent align={isMobile ? 'center' : 'end'} side={isMobile ? 'bottom' : 'right'}>
           <DropdownMenuLabel>
-            <div className='w-full mr-20'>
-              <div className='w-full flex items-center gap-2'>
+            <div className="w-full">
+              <div className="flex items-center gap-2 w-52 max-w-60">
                 <Avatar className="size-7 rounded-md">
                   <AvatarImage
                     src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${profile?.avatar}`}
                   />
                   <AvatarFallback></AvatarFallback>
                 </Avatar>
-                <div className='flex flex-col items-start justify-center'>
-                  <p className='font-bold text-xs'>
+                <div className="flex flex-col items-start justify-center overflow-hidden w-full text-left">
+                  <p className="text-xs font-bold w-full truncate">
                     {profile?.firstname} {profile?.lastname}
                   </p>
-                  <p className='font-normal text-muted-foreground text-[0.65rem] leading-[0.9rem]'>
-                    Administrateur
+                  <p className="text-[0.65rem] font-normal leading-[0.9rem] text-muted-foreground w-full truncate">
+                    {profile?.role}
                   </p>
                 </div>
               </div>

@@ -22,7 +22,7 @@ interface Verify2FAModalProps {
   isOpen: boolean;
   onClose: () => void;
   onVerify: () => void;
-  verifyCode: (code: string) => Promise<boolean>;
+  verifyCode: (code: string) => Promise<{ success: boolean; message: string; }>;
   action?: string;
 }
 
@@ -63,9 +63,12 @@ const Verify2FAModal: React.FC<Verify2FAModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-min" onInteractOutside={(e) => {
-            e.preventDefault();
-          }}>
+      <DialogContent
+        className="max-w-min"
+        onInteractOutside={(e) => {
+          e.preventDefault();
+        }}
+      >
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Lock className="size-5" />

@@ -29,21 +29,21 @@ const Settings2FA: React.FC<Settings2FAProps> = ({ profileSettings }) => {
     : profileSettings.two_fa_enabled;
 
   return (
-    <div className="flex h-full w-full flex-col gap-6">
-      <div className="flex items-center justify-center gap-6">
+    <div className="flex size-full flex-col gap-6">
+      <div className="flex items-center justify-center gap-4">
         <h2 className="text-center text-lg font-semibold">
           Authentification à deux facteurs (2FA)
         </h2>
         <p className="text-lg font-semibold">-</p>
         {twoFAEnabled ? (
-          <Badge className="text-md bg-lime-500 font-semibold text-secondary hover:bg-lime-500">
+          <Badge className="text-sm bg-lime-500 font-semibold text-secondary hover:bg-lime-500">
             Activé
-            <ShieldCheck className="ml-2 size-5" />
+            <ShieldCheck className="ml-2 size-4" />
           </Badge>
         ) : (
-          <Badge className="text-md bg-red-600 font-semibold text-secondary hover:bg-red-600">
+          <Badge className="text-sm bg-red-600 font-semibold text-secondary hover:bg-red-600">
             Désactivé
-            <ShieldX className="ml-2 size-5" />
+            <ShieldX className="ml-2 size-4" />
           </Badge>
         )}
       </div>

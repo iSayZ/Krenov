@@ -17,7 +17,7 @@ const VisitedSectionProvider: React.FC<{ children: ReactNode }> = ({
   const [visitedSection, setVisitedSection] = useState<Section>({
     items: [],
     page: {
-      path: '/admin/dashboard',
+      path: '/admin/dashboard/accueil',
       name: 'Dashboard',
     },
   });

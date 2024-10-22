@@ -134,9 +134,11 @@ const GenerateBackupCode2FA: React.FC = () => {
         >
           Code de secours
         </Button>
-        <DialogContent onInteractOutside={(e) => {
+        <DialogContent
+          onInteractOutside={(e) => {
             e.preventDefault();
-          }}>
+          }}
+        >
           <DialogHeader>
             <div className="space-y-6">
               <DialogTitle className="mr-4">
@@ -192,8 +194,11 @@ const GenerateBackupCode2FA: React.FC = () => {
                 peut être utilisé{' '}
                 <span className="font-semibold">qu'une seule fois</span>.
               </p>
-              <div className="w-max rounded-sm border border-muted-foreground/20 bg-muted-foreground/20 shadow-sm m-auto">
-                <div id="backup-codes" className="grid grid-cols-3 gap-4 p-4 md:grid-cols-5">
+              <div className="m-auto w-max rounded-sm border border-muted-foreground/20 bg-muted-foreground/20 shadow-sm">
+                <div
+                  id="backup-codes"
+                  className="grid grid-cols-3 gap-4 p-4 md:grid-cols-5"
+                >
                   {backupCodes &&
                     backupCodes.map((code, index) => (
                       <p
@@ -238,7 +243,7 @@ const GenerateBackupCode2FA: React.FC = () => {
                   ou de les imprimer et les garder en lieu sûr.
                 </p>
               </div>
-              <div className="flex justify-center sm:justify-end gap-4">
+              <div className="flex justify-center gap-4 sm:justify-end">
                 <DialogClose className="min-w-36" asChild>
                   <Button>Continuer</Button>
                 </DialogClose>
