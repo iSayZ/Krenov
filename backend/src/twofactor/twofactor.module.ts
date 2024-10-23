@@ -3,10 +3,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 import {
   AdminAccount,
   AdminAccountSchema,
-} from 'src/admin/admin-account.schema';
+} from 'src/admin/schema/admin-account.schema';
+import { AuthModule } from 'src/auth/auth.module';
 import { TwoFactorController } from './twofactor.controller';
 import { TwoFactorService } from './twofactor.service';
-import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [

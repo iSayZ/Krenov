@@ -4,15 +4,15 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import * as argon2 from 'argon2';
+import * as crypto from 'crypto';
 import { Model } from 'mongoose';
+import * as qrcode from 'qrcode';
+import * as speakeasy from 'speakeasy';
 import {
   AdminAccount,
   AdminAccountDocument,
-} from 'src/admin/admin-account.schema';
-import * as speakeasy from 'speakeasy';
-import * as qrcode from 'qrcode';
-import * as crypto from 'crypto';
-import * as argon2 from 'argon2';
+} from 'src/admin/schema/admin-account.schema';
 
 @Injectable()
 export class TwoFactorService {
@@ -183,7 +183,7 @@ export class TwoFactorService {
   }
 
   // Clean secret in case of failure
-  async reset2FA(userId: string) {
+  async reset2FA(userId: string): Promise<{message: string}> {
     await this.cleanupSecret(userId);
     return { message: '2FA désactivée avec succès' };
   }

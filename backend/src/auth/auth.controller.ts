@@ -34,13 +34,16 @@ export class AuthController {
   })
   async login(
     @Body() loginDto: LoginDto,
-    @Res({ passthrough: true }) response: Response
+    @Res({ passthrough: true }) response: Response,
+    @Req() request: Request
   ) {
-    const { account } = await this.authService.validateCredentials(
+    // Check login logs
+    const account = await this.authService.validateCredentials(
       loginDto,
       response
     );
 
+    // If 2FA is enabled, break here to check 2FA
     if (account.two_fa_enabled) {
       response.status(200);
 
@@ -50,7 +53,16 @@ export class AuthController {
       };
     }
 
-    const message = await this.authService.completeLogin(account, response);
+    // Get IP / userAgent to identificate user
+    const ip = request.ip;
+    const userAgent = request.headers['user-agent'];
+
+    if (!userAgent) {
+      return;
+    } 
+
+    // Last step of login to verify identify and generate tokens
+    const message = await this.authService.completeLogin(account, response, ip, userAgent);
 
     response.status(200);
 
@@ -80,14 +92,18 @@ export class AuthController {
     const account =
       await this.authService.validateTemporaryToken(temporaryToken);
 
-    // Vérifier le code 2FA
+    // Verify 2FA code
     await this.twoFactorService.verifyTOTP(
       account._id.toString(),
       verify2FADto.code
     );
 
-    // Générer les vrais tokens d'authentification
-    const message = await this.authService.completeLogin(account, response);
+    // Get IP / userAgent to identificate user
+    const ip = request.ip;
+    const userAgent = request.headers['user-agent'];
+
+    // Last step of login to verify identify and generate tokens
+    const message = await this.authService.completeLogin(account, response, ip, userAgent);
 
     response.status(200);
 
@@ -100,9 +116,10 @@ export class AuthController {
   async logout(
     @Req() request: Request,
     @Res() response: Response,
-    @User('sub') userId: string
+    @User('sub') userId: string,
+    @User('session') sessionId: string
   ) {
-    const message = await this.authService.logout(userId, response);
+    const message = await this.authService.logout(userId, sessionId, response);
 
     return response.status(200).json({ message });
   }
@@ -130,9 +147,16 @@ export class AuthController {
       throw new UnauthorizedException('Refresh token not found');
     }
 
+    // Get IP / userAgent to identificate user
+    const ip = request.ip;
+    const userAgent = request.headers['x-original-user-agent'] as string;
+
+    // Refresh news tokens
     const newAccessToken = await this.authService.refreshTokens(
       refreshToken,
-      response
+      response,
+      ip,
+      userAgent
     );
 
     response.status(200);

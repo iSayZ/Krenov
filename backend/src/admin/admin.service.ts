@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { AdminAccount, AdminAccountDocument } from './admin-account.schema';
-import { AdminProfile, AdminProfileDocument } from './admin-profile.schema';
-import { UpdateProfileAccountDto } from './dto/update-admin-profile.dto';
+import { Model, UpdateWriteOpResult } from 'mongoose';
 import { UploadService } from 'src/upload/upload.service';
+import { UpdateProfileAccountDto } from './dto/update-admin-profile.dto';
+import { AdminAccount, AdminAccountDocument } from './schema/admin-account.schema';
+import { AdminProfile, AdminProfileDocument } from './schema/admin-profile.schema';
 
 @Injectable()
 export class AdminService {
@@ -15,6 +15,22 @@ export class AdminService {
     private adminProfileModel: Model<AdminProfileDocument>
   ) {}
 
+  // To search and clean inactives sessions
+  async cleanUpInactiveSessions(expirationDate: Date): Promise<UpdateWriteOpResult> {
+    const result = await this.adminAccountModel.updateMany(
+      {},
+      {
+        $pull: {
+          sessions: {
+            created_at: { $lt: expirationDate }
+          }
+        }
+      }
+    );
+
+    return result;
+  }
+  
   async readProfile(userId: string) {
     const adminProfile = await this.adminProfileModel
       .findOne({ admin_id: userId })
@@ -78,7 +94,7 @@ export class AdminService {
   async updateSettingsProfile(
     userId: string,
     updateProfileAccountDto: UpdateProfileAccountDto
-  ) {
+  ): Promise<string> {
     // If a new avatar is upload, get the old avatar src for delete
     if (updateProfileAccountDto.avatar) {
       const adminProfile = await this.adminProfileModel

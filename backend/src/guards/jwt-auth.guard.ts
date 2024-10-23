@@ -18,6 +18,10 @@ export class JwtAuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const response = context.switchToHttp().getResponse();
 
+    // Get Ip and UserAgent to check identity before refresh
+    const ip = request.ip;
+    const userAgent = request.headers['x-original-user-agent'] ? request.headers['x-original-user-agent'] : request.headers['user-agent'];
+
     // Prioritize token in Authorization header
     const authHeader = request.headers['authorization'];
     const accessToken = authHeader
@@ -34,7 +38,7 @@ export class JwtAuthGuard implements CanActivate {
 
       // If the refresh_token is present, try refresh by the road
       try {
-        await this.authService.refreshTokens(refreshToken, response);
+        await this.authService.refreshTokens(refreshToken, response, ip, userAgent);
         return true;
       } catch {
         throw new UnauthorizedException('Invalid refresh token');
@@ -56,7 +60,7 @@ export class JwtAuthGuard implements CanActivate {
 
       // If the refresh_token is present, try refresh by the road
       try {
-        await this.authService.refreshTokens(refreshToken, response);
+        await this.authService.refreshTokens(refreshToken, response, ip, userAgent);
         return true;
       } catch {
         throw new UnauthorizedException('Invalid refresh token');

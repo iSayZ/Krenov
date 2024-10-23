@@ -13,6 +13,7 @@ import { TwoFactorModule } from './twofactor/twofactor.module';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { CustomThrottlerGuard } from './guards/custom-throttler.guard';
+import { SessionCleanupModule } from './jobs/session-cleanup.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { CustomThrottlerGuard } from './guards/custom-throttler.guard';
     }),
     // Connect to MongoDB
     MongooseModule.forRoot(process.env.MONGODB_URI),
+    // Rate Limiting
     ThrottlerModule.forRoot([
       {
         ttl: Number(process.env.THROTTLE_TTL),
@@ -37,6 +39,7 @@ import { CustomThrottlerGuard } from './guards/custom-throttler.guard';
     AdminModule,
     UploadModule,
     TwoFactorModule,
+    SessionCleanupModule,
   ],
   controllers: [AppController],
   providers: [

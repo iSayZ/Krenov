@@ -1,6 +1,7 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 
 export interface JwtPayload {
+  session: string;
   sub: string;
   access_level: string;
   iat: number;

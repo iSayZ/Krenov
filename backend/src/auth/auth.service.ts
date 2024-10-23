@@ -1,5 +1,6 @@
 import {
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -7,11 +8,11 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import * as argon2 from 'argon2';
 import { Response } from 'express';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import {
   AdminAccount,
   AdminAccountDocument,
-} from '../admin/admin-account.schema';
+} from '../admin/schema/admin-account.schema';
 import { LoginDto } from './dto/login.dto';
 
 @Injectable()
@@ -28,7 +29,7 @@ export class AuthService {
     return await argon2.hash(password);
   }
 
-  async verifyPassword(accountPassword: string, password: string) {
+  async verifyPassword(accountPassword: string, password: string): Promise<boolean> {
     return await argon2.verify(accountPassword, password);
   }
 
@@ -36,9 +37,15 @@ export class AuthService {
 
   // Function to generate and stock the tokens
   private async generateTokens(
-    account
+    account: AdminAccountDocument,
+    ip: string,
+    userAgent: string
   ): Promise<{ access_token: string; refresh_token: string }> {
-    const payload = { sub: account._id, access_level: account.access_level };
+    // Generate sessionId to identificate the session
+    const sessionId = this.generateSessionId();
+
+    // Content of payload
+    const payload = { session: sessionId, sub: account._id, access_level: account.access_level };
 
     // Generate access_token, with expiration of 15mins
     const access_token = await this.jwtService.signAsync(payload, {
@@ -53,11 +60,30 @@ export class AuthService {
     // Hash the refresh_token
     const hashedRefreshToken = await this.hashPassword(refresh_token);
 
-    // Stock refresh_token hashed in the account
-    await this.adminAccountModel.findByIdAndUpdate(account._id, {
+    // Find account to push the new session
+    const adminAccount = await this.adminAccountModel.findById(account._id);
+
+    if (!adminAccount) {
+      throw new Error('Aucun compte correspondant');
+    }
+
+    // Body of object session
+    const newSession = {
+      session_id: sessionId,
+      ip,
+      user_agent: userAgent,
       refresh_token: hashedRefreshToken,
-      last_login: new Date(),
-    });
+      created_at: new Date(),
+    };
+
+    // Push the new session into account
+    try {
+      adminAccount.sessions.push(newSession);
+      await adminAccount.save();
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException("Impossible de récupérer les informations de session. Veuillez réessayer.");
+    }
 
     return {
       access_token,
@@ -68,21 +94,42 @@ export class AuthService {
   // Function to refresh a new tokens by refresh_token if it is valid
   async refreshTokens(
     refreshToken: string,
-    response: Response
+    response: Response,
+    ip: string,
+    userAgent: string
   ): Promise<string> {
     try {
       // Verify validity of refresh_token and extract the payload
       const payload = await this.jwtService.verifyAsync(refreshToken);
+
       // Find the account match of payload sub
       const account = await this.adminAccountModel.findById(payload.sub);
 
-      if (!account || !account.refresh_token) {
+      if (!account) {
         throw new UnauthorizedException('Invalid refresh token');
       }
 
-      // Verify if the hashed refresh_token stocked in account matches
+      // Get index of session
+      const currentIndexSession = account.sessions.findIndex(session => session.session_id === payload.session);
+      
+      if (currentIndexSession < 0) {
+        throw new UnauthorizedException('Invalid session');
+      }
+
+      // Get session with index
+      const currentSession = account.sessions[currentIndexSession];
+
+      // Check if IP or User-Agent matches
+      const isIpMatch = currentSession.ip === ip;
+      const isUserAgentMatch = currentSession.user_agent === userAgent;
+
+      if (!(isIpMatch || isUserAgentMatch)) {
+        throw new UnauthorizedException('Unauthorized access');
+      }
+
+      // Verify if the hashed refresh_token stocked in session of account matches
       const isRefreshTokenValid = await argon2.verify(
-        account.refresh_token,
+        currentSession.refresh_token,
         refreshToken
       );
 
@@ -90,8 +137,17 @@ export class AuthService {
         throw new UnauthorizedException('Invalid refresh token');
       }
 
+      // Delete old session before regenerate new tokens
+      await this.adminAccountModel.updateOne(
+        { _id: account._id },
+        { 
+          $pull: { sessions: { session_id: currentSession.session_id } },
+          $set: { last_login: new Date() }
+        },
+      );
+
       // Generates new tokens
-      const tokens = await this.generateTokens(account);
+      const tokens = await this.generateTokens(account, ip, userAgent);
 
       // Set cookies
       response.cookie('access_token', tokens.access_token, {
@@ -118,7 +174,13 @@ export class AuthService {
   }
 
   // --------------------------------------------------------- Auth Services - Functions ---------------------------------------------------------
+  
+  // Function to generate unique ID (objectId from mongoose)
+  private generateSessionId(): string {
+    return new mongoose.Types.ObjectId().toString();
+  };
 
+  // Function to check login logs to allow access
   private async validateUser(
     loginDto: LoginDto
   ): Promise<AdminAccountDocument> {
@@ -143,7 +205,8 @@ export class AuthService {
     return account;
   }
 
-  async validateCredentials(loginDto: LoginDto, response: Response) {
+  // First step of login, to validate login logs and check 2FA status
+  async validateCredentials(loginDto: LoginDto, response: Response): Promise<AdminAccountDocument> {
     const account = await this.validateUser(loginDto);
 
     // Generate a temporary token if 2FA is enabled
@@ -162,12 +225,13 @@ export class AuthService {
         maxAge: 1000 * 60 * 5, // 5min
       });
 
-      return { account };
+      return account ;
     }
 
-    return { account };
+    return account;
   }
 
+  // Function to check temporary_token (2FA) is valid
   async validateTemporaryToken(token: string): Promise<AdminAccountDocument> {
     try {
       const payload = await this.jwtService.verifyAsync(token);
@@ -180,11 +244,14 @@ export class AuthService {
     }
   }
 
+  // Last step of login to set the cookies
   async completeLogin(
-    account: AdminAccount,
-    response: Response
+    account: AdminAccountDocument,
+    response: Response,
+    ip: string,
+    userAgent: string
   ): Promise<string> {
-    const tokens = await this.generateTokens(account);
+    const tokens = await this.generateTokens(account, ip, userAgent);
 
     // Set cookies
     response.cookie('access_token', tokens.access_token, {
@@ -206,11 +273,13 @@ export class AuthService {
     return 'Connexion réussie';
   }
 
-  async logout(id: string, response: Response): Promise<string> {
-    // Invalid the refresh_token in the account
-    await this.adminAccountModel.findByIdAndUpdate(id, {
-      refresh_token: 'logout',
-    });
+  // Function to logout, delete session and clear cookies
+  async logout(id: string, sessionId: string, response: Response): Promise<string> {
+    // Delete session before clear cookies
+    await this.adminAccountModel.updateOne(
+      { _id: id },
+      { $pull: { sessions: { session_id: sessionId } } }
+    );
 
     // Delete cookies
     response.clearCookie('access_token', {
@@ -230,6 +299,7 @@ export class AuthService {
     return 'Déconnexion réussie';
   }
 
+  // Function to check password of an user
   async verifyIdentity(id: string, password: string): Promise<string> {
     const account = await this.adminAccountModel.findById(id).exec();
 

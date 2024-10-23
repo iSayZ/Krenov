@@ -1,11 +1,17 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, UpdateQuery } from 'mongoose';
+import { SessionSchema, SessionSchemaFactory } from './session.schema';
+
+// Interface of session object into sessions[]
+export interface Session {
+  id: string;
+  ip: string;
+  user_agent: string;
+  refresh_token: string;
+  created_at: Date;
+}
 
 export type AdminAccountDocument = AdminAccount & Document;
-
-interface AdminAccountUpdate extends UpdateQuery<AdminAccount> {
-  refresh_token?: string;
-}
 
 @Schema({ collection: 'admin_accounts' })
 export class AdminAccount {
@@ -14,9 +20,6 @@ export class AdminAccount {
 
   @Prop({ type: String, required: true })
   password: string;
-
-  @Prop({ type: String, required: true })
-  refresh_token: string;
 
   @Prop({ type: Boolean, required: true, default: false })
   two_fa_enabled: boolean;
@@ -35,15 +38,18 @@ export class AdminAccount {
 
   @Prop({ type: Date, required: true, default: Date.now })
   updated_at: Date;
+
+  @Prop({ type: [SessionSchemaFactory], default: [] }) // Ajout du tableau de sessions
+  sessions: SessionSchema[];
 }
 
 export const AdminAccountSchema = SchemaFactory.createForClass(AdminAccount);
 
-// Middleware to update `updatedAt` each time the document is modified
+// Middleware to update `updated_at` each time the document is modified
 AdminAccountSchema.pre('findOneAndUpdate', function (next) {
-  const update = this.getUpdate() as AdminAccountUpdate;
+  const update = this.getUpdate() as UpdateQuery<AdminAccount>;
 
-  if (update && (update.refresh_token || update.$set?.refresh_token)) {
+  if (update && (update.sessions || update.$set?.sessions || update.$pull?.sessions)) {
     return next();
   }
 
