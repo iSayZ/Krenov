@@ -13,7 +13,8 @@ export class SessionCleanupService {
     const expirationDate = new Date(now.getTime() - SEVEN_DAYS_IN_MS);
 
     // Search and delete expired sessions
-    const result = await this.adminService.cleanUpInactiveSessions(expirationDate);
+    const result =
+      await this.adminService.cleanUpInactiveSessions(expirationDate);
     console.log(`Sessions expirées supprimées : ${result.modifiedCount}`);
   }
 }

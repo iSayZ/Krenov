@@ -59,10 +59,15 @@ export class AuthController {
 
     if (!userAgent) {
       return;
-    } 
+    }
 
     // Last step of login to verify identify and generate tokens
-    const message = await this.authService.completeLogin(account, response, ip, userAgent);
+    const message = await this.authService.completeLogin(
+      account,
+      response,
+      ip,
+      userAgent
+    );
 
     response.status(200);
 
@@ -103,7 +108,12 @@ export class AuthController {
     const userAgent = request.headers['user-agent'];
 
     // Last step of login to verify identify and generate tokens
-    const message = await this.authService.completeLogin(account, response, ip, userAgent);
+    const message = await this.authService.completeLogin(
+      account,
+      response,
+      ip,
+      userAgent
+    );
 
     response.status(200);
 

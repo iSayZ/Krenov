@@ -183,7 +183,7 @@ export class TwoFactorService {
   }
 
   // Clean secret in case of failure
-  async reset2FA(userId: string): Promise<{message: string}> {
+  async reset2FA(userId: string): Promise<{ message: string }> {
     await this.cleanupSecret(userId);
     return { message: '2FA désactivée avec succès' };
   }

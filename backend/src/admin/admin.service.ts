@@ -3,8 +3,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, UpdateWriteOpResult } from 'mongoose';
 import { UploadService } from 'src/upload/upload.service';
 import { UpdateProfileAccountDto } from './dto/update-admin-profile.dto';
-import { AdminAccount, AdminAccountDocument } from './schema/admin-account.schema';
-import { AdminProfile, AdminProfileDocument } from './schema/admin-profile.schema';
+import {
+  AdminAccount,
+  AdminAccountDocument,
+} from './schema/admin-account.schema';
+import {
+  AdminProfile,
+  AdminProfileDocument,
+} from './schema/admin-profile.schema';
 
 @Injectable()
 export class AdminService {
@@ -16,21 +22,23 @@ export class AdminService {
   ) {}
 
   // To search and clean inactives sessions
-  async cleanUpInactiveSessions(expirationDate: Date): Promise<UpdateWriteOpResult> {
+  async cleanUpInactiveSessions(
+    expirationDate: Date
+  ): Promise<UpdateWriteOpResult> {
     const result = await this.adminAccountModel.updateMany(
       {},
       {
         $pull: {
           sessions: {
-            created_at: { $lt: expirationDate }
-          }
-        }
+            created_at: { $lt: expirationDate },
+          },
+        },
       }
     );
 
     return result;
   }
-  
+
   async readProfile(userId: string) {
     const adminProfile = await this.adminProfileModel
       .findOne({ admin_id: userId })

@@ -49,7 +49,10 @@ export const AdminAccountSchema = SchemaFactory.createForClass(AdminAccount);
 AdminAccountSchema.pre('findOneAndUpdate', function (next) {
   const update = this.getUpdate() as UpdateQuery<AdminAccount>;
 
-  if (update && (update.sessions || update.$set?.sessions || update.$pull?.sessions)) {
+  if (
+    update &&
+    (update.sessions || update.$set?.sessions || update.$pull?.sessions)
+  ) {
     return next();
   }
 

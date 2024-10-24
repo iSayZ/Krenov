@@ -3,8 +3,14 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from 'src/auth/auth.module';
 import { AdminController } from './admin.controller';
 import { AdminService } from './admin.service';
-import { AdminAccount, AdminAccountSchema } from './schema/admin-account.schema';
-import { AdminProfile, AdminProfileSchema } from './schema/admin-profile.schema';
+import {
+  AdminAccount,
+  AdminAccountSchema,
+} from './schema/admin-account.schema';
+import {
+  AdminProfile,
+  AdminProfileSchema,
+} from './schema/admin-profile.schema';
 
 @Module({
   imports: [
@@ -16,6 +22,6 @@ import { AdminProfile, AdminProfileSchema } from './schema/admin-profile.schema'
   ],
   controllers: [AdminController],
   providers: [AdminService],
-  exports: [AdminService]
+  exports: [AdminService],
 })
 export class AdminModule {}

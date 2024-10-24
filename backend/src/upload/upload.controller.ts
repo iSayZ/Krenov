@@ -5,24 +5,17 @@ import {
   UploadedFiles,
   BadRequestException,
   UseGuards,
+  Req,
+  Param,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
+import * as fs from 'fs';
 
 @Controller('upload')
 export class UploadController {
-  private static getStorage(destination: string) {
-    return diskStorage({
-      destination: `./public/uploads/${destination}`, // Utilisation du chemin dynamique
-      filename: (req, file, callback) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-        callback(null, uniqueSuffix + extname(file.originalname)); // Nom de fichier unique
-      },
-    });
-  }
-
   private async handleUpload(
     @UploadedFiles() files: Express.Multer.File[],
     destination: string
@@ -31,34 +24,51 @@ export class UploadController {
       throw new BadRequestException('Aucun fichier téléchargé');
     }
 
-    // Générer les URLs ou les chemins des fichiers uploadés
+    // Generate url path of uploaded image(s)
     return files.map((file) => ({
-      url: `/${destination}/${file.filename}`, // Chemin dynamique pour chaque type d'upload
+      url: `/${destination}/${file.filename}`,
       originalname: file.originalname,
     }));
   }
 
-  @Post('avatar')
+  @Post('avatar/:source')
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(
-    FilesInterceptor('avatar', 10, {
-      storage: UploadController.getStorage('avatar'), // Utilisation de la méthode pour le stockage
+    FilesInterceptor('avatar', 1, {
+      storage: diskStorage({
+        destination: (req, file, callback) => {
+          const source = req.params.source;
+          
+          const uniqueFolder = `./public/uploads/avatars/${source}`;
+          
+          // Create folder if is don't exist
+          if (!fs.existsSync(uniqueFolder)) {
+            fs.mkdirSync(uniqueFolder, { recursive: true });
+          }
+          
+          callback(null, uniqueFolder);
+        },
+        filename: (req, file, callback) => {
+          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+          callback(null, uniqueSuffix + extname(file.originalname));
+        },
+      })
     })
   )
-  async uploadAvatar(@UploadedFiles() files: Express.Multer.File[]) {
-    const filePaths = await this.handleUpload(files, 'avatar'); // Gestion des fichiers
+  async uploadAvatar(@UploadedFiles() files: Express.Multer.File[], @Param('source') source: string) {
+    const filePaths = await this.handleUpload(files, `avatars/${source}`);
     return filePaths[0].url;
   }
 
-  @Post('realisation')
-  @UseGuards(JwtAuthGuard)
-  @UseInterceptors(
-    FilesInterceptor('images', 10, {
-      storage: UploadController.getStorage('realisation'), // Utilisation de la méthode pour le stockage
-    })
-  )
-  async uploadRealisations(@UploadedFiles() files: Express.Multer.File[]) {
-    const filePaths = await this.handleUpload(files, 'realisation'); // Gestion des fichiers
-    return { files: filePaths };
-  }
+  // @Post('realisation')
+  // @UseGuards(JwtAuthGuard)
+  // @UseInterceptors(
+  //   FilesInterceptor('images', 10, {
+  //     storage: UploadController.getStorage('realisations'), // Use method for stockage
+  //   })
+  // )
+  // async uploadRealisations(@UploadedFiles() files: Express.Multer.File[]) {
+  //   const filePaths = await this.handleUpload(files, 'realisations'); // Gestion des fichiers
+  //   return { files: filePaths };
+  // }
 }

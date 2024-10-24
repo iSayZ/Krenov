@@ -21,10 +21,6 @@ export class CreateRealisationDto {
 
   @IsString()
   @IsNotEmpty()
-  desc: string;
-
-  @IsString()
-  @IsNotEmpty()
   content: string;
 
   @IsString()

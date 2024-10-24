@@ -29,7 +29,10 @@ export class AuthService {
     return await argon2.hash(password);
   }
 
-  async verifyPassword(accountPassword: string, password: string): Promise<boolean> {
+  async verifyPassword(
+    accountPassword: string,
+    password: string
+  ): Promise<boolean> {
     return await argon2.verify(accountPassword, password);
   }
 
@@ -45,7 +48,11 @@ export class AuthService {
     const sessionId = this.generateSessionId();
 
     // Content of payload
-    const payload = { session: sessionId, sub: account._id, access_level: account.access_level };
+    const payload = {
+      session: sessionId,
+      sub: account._id,
+      access_level: account.access_level,
+    };
 
     // Generate access_token, with expiration of 15mins
     const access_token = await this.jwtService.signAsync(payload, {
@@ -82,7 +89,9 @@ export class AuthService {
       await adminAccount.save();
     } catch (error) {
       console.log(error);
-      throw new InternalServerErrorException("Impossible de récupérer les informations de session. Veuillez réessayer.");
+      throw new InternalServerErrorException(
+        'Impossible de récupérer les informations de session. Veuillez réessayer.'
+      );
     }
 
     return {
@@ -108,10 +117,12 @@ export class AuthService {
       if (!account) {
         throw new UnauthorizedException('Invalid refresh token');
       }
-
+      console.log(payload.session)
       // Get index of session
-      const currentIndexSession = account.sessions.findIndex(session => session.session_id === payload.session);
-      
+      const currentIndexSession = account.sessions.findIndex(
+        (session) => session.session_id === payload.session
+      );
+
       if (currentIndexSession < 0) {
         throw new UnauthorizedException('Invalid session');
       }
@@ -140,10 +151,10 @@ export class AuthService {
       // Delete old session before regenerate new tokens
       await this.adminAccountModel.updateOne(
         { _id: account._id },
-        { 
+        {
           $pull: { sessions: { session_id: currentSession.session_id } },
-          $set: { last_login: new Date() }
-        },
+          $set: { last_login: new Date() },
+        }
       );
 
       // Generates new tokens
@@ -174,11 +185,11 @@ export class AuthService {
   }
 
   // --------------------------------------------------------- Auth Services - Functions ---------------------------------------------------------
-  
+
   // Function to generate unique ID (objectId from mongoose)
   private generateSessionId(): string {
     return new mongoose.Types.ObjectId().toString();
-  };
+  }
 
   // Function to check login logs to allow access
   private async validateUser(
@@ -206,7 +217,10 @@ export class AuthService {
   }
 
   // First step of login, to validate login logs and check 2FA status
-  async validateCredentials(loginDto: LoginDto, response: Response): Promise<AdminAccountDocument> {
+  async validateCredentials(
+    loginDto: LoginDto,
+    response: Response
+  ): Promise<AdminAccountDocument> {
     const account = await this.validateUser(loginDto);
 
     // Generate a temporary token if 2FA is enabled
@@ -225,7 +239,7 @@ export class AuthService {
         maxAge: 1000 * 60 * 5, // 5min
       });
 
-      return account ;
+      return account;
     }
 
     return account;
@@ -274,7 +288,11 @@ export class AuthService {
   }
 
   // Function to logout, delete session and clear cookies
-  async logout(id: string, sessionId: string, response: Response): Promise<string> {
+  async logout(
+    id: string,
+    sessionId: string,
+    response: Response
+  ): Promise<string> {
     // Delete session before clear cookies
     await this.adminAccountModel.updateOne(
       { _id: id },
