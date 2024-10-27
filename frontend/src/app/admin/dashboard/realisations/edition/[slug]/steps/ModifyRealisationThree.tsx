@@ -14,9 +14,11 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-import { useCreateRealisation } from '../../../contexts/CreateRealisationContext';
+import { useModifyRealisation } from '../../../../contexts/ModifyRealisationContext';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
+import Image from 'next/image';
 
-const CreateRealisationThree: React.FC = () => {
+const ModifyRealisationThree: React.FC = () => {
   const {
     formData,
     handleFileChange,
@@ -26,7 +28,7 @@ const CreateRealisationThree: React.FC = () => {
     removeTag,
     handleChangeStatus,
     formErrors,
-  } = useCreateRealisation();
+  } = useModifyRealisation();
 
   return (
     <Card>
@@ -39,17 +41,29 @@ const CreateRealisationThree: React.FC = () => {
             <Label htmlFor="header" className="text-base">
               Image d'en-tête
             </Label>
-            <Input
-              id="header"
-              type="file"
-              accept='image/*'
-              onChange={handleFileChange}
-              className={
-                formErrors.header
-                  ? 'max-w-xs cursor-pointer outline outline-1 outline-red-500'
-                  : 'max-w-xs cursor-pointer'
-              }
-            />
+            <div className='space-y-4'>
+              <div className="w-full lg:max-w-sm">
+                <AspectRatio ratio={1 / 1}>
+                  <Image
+                    src={formData.header}
+                    fill
+                    alt="Image d'en-tête de l'article"
+                    className="rounded-md object-cover"
+                  />
+                </AspectRatio>
+              </div>
+              <Input
+                id="header"
+                type="file"
+                accept='image/*'
+                onChange={handleFileChange}
+                className={
+                  formErrors.header
+                    ? 'max-w-xs cursor-pointer outline outline-1 outline-red-500'
+                    : 'max-w-xs cursor-pointer'
+                }
+              />
+            </div>
             {formErrors.header && (
               <p className="text-sm text-red-600">{formErrors.header}</p>
             )}
@@ -152,4 +166,4 @@ const CreateRealisationThree: React.FC = () => {
   );
 };
 
-export default CreateRealisationThree;
+export default ModifyRealisationThree;

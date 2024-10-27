@@ -180,7 +180,7 @@ export const columns = (
       // Function to go to the edition page
       const handleModify = () => {
         router.push(
-          `/admin/dashboard/realisations/${realisation.slug}/edition`
+          `/admin/dashboard/realisations/edition/${realisation.slug}`
         );
       };
 

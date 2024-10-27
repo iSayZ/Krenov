@@ -22,9 +22,9 @@ import {
 } from '@/components/ui/tooltip';
 
 import { updateAdminProfile } from '@/api/adminApi';
+import { uploadAvatar } from '@/api/uploadApi';
 import { formatDateForUX } from '@/lib/dateUtils';
 import { AdminSettings } from '@/types/admin.interface';
-import { uploadAvatar } from '@/api/uploadApi';
 
 interface ProfileProps {
   profileSettings: AdminSettings;
@@ -101,6 +101,7 @@ const ProfileInformation: React.FC<ProfileProps> = ({
       {/* Hidden input to change avatar */}
       <input
         type="file"
+        accept='image/*'
         ref={fileInputRef}
         onChange={handleFileChange}
         className="hidden"

@@ -1,14 +1,15 @@
 import DOMPurify from 'dompurify';
 import { JSDOM } from 'jsdom';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import React from 'react';
 
-import { Realisation } from '@/types/realisation.interface';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import Image from 'next/image';
+
+import { Realisation } from '@/types/realisation.interface';
 
 // Fonction pour récupérer les slugs des réalisations (ISR compatible)
-export async function generateStaticParams() {
+async function generateStaticParams() {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_BASE_URL}/realisations`
   );
@@ -42,7 +43,7 @@ const RealisationPage = async ({ params }: { params: { slug: string } }) => {
   }
 
   // Créez un DOM virtuel pour utiliser DOMPurify
-  const window = (new JSDOM('')).window;
+  const window = new JSDOM('').window;
   const purify = DOMPurify(window);
 
   // Nettoyer le contenu HTML pour éviter les attaques XSS
@@ -50,30 +51,35 @@ const RealisationPage = async ({ params }: { params: { slug: string } }) => {
 
   return (
     <div>
-        <div className="h-full w-full overflow-hidden">
-            <AspectRatio ratio={21.35 / 9}>
-                    <Image
-                        src={realisation.header}
-                        fill
-                        alt={`Image de couverture de l'article ${realisation.slug}`}
-                        className="object-cover object-bottom-right"
-                    />
-            </AspectRatio>
+      <div className="size-full overflow-hidden">
+        <AspectRatio ratio={21.35 / 9}>
+          <Image
+            src={realisation.header}
+            fill
+            alt={`Image de couverture de l'article ${realisation.slug}`}
+            className="object-bottom-right object-cover"
+          />
+        </AspectRatio>
+      </div>
+      <div className="relative -top-28 m-auto flex w-2/3 flex-col items-center bg-card p-12">
+        <div className="space-y-6">
+          <h1 className="text-4xl font-bold">{realisation.title}</h1>
+          <div
+            className="prose max-w-none"
+            dangerouslySetInnerHTML={{ __html: cleanContent }}
+          />
         </div>
-        <div className="w-2/3 m-auto flex flex-col items-center p-12 relative -top-28 bg-card">
-            <div className="space-y-6">
-                <h1 className="text-4xl font-bold">{realisation.title}</h1>
-                <div
-                className="prose max-w-none"
-                dangerouslySetInnerHTML={{ __html: cleanContent }}
-                />
-            </div>
-        </div>
+      </div>
     </div>
   );
 };
 
-// Exportation ISR avec une régénération toutes les 60 secondes
-export const revalidate = 60; // intervalle de régénération en secondes
+// Valeur de revalidation
+const REVALIDATE_INTERVAL = 60; // intervalle de régénération en secondes
 
-export default RealisationPage;
+// Exportation consolidée
+export {
+  generateStaticParams,
+  RealisationPage as default,
+  REVALIDATE_INTERVAL as revalidate,
+};

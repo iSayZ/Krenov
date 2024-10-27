@@ -6,18 +6,18 @@ import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 
-import { createRealisation } from '@/api/realisationsApi';
+import { fetchRealisationBySlug, updateRealisation } from '@/api/realisationsApi';
 import { uploadRealisationImage } from '@/api/uploadApi';
 import { formatDateForUX } from '@/lib/dateUtils';
 
-import { Section } from '../../components/template/TopbarMenu';
-import { useVisitedSection } from '../../contexts/VisitedSectionContext';
+import { Section } from '../../../components/template/TopbarMenu';
+import { useVisitedSection } from '../../../contexts/VisitedSectionContext';
 
-import { useCreateRealisation } from '../../contexts/CreateRealisationContext';
-import CreateRealisationFour from './steps/CreateRealisationFour';
-import CreateRealisationOne from './steps/CreateRealisationOne';
-import CreateRealisationThree from './steps/CreateRealisationThree';
-import CreateRealisationTwo from './steps/CreateRealisationTwo';
+import { useModifyRealisation } from '../../../contexts/ModifyRealisationContext';
+import ModifyRealisationFour from './steps/ModifyRealisationFour';
+import ModifyRealisationOne from './steps/ModifyRealisationOne';
+import ModifyRealisationThree from './steps/ModifyRealisationThree';
+import ModifyRealisationTwo from './steps/ModifyRealisationTwo';
 
 const section: Section = {
   items: [
@@ -31,26 +31,53 @@ const section: Section = {
     },
   ],
   page: {
-    path: '/admin/dashboard/realisation/creation',
-    name: 'Ajouter une réalisation',
+    path: '/admin/dashboard/realisation/edition',
+    name: 'Editer une realisation',
   },
 };
 
-const CreateRealisationPage: React.FC = () => {
-  const { step, setStep, content, formData, header, setFormErrors } =
-    useCreateRealisation();
+interface ModifyRealisationProps {
+  params: {
+    slug: string;
+  };
+}
+
+const ModifyRealisationPage: React.FC<ModifyRealisationProps> = ({ params }) => {
+  const { step, setStep, setContent, content, formData, setFormData, header, setFormErrors } =
+    useModifyRealisation();
 
   const { setVisitedSection } = useVisitedSection();
 
   useEffect(() => {
     setVisitedSection(section);
   }, [setVisitedSection]);
-
+  
   const router = useRouter();
+  const { slug } = params;
+
+  const [loading, setLoading] = useState<boolean>(true);
+  
+  useEffect(() => {
+    const loadRealisation = async () => {
+      try {
+        const realisationData = await fetchRealisationBySlug(slug);
+        setFormData(realisationData);
+        setContent(realisationData.content);
+      } catch (error) {
+        console.error(error);
+        router.push('/admin/dashboard/realisations');
+      } finally {
+        setTimeout(() => setLoading(false), 1000);
+      }
+    };
+
+    loadRealisation();
+  }, [slug]);
+
 
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      event.preventDefault(); // Empêche le comportement par défaut
+      event.preventDefault();
     };
 
     // Ajout de l'événement beforeunload
@@ -96,7 +123,7 @@ const CreateRealisationPage: React.FC = () => {
     }
 
     // Condition of step 3
-    if (step === 3 && !header) {
+    if (step === 3 && !formData.header) {
       return setFormErrors((prev) => ({
         ...prev,
         header: "L'image d'en-tête est obligatoire.",
@@ -148,27 +175,29 @@ const CreateRealisationPage: React.FC = () => {
 
   // Submit to create realisation
   const handleSubmit = async () => {
-    if (!header) return;
-
-    // Prepare header to upload
-    const image = new FormData();
-    image.append('file', header);
-
-    // Uploading header
-    const srcHeader = await uploadRealisationImage(image, formData.slug);
 
     const imageUrls = extractImageSourcesFromHtml(content);
 
     const realisation = {
       ...formData,
       content,
-      header: srcHeader,
       imageUrls,
     };
 
+    if (header) {
+      // Prepare header to upload
+      const image = new FormData();
+      image.append('file', header);
+  
+      // Uploading header
+      const srcHeader = await uploadRealisationImage(image, formData.slug);
+    
+      realisation.header = srcHeader;
+    }
+
     // Call API to create
     try {
-      const response = await createRealisation(realisation);
+      const response = await updateRealisation(slug, realisation);
       if (response.success) {
         toast.success('Réalisation publié avec succés.', {
           description: formatDateForUX(new Date().toISOString()),
@@ -191,19 +220,31 @@ const CreateRealisationPage: React.FC = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex size-full items-center justify-center">
+        <div
+          className="inline-block size-12 animate-spin rounded-full border-[3px] border-current border-t-transparent text-foreground"
+          role="status"
+          aria-label="loading"
+        ></div>
+      </div>
+    );
+  }
+
   return (
     <div className="m-auto size-full space-y-10 2xl:w-2/3">
       <div className="space-y-1">
-        <h1 className="text-2xl font-bold">Ajouter une réalisation</h1>
+        <h1 className="text-2xl font-bold">Modifier la réalisation : <span className='font-normal'>{slug}</span></h1>
         <h2 className="italic">
           Étape {step} - {stepInfo}
         </h2>
       </div>
       <div>
-        {step === 1 && <CreateRealisationOne />}
-        {step === 2 && <CreateRealisationTwo />}
-        {step === 3 && <CreateRealisationThree />}
-        {step === 4 && <CreateRealisationFour />}
+        {step === 1 && <ModifyRealisationOne />}
+        {step === 2 && <ModifyRealisationTwo />}
+        {step === 3 && <ModifyRealisationThree />}
+        {step === 4 && <ModifyRealisationFour />}
       </div>
       <div className="flex w-full justify-between">
         <Button variant="destructive">Annuler</Button>
@@ -212,7 +253,7 @@ const CreateRealisationPage: React.FC = () => {
           {step < 4 ? (
             <Button onClick={handleNextStep}>Suivant</Button>
           ) : (
-            <Button onClick={handleSubmit}>Publier</Button>
+            <Button onClick={handleSubmit}>Mettre à jour</Button>
           )}
         </div>
       </div>
@@ -220,4 +261,4 @@ const CreateRealisationPage: React.FC = () => {
   );
 };
 
-export default CreateRealisationPage;
+export default ModifyRealisationPage;

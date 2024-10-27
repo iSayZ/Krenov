@@ -7,10 +7,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 import { Realisation } from '@/types/realisation.interface';
 
-import { useCreateRealisation } from '../../../contexts/CreateRealisationContext';
+import { useModifyRealisation } from '@/app/admin/dashboard/contexts/ModifyRealisationContext';
 
-const CreateRealisationFour: React.FC = () => {
-  const { content, formData } = useCreateRealisation();
+const ModifyRealisationFour: React.FC = () => {
+  const { content, formData } = useModifyRealisation();
 
   // To clean html, prievent to XSS Attack
   const cleanContent = DOMPurify.sanitize(content);
@@ -128,4 +128,4 @@ const CreateRealisationFour: React.FC = () => {
   );
 };
 
-export default CreateRealisationFour;
+export default ModifyRealisationFour;

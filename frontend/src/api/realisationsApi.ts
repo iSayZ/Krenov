@@ -13,7 +13,7 @@ const fetchAllRealisations = async (): Promise<Realisation[]> => {
 };
 
 // Function to fetch a realisation by its slug
-const fetchRealisationBySlug = async (slug: string): Promise<Realisation> => {
+const fetchRealisationBySlug = async (slug: string): Promise<Pick<Realisation, 'title' | 'slug' | 'tags' | 'status' | 'header' | 'content'>> => {
   try {
     const response = await axiosInstance.get(`/realisations/${slug}`);
     return response.data;
@@ -41,15 +41,15 @@ const createRealisation = async (
 
 // Function to update a realisation
 const updateRealisation = async (
-  id: string,
+  slug: Realisation['slug'],
   data: Partial<Realisation>
-): Promise<Realisation> => {
+): Promise<{ success: boolean }> => {
   try {
-    const response = await axiosInstance.put(`/realisations/${id}`, data);
+    const response = await axiosInstance.put(`/realisations/${slug}`, data);
     return response.data;
   } catch (error) {
     console.error(
-      `Erreur lors de la mise à jour de la réalisation avec ID ${id}:`,
+      `Erreur lors de la mise à jour de la réalisation :`,
       error
     );
     throw error;

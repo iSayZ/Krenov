@@ -1,23 +1,16 @@
 'use client';
 
 import { Editor } from '@tinymce/tinymce-react';
-import { useState } from 'react';
 
-import { uploadRealisationPicture } from '@/api/realisationsApi';
-import { Realisation } from '@/types/realisation.interface';
-import { useCreateRealisation } from '../creation/contexts/CreateRealisationContext';
 import { uploadRealisationImage } from '@/api/uploadApi';
 
 interface EditorProps {
   content: string;
   setContent: (value: string) => void;
+  source: string;
 }
 
-const TinyMCEEditor: React.FC<EditorProps> = ({ content, setContent }) => {
-  const {
-    formData
-  } = useCreateRealisation();
-
+const TinyMCEEditor: React.FC<EditorProps> = ({ content, setContent, source }) => {
   return (
     <>
       <Editor
@@ -59,15 +52,20 @@ const TinyMCEEditor: React.FC<EditorProps> = ({ content, setContent }) => {
                 const image = new FormData();
                 image.append('file', file);
                 try {
-                  const url = await uploadRealisationImage(image, formData.slug);
+                  const url = await uploadRealisationImage(
+                    image,
+                    source
+                  );
                   cb(url);
                 } catch (error) {
                   console.error('Error uploading image:', error);
                 }
               }
             };
-
             input.click();
+            alert(`Pour que l'image occupe toute la largeur de l'article, veuillez entrer les dimensions appropriées :\n
+              Largeur = 100%\n
+              Hauteur = auto\n`);
           },
         }}
       />

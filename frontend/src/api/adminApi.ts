@@ -37,8 +37,4 @@ const updateAdminProfile = async (
 };
 
 // Consolidated exports
-export {
-  fetchAdminProfile,
-  fetchAdminSettings,
-  updateAdminProfile,
-};
+export { fetchAdminProfile, fetchAdminSettings, updateAdminProfile };
