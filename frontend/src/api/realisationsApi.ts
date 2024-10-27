@@ -26,6 +26,19 @@ const fetchRealisationBySlug = async (slug: string): Promise<Realisation> => {
   }
 };
 
+// Function to create a realisation
+const createRealisation = async (
+  data: Partial<Realisation>
+): Promise<{ success: boolean }> => {
+  try {
+    const response = await axiosInstance.post(`/realisations`, data);
+    return response.data;
+  } catch (error) {
+    console.error(`Erreur lors de la création de la réalisation :`, error);
+    throw error;
+  }
+};
+
 // Function to update a realisation
 const updateRealisation = async (
   id: string,
@@ -60,6 +73,7 @@ const deleteRealisation = async (id: string): Promise<void> => {
 export {
   fetchAllRealisations,
   fetchRealisationBySlug,
+  createRealisation,
   updateRealisation,
   deleteRealisation,
 };

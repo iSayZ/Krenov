@@ -36,23 +36,9 @@ const updateAdminProfile = async (
   }
 };
 
-// Function to upload an avatar
-const uploadAvatar = async (
-  image: FormData
-): Promise<AdminProfile['avatar']> => {
-  try {
-    const avatar = await axiosInstance.post(`/upload/avatar`, image);
-    return avatar.data;
-  } catch (error) {
-    console.error(`Erreur lors d'upload de l'avatar.`, error);
-    throw error;
-  }
-};
-
 // Consolidated exports
 export {
   fetchAdminProfile,
   fetchAdminSettings,
   updateAdminProfile,
-  uploadAvatar,
 };

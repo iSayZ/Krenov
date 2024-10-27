@@ -10,6 +10,7 @@ import type { NextRequest } from 'next/server';
 async function loginMiddleware(request: NextRequest) {
   const accessToken = request.cookies.get('access_token')?.value;
   const refreshToken = request.cookies.get('refresh_token')?.value;
+  const userAgent = request.headers.get('user-agent') as string;
 
   // If the user has a accessToken, we check the token's validity
   if (accessToken) {
@@ -21,7 +22,7 @@ async function loginMiddleware(request: NextRequest) {
       // If the accessToken is invalid and the user has a refreshToken, try to refresh a new tokens
       if (refreshToken) {
         try {
-          const response = await refreshTokens(refreshToken);
+          const response = await refreshTokens(refreshToken, userAgent);
 
           // Generate a response to set cookies
           const redirectResponse = NextResponse.redirect(
@@ -42,7 +43,7 @@ async function loginMiddleware(request: NextRequest) {
   } else if (refreshToken) {
     // If the user has a refreshToken, try to refresh a new tokens
     try {
-      const response = await refreshTokens(refreshToken);
+      const response = await refreshTokens(refreshToken, userAgent);
 
       // Generate a response to set cookies
       const redirectResponse = NextResponse.redirect(

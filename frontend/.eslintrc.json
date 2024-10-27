@@ -24,6 +24,7 @@
     "@typescript-eslint", // Plugin TypeScript pour ESLint
     "tailwindcss" // Plugin pour vérifier les classes Tailwind
   ],
+  "ignorePatterns": ["public/tinymce/js/tin"],
   "rules": {
     "prettier/prettier": "off",
     // Règles spécifiques de TailwindCSS
@@ -66,7 +67,7 @@
     ],
     "import/no-duplicates": "error", // interdit les imports en double
     "import/group-exports": "error" // groupe les exports par source
-  }
+  },
   "overrides": [
     {
       "files": ["**/*.ts", "**/*.tsx"],

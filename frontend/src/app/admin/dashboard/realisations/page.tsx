@@ -6,7 +6,7 @@ import { fetchAllRealisations } from '@/api/realisationsApi';
 import { Realisation } from '@/types/realisation.interface';
 
 import { Section } from '../components/template/TopbarMenu';
-import { useVisitedSection } from '../context/VisitedSectionContext';
+import { useVisitedSection } from '../contexts/VisitedSectionContext';
 
 import { columns } from './components/columns';
 import { DataTable } from './components/data-table';

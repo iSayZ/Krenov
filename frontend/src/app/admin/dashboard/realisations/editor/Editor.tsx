@@ -1,90 +1,78 @@
-// 'use client';
+'use client';
 
-// import {
-//   BasicTextStyleButton,
-//   BlockTypeSelect,
-//   ColorStyleButton,
-//   CreateLinkButton,
-//   FileCaptionButton,
-//   FileReplaceButton,
-//   FormattingToolbar,
-//   FormattingToolbarController,
-//   NestBlockButton,
-//   TextAlignButton,
-//   UnnestBlockButton,
-//   useCreateBlockNote,
-// } from '@blocknote/react';
-// import React, { useState } from 'react';
-// import '@blocknote/core/fonts/inter.css';
-// import { locales } from '@blocknote/core';
-// import { BlockNoteView } from '@blocknote/shadcn';
+import { Editor } from '@tinymce/tinymce-react';
+import { useState } from 'react';
 
-// import '@blocknote/shadcn/style.css';
-// import { Button } from '@/components/ui/button';
+import { uploadRealisationPicture } from '@/api/realisationsApi';
+import { Realisation } from '@/types/realisation.interface';
+import { useCreateRealisation } from '../creation/contexts/CreateRealisationContext';
+import { uploadRealisationImage } from '@/api/uploadApi';
 
-// const Editor: React.FC = () => {
-//   const editor = useCreateBlockNote({
-//     dictionary: locales.fr, // Utiliser le dictionnaire français
-//   });
+interface EditorProps {
+  content: string;
+  setContent: (value: string) => void;
+}
 
-//   const [exportedHtml, setExportedHtml] = useState<string | null>(null);
+const TinyMCEEditor: React.FC<EditorProps> = ({ content, setContent }) => {
+  const {
+    formData
+  } = useCreateRealisation();
 
-//   const handleExport = async () => {
-//     if (editor) {
-//       // Exporter le contenu en HTML
-//       const html = await editor.blocksToFullHTML(editor.topLevelBlocks);
+  return (
+    <>
+      <Editor
+        tinymceScriptSrc="/tinymce/tinymce.min.js"
+        licenseKey="gpl"
+        value={content}
+        onEditorChange={(newContent) => setContent(newContent)}
+        init={{
+          language: 'fr_FR',
+          height: 500,
+          menubar: true,
+          plugins: [
+            'autolink',
+            'link',
+            'fullscreen',
+            'image',
+            'emoticons',
+            'lists',
+            'preview',
+            'searchreplace',
+            'autosave',
+          ],
+          toolbar:
+            'undo redo | preview restoredraft | styles | bold italic underline | link image emoticons | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent | searchreplace fullscreen',
+          advlist_bullet_styles: 'default',
+          font_size_input_default_unit: 'px',
+          image_caption: true, // To add legend at a picture
+          image_dimensions: true, // To resize a picture
+          images_reuse_filename: true, // Keep picture name
+          file_picker_types: 'image',
+          file_picker_callback: (cb) => {
+            const input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'image/*');
 
-//       // Créer un conteneur temporaire pour manipuler le HTML
-//       const tempDiv = document.createElement('div');
-//       tempDiv.innerHTML = html;
+            input.onchange = async () => {
+              const file = input.files ? input.files[0] : null;
+              if (file) {
+                const image = new FormData();
+                image.append('file', file);
+                try {
+                  const url = await uploadRealisationImage(image, formData.slug);
+                  cb(url);
+                } catch (error) {
+                  console.error('Error uploading image:', error);
+                }
+              }
+            };
 
-//       // Ajouter des classes Tailwind aux images
-//       const images = tempDiv.querySelectorAll('img');
-//       images.forEach((img) => {
-//         img.classList.add('max-w-full');
-//       });
+            input.click();
+          },
+        }}
+      />
+    </>
+  );
+};
 
-//       // Obtenir le HTML modifié
-//       const modifiedHtml = tempDiv.innerHTML;
-
-//       // Créer un blob et télécharger le fichier HTML
-//       const blob = new Blob([modifiedHtml], { type: 'text/html' });
-//       const url = URL.createObjectURL(blob);
-//       const a = document.createElement('a');
-//       a.href = url;
-//       a.download = 'contenu-exporte.html';
-//       a.click();
-//       URL.revokeObjectURL(url);
-
-//       // Optionnel: Afficher le contenu exporté
-//       setExportedHtml(modifiedHtml);
-//     }
-//   };
-
-//   return (
-//     <div className="w-full">
-//       {/* Affichage de l'éditeur BlockNote */}
-//       <BlockNoteView editor={editor} />
-
-//       {/* Bouton pour exporter le contenu en HTML */}
-//       <Button
-//         onClick={handleExport}
-//         className="mt-4 rounded-lg bg-blue-500 px-4 py-2 text-white"
-//       >
-//         Exporter en HTML
-//       </Button>
-
-//       {/* Optionnel: Afficher le contenu exporté */}
-//       {exportedHtml && (
-//         <div className="mt-6">
-//           <h2 className="mb-2 text-xl font-semibold">Contenu Exporté :</h2>
-//           <div className="rounded-lg bg-gray-100 p-4">
-//             <pre>{exportedHtml}</pre>
-//           </div>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default Editor;
+export default TinyMCEEditor;

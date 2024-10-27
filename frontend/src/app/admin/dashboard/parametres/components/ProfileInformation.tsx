@@ -21,9 +21,10 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 
-import { updateAdminProfile, uploadAvatar } from '@/api/adminApi';
+import { updateAdminProfile } from '@/api/adminApi';
 import { formatDateForUX } from '@/lib/dateUtils';
 import { AdminSettings } from '@/types/admin.interface';
+import { uploadAvatar } from '@/api/uploadApi';
 
 interface ProfileProps {
   profileSettings: AdminSettings;
@@ -73,7 +74,8 @@ const ProfileInformation: React.FC<ProfileProps> = ({
       try {
         const formData = new FormData();
         formData.append('avatar', newAvatar);
-        const avatarSrc = await uploadAvatar(formData);
+        const source = `${profileSettings?.firstname}-${profileSettings?.lastname}`;
+        const avatarSrc = await uploadAvatar(formData, source.toLowerCase());
         profileData.avatar = avatarSrc;
       } catch (error) {
         console.error("Erreur lors de l'upload de l'avatar :", error);
@@ -117,9 +119,7 @@ const ProfileInformation: React.FC<ProfileProps> = ({
               <Avatar className="size-52">
                 <AvatarImage
                   src={
-                    newAvatarUrl
-                      ? newAvatarUrl
-                      : `${process.env.NEXT_PUBLIC_API_BASE_URL}${profileSettings?.avatar}`
+                    newAvatarUrl ? newAvatarUrl : `${profileSettings?.avatar}`
                   }
                 />
                 <AvatarFallback></AvatarFallback>
@@ -142,7 +142,9 @@ const ProfileInformation: React.FC<ProfileProps> = ({
                 </Tooltip>
               </TooltipProvider>
             </div>
-            <h2 className="text-lg font-semibold">Alexis Estrine</h2>
+            <h2 className="text-lg font-semibold">
+              {profileSettings?.firstname} {profileSettings?.lastname}
+            </h2>
           </div>
           <div className="w-2/3 space-y-6 max-lg:w-full">
             <div className="w-2/3 space-y-1 max-sm:w-full">

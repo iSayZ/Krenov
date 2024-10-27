@@ -21,7 +21,7 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 
 import { Section } from '../../components/template/TopbarMenu';
-import { useVisitedSection } from '../../context/VisitedSectionContext';
+import { useVisitedSection } from '../../contexts/VisitedSectionContext';
 
 import Item from './components/Item';
 import SortableItem from './components/SortableItem';
@@ -151,7 +151,7 @@ const EditRealisation: React.FC = () => {
       <p className="italic text-muted-foreground">
         Seuls les articles ayant l'état "
         <span className="font-semibold text-lime-500">Activé</span>" seront
-        visibles.
+        visibles ici.
       </p>
 
       {/* DndContext for handling drag and drop */}

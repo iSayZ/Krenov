@@ -8,7 +8,7 @@ import { fetchAdminSettings } from '@/api/adminApi';
 import { AdminSettings } from '@/types/admin.interface';
 
 import { Section } from '../components/template/TopbarMenu';
-import { useVisitedSection } from '../context/VisitedSectionContext';
+import { useVisitedSection } from '../contexts/VisitedSectionContext';
 
 import ProfileInformation from './components/ProfileInformation';
 import SecuritySettings from './components/SecuritySettings';

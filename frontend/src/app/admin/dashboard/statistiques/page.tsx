@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 
 import { Section } from '../components/template/TopbarMenu';
-import { useVisitedSection } from '../context/VisitedSectionContext';
+import { useVisitedSection } from '../contexts/VisitedSectionContext';
 
 const section: Section = {
   items: [

@@ -4,8 +4,8 @@ import { ThemeProvider } from '@/components/theme-provider';
 
 export const metadata: Metadata = {
   title: {
-    template: `${process.env.NEXT_APP_NAME} | Dashboard`,
-    default: `${process.env.NEXT_APP_NAME} | Dashboard`,
+    template: `${process.env.NEXT_PUBLIC_APP_NAME} | Dashboard`,
+    default: `${process.env.NEXT_PUBLIC_APP_NAME} | Dashboard`,
   },
 };
 

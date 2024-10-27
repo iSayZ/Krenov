@@ -59,7 +59,10 @@ const verifyAccess = async (token: string): Promise<{ message: string }> => {
 };
 
 // Function to refresh tokens, use header authorization to use middleware
-const refreshTokens = async (token: string): Promise<AxiosResponse> => {
+const refreshTokens = async (
+  token: string,
+  userAgent: string
+): Promise<AxiosResponse> => {
   try {
     const response = await axiosInstance.post(
       '/auth/refresh',
@@ -67,6 +70,7 @@ const refreshTokens = async (token: string): Promise<AxiosResponse> => {
       {
         headers: {
           Authorization: `Bearer ${token}`,
+          'x-original-user-agent': userAgent,
         },
       }
     );

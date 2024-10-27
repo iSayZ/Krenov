@@ -67,9 +67,7 @@ const ProfileButton: React.FC = () => {
           >
             <div className="flex w-full items-center gap-2">
               <Avatar className="size-8 rounded-md">
-                <AvatarImage
-                  src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${profile?.avatar}`}
-                />
+                <AvatarImage src={profile?.avatar} />
                 <AvatarFallback></AvatarFallback>
               </Avatar>
               <div className="flex flex-col justify-center overflow-hidden text-left">
@@ -92,9 +90,7 @@ const ProfileButton: React.FC = () => {
             <div className="w-full">
               <div className="flex w-52 max-w-60 items-center gap-2">
                 <Avatar className="size-7 rounded-md">
-                  <AvatarImage
-                    src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${profile?.avatar}`}
-                  />
+                  <AvatarImage src={profile?.avatar} />
                   <AvatarFallback></AvatarFallback>
                 </Avatar>
                 <div className="flex w-full flex-col items-start justify-center overflow-hidden text-left">

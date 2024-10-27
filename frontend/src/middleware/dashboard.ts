@@ -12,6 +12,7 @@ const protectedRoutes = ['/admin/dashboard'];
 async function dashboardMiddleware(request: NextRequest) {
   const accessToken = request.cookies.get('access_token')?.value;
   const refreshToken = request.cookies.get('refresh_token')?.value;
+  const userAgent = request.headers.get('user-agent') as string;
 
   // If the user doesn't have a acessToken and refreshToken, he's redirected to the login page
   if (
@@ -31,7 +32,7 @@ async function dashboardMiddleware(request: NextRequest) {
       // If the accessToken is invalid and the user has a refreshToken, try to refresh a new tokens
       if (refreshToken) {
         try {
-          const response = await refreshTokens(refreshToken);
+          const response = await refreshTokens(refreshToken, userAgent);
 
           // Generate a response to set cookies
           const redirectResponse = NextResponse.next();
@@ -52,7 +53,7 @@ async function dashboardMiddleware(request: NextRequest) {
   } else if (refreshToken) {
     // If the user has a refreshToken, try to refresh a new tokens
     try {
-      const response = await refreshTokens(refreshToken);
+      const response = await refreshTokens(refreshToken, userAgent);
 
       // Generate a response to set cookies
       const redirectResponse = NextResponse.next();

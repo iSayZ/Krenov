@@ -3,12 +3,14 @@
 import { Clock, Eye, File, TrendingDown } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
+import { Skeleton } from '@/components/ui/skeleton';
+
 import { fetchAdminProfile } from '@/api/adminApi';
 import { formatDateForUX } from '@/lib/dateUtils';
 import { AdminProfile } from '@/types/admin.interface';
 
 import { Section } from '../components/template/TopbarMenu';
-import { useVisitedSection } from '../context/VisitedSectionContext';
+import { useVisitedSection } from '../contexts/VisitedSectionContext';
 
 import IndicatorCard from './components/IndicatorCard';
 import VisitorChart from './components/VisitorChart';
@@ -49,12 +51,22 @@ const Index: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex size-full items-center justify-center">
-        <div
-          className="inline-block size-12 animate-spin rounded-full border-[3px] border-current border-t-transparent text-foreground"
-          role="status"
-          aria-label="loading"
-        ></div>
+      <div className="flex size-full flex-col gap-6">
+        <div className="flex flex-col gap-2">
+          <Skeleton className="h-8 w-2/5" />
+          <Skeleton className="h-6 w-3/5" />
+        </div>
+        <div className="container mx-auto">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
+            <Skeleton className="h-44 rounded-xl" />
+            <Skeleton className="h-44 rounded-xl" />
+            <Skeleton className="h-44 rounded-xl" />
+            <Skeleton className="h-44 rounded-xl" />
+          </div>
+        </div>
+        <div className="mx-auto w-full">
+          <Skeleton className="h-96 w-full rounded-xl" />
+        </div>
       </div>
     );
   }

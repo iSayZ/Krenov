@@ -83,13 +83,13 @@ export const columns = (
       const realisation = row.original;
       return (
         <Link
-          href="https://www.nd-renov.fr/upload/Image/renovation-interieure.jpg"
+          href={realisation.header}
           target="_blank"
           className="block w-[75px]"
         >
           <AspectRatio ratio={1 / 1}>
             <Image
-              src="https://www.nd-renov.fr/upload/Image/renovation-interieure.jpg"
+              src={realisation.header}
               alt={`En-tête de la réalisation ${realisation._id}`}
               fill
               className="rounded-md object-cover shadow-lg"
@@ -112,11 +112,7 @@ export const columns = (
     header: 'Titre',
   },
   {
-    accessorKey: 'desc',
-    header: 'Description',
-  },
-  {
-    accessorKey: 'updatedAt',
+    accessorKey: 'updated_at',
     header: ({ column }) => {
       return (
         <Button
@@ -129,7 +125,7 @@ export const columns = (
       );
     },
     cell: ({ row }) => {
-      const date = row.original.updatedAt;
+      const date = row.original.updated_at;
       return formatDateForUX(date.toString());
     },
   },
@@ -255,7 +251,7 @@ export const columns = (
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <ExternalLink className="mr-2 size-4" />
-                <Link href={`/realisations/${realisation._id}`} target="_blank">
+                <Link href={`/${realisation.slug}`} target="_blank">
                   <span>Voir la réalisation</span>
                 </Link>
               </DropdownMenuItem>

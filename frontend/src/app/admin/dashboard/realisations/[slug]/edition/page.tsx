@@ -4,7 +4,7 @@ import { useParams } from 'next/navigation';
 import React, { useEffect } from 'react';
 
 import { Section } from '../../../components/template/TopbarMenu';
-import { useVisitedSection } from '../../../context/VisitedSectionContext';
+import { useVisitedSection } from '../../../contexts/VisitedSectionContext';
 
 const EditRealisation: React.FC = () => {
   const params = useParams<{ slug: string }>();

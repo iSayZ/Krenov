@@ -2,15 +2,15 @@
 
 import {
   Collapsible,
-  CollapsibleTrigger,
   CollapsibleContent,
+  CollapsibleTrigger,
 } from '@radix-ui/react-collapsible';
 import {
-  Settings,
+  ChartNoAxesCombined,
   ChevronRight,
   House,
   Newspaper,
-  ChartNoAxesCombined,
+  Settings,
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -18,7 +18,6 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { Button } from '@/components/ui/button';
 import {
   Sidebar,
   SidebarContent,
@@ -61,7 +60,7 @@ const AsideMenu: React.FC = () => {
           url: '/admin/dashboard/realisations',
         },
         {
-          title: 'Créer une réalisation',
+          title: 'Ajouter une réalisation',
           url: '/admin/dashboard/realisations/creation',
         },
         {

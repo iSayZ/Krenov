@@ -124,7 +124,10 @@ const InitSuccess2FA: React.FC<InitSuccess2FAProps> = ({
           </div>
           <div className="flex w-full justify-center">
             <div className="w-max rounded-sm border border-muted-foreground/20 bg-muted-foreground/20 shadow-sm">
-              <div id="backup-codes" className="grid grid-cols-3 gap-4 p-4 md:grid-cols-5">
+              <div
+                id="backup-codes"
+                className="grid grid-cols-3 gap-4 p-4 md:grid-cols-5"
+              >
                 {backupCodes.map((code, index) => (
                   <p
                     key={index}
