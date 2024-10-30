@@ -12,8 +12,8 @@ import { ToggleButtonTheme } from '@/components/ui/toggleButtonTheme';
 
 import AsideMenu from './components/template/AsideMenu';
 import TopbarMenu from './components/template/TopbarMenu';
-import { VisitedSectionProvider } from './contexts/VisitedSectionContext';
 import { CreateRealisationProvider } from './contexts/CreateRealisationContext';
+import { VisitedSectionProvider } from './contexts/VisitedSectionContext';
 
 const ClientDashboardLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -33,7 +33,9 @@ const ClientDashboardLayout: React.FC<{ children: React.ReactNode }> = ({
                     <ToggleButtonTheme />
                   </div>
                 </div>
-                <div className="size-full px-12 pb-6 max-md:px-6">{children}</div>
+                <div className="size-full px-12 pb-6 max-md:px-6">
+                  {children}
+                </div>
               </div>
             </SidebarInset>
           </div>

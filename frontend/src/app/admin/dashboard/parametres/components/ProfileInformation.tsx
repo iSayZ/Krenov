@@ -101,7 +101,7 @@ const ProfileInformation: React.FC<ProfileProps> = ({
       {/* Hidden input to change avatar */}
       <input
         type="file"
-        accept='image/*'
+        accept="image/*"
         ref={fileInputRef}
         onChange={handleFileChange}
         className="hidden"

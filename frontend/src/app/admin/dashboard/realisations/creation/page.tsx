@@ -11,9 +11,9 @@ import { uploadRealisationImage } from '@/api/uploadApi';
 import { formatDateForUX } from '@/lib/dateUtils';
 
 import { Section } from '../../components/template/TopbarMenu';
+import { useCreateRealisation } from '../../contexts/CreateRealisationContext';
 import { useVisitedSection } from '../../contexts/VisitedSectionContext';
 
-import { useCreateRealisation } from '../../contexts/CreateRealisationContext';
 import CreateRealisationFour from './steps/CreateRealisationFour';
 import CreateRealisationOne from './steps/CreateRealisationOne';
 import CreateRealisationThree from './steps/CreateRealisationThree';
@@ -117,12 +117,12 @@ const CreateRealisationPage: React.FC = () => {
         setStepInfo("Renseignez le titre, le slug de l'article.");
         break;
       case 2:
-        setStepInfo(
-          "Rédigez votre article."
-        );
+        setStepInfo('Rédigez votre article.');
         break;
       case 3:
-        setStepInfo("Ajoutez les tags, sélectionnez le statut et téléchargez l'image d'en-tête.");
+        setStepInfo(
+          "Ajoutez les tags, sélectionnez le statut et téléchargez l'image d'en-tête."
+        );
         break;
       default:
         setStepInfo('Revoyez et finalisez votre article avant publication.');

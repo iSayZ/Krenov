@@ -1,5 +1,7 @@
 import { X } from 'lucide-react';
+import Image from 'next/image';
 
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,8 +17,6 @@ import {
 } from '@/components/ui/select';
 
 import { useModifyRealisation } from '../../../../contexts/ModifyRealisationContext';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
-import Image from 'next/image';
 
 const ModifyRealisationThree: React.FC = () => {
   const {
@@ -41,7 +41,7 @@ const ModifyRealisationThree: React.FC = () => {
             <Label htmlFor="header" className="text-base">
               Image d'en-tête
             </Label>
-            <div className='space-y-4'>
+            <div className="space-y-4">
               <div className="w-full lg:max-w-sm">
                 <AspectRatio ratio={1 / 1}>
                   <Image
@@ -55,7 +55,7 @@ const ModifyRealisationThree: React.FC = () => {
               <Input
                 id="header"
                 type="file"
-                accept='image/*'
+                accept="image/*"
                 onChange={handleFileChange}
                 className={
                   formErrors.header

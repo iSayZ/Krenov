@@ -47,9 +47,7 @@ const ModifyRealisationProvider: React.FC<{ children: ReactNode }> = ({
   const [step, setStep] = useState<number>(1);
 
   // Content of the article
-  const [content, setContent] = useState<
-    Realisation['content']
-  >('');
+  const [content, setContent] = useState<Realisation['content']>('');
 
   // To update content
   const handleChangeContent = (newContent: string) => {

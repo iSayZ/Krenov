@@ -42,7 +42,7 @@ const CreateRealisationThree: React.FC = () => {
             <Input
               id="header"
               type="file"
-              accept='image/*'
+              accept="image/*"
               onChange={handleFileChange}
               className={
                 formErrors.header

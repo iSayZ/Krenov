@@ -6,14 +6,17 @@ import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 
-import { fetchRealisationBySlug, updateRealisation } from '@/api/realisationsApi';
+import {
+  fetchRealisationBySlug,
+  updateRealisation,
+} from '@/api/realisationsApi';
 import { uploadRealisationImage } from '@/api/uploadApi';
 import { formatDateForUX } from '@/lib/dateUtils';
 
 import { Section } from '../../../components/template/TopbarMenu';
+import { useModifyRealisation } from '../../../contexts/ModifyRealisationContext';
 import { useVisitedSection } from '../../../contexts/VisitedSectionContext';
 
-import { useModifyRealisation } from '../../../contexts/ModifyRealisationContext';
 import ModifyRealisationFour from './steps/ModifyRealisationFour';
 import ModifyRealisationOne from './steps/ModifyRealisationOne';
 import ModifyRealisationThree from './steps/ModifyRealisationThree';
@@ -42,21 +45,31 @@ interface ModifyRealisationProps {
   };
 }
 
-const ModifyRealisationPage: React.FC<ModifyRealisationProps> = ({ params }) => {
-  const { step, setStep, setContent, content, formData, setFormData, header, setFormErrors } =
-    useModifyRealisation();
+const ModifyRealisationPage: React.FC<ModifyRealisationProps> = ({
+  params,
+}) => {
+  const {
+    step,
+    setStep,
+    setContent,
+    content,
+    formData,
+    setFormData,
+    header,
+    setFormErrors,
+  } = useModifyRealisation();
 
   const { setVisitedSection } = useVisitedSection();
 
   useEffect(() => {
     setVisitedSection(section);
   }, [setVisitedSection]);
-  
+
   const router = useRouter();
   const { slug } = params;
 
   const [loading, setLoading] = useState<boolean>(true);
-  
+
   useEffect(() => {
     const loadRealisation = async () => {
       try {
@@ -73,7 +86,6 @@ const ModifyRealisationPage: React.FC<ModifyRealisationProps> = ({ params }) => 
 
     loadRealisation();
   }, [slug]);
-
 
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -144,12 +156,12 @@ const ModifyRealisationPage: React.FC<ModifyRealisationProps> = ({ params }) => 
         setStepInfo("Renseignez le titre, le slug de l'article.");
         break;
       case 2:
-        setStepInfo(
-          "Rédigez votre article."
-        );
+        setStepInfo('Rédigez votre article.');
         break;
       case 3:
-        setStepInfo("Ajoutez les tags, sélectionnez le statut et téléchargez l'image d'en-tête.");
+        setStepInfo(
+          "Ajoutez les tags, sélectionnez le statut et téléchargez l'image d'en-tête."
+        );
         break;
       default:
         setStepInfo('Revoyez et finalisez votre article avant publication.');
@@ -175,7 +187,6 @@ const ModifyRealisationPage: React.FC<ModifyRealisationProps> = ({ params }) => 
 
   // Submit to create realisation
   const handleSubmit = async () => {
-
     const imageUrls = extractImageSourcesFromHtml(content);
 
     const realisation = {
@@ -188,10 +199,10 @@ const ModifyRealisationPage: React.FC<ModifyRealisationProps> = ({ params }) => 
       // Prepare header to upload
       const image = new FormData();
       image.append('file', header);
-  
+
       // Uploading header
       const srcHeader = await uploadRealisationImage(image, formData.slug);
-    
+
       realisation.header = srcHeader;
     }
 
@@ -235,7 +246,9 @@ const ModifyRealisationPage: React.FC<ModifyRealisationProps> = ({ params }) => 
   return (
     <div className="m-auto size-full space-y-10 2xl:w-2/3">
       <div className="space-y-1">
-        <h1 className="text-2xl font-bold">Modifier la réalisation : <span className='font-normal'>{slug}</span></h1>
+        <h1 className="text-2xl font-bold">
+          Modifier la réalisation : <span className="font-normal">{slug}</span>
+        </h1>
         <h2 className="italic">
           Étape {step} - {stepInfo}
         </h2>

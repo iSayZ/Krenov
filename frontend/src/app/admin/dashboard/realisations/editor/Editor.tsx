@@ -10,7 +10,11 @@ interface EditorProps {
   source: string;
 }
 
-const TinyMCEEditor: React.FC<EditorProps> = ({ content, setContent, source }) => {
+const TinyMCEEditor: React.FC<EditorProps> = ({
+  content,
+  setContent,
+  source,
+}) => {
   return (
     <>
       <Editor
@@ -52,10 +56,7 @@ const TinyMCEEditor: React.FC<EditorProps> = ({ content, setContent, source }) =
                 const image = new FormData();
                 image.append('file', file);
                 try {
-                  const url = await uploadRealisationImage(
-                    image,
-                    source
-                  );
+                  const url = await uploadRealisationImage(image, source);
                   cb(url);
                 } catch (error) {
                   console.error('Error uploading image:', error);
