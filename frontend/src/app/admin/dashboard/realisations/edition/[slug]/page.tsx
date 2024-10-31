@@ -6,12 +6,6 @@ import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 
-import {
-  fetchRealisationBySlug,
-  updateRealisation,
-} from '@/api/realisationsApi';
-import { uploadRealisationImage } from '@/api/uploadApi';
-import { formatDateForUX } from '@/lib/dateUtils';
 
 import { Section } from '../../../components/template/TopbarMenu';
 import { useModifyRealisation } from '../../../contexts/ModifyRealisationContext';
@@ -21,6 +15,13 @@ import ModifyRealisationFour from './steps/ModifyRealisationFour';
 import ModifyRealisationOne from './steps/ModifyRealisationOne';
 import ModifyRealisationThree from './steps/ModifyRealisationThree';
 import ModifyRealisationTwo from './steps/ModifyRealisationTwo';
+
+import {
+  fetchRealisationBySlug,
+  updateRealisation,
+} from '@/api/realisationsApi';
+import { uploadRealisationImage } from '@/api/uploadApi';
+import { formatDateForUX } from '@/lib/dateUtils';
 
 const section: Section = {
   items: [
@@ -210,7 +211,7 @@ const ModifyRealisationPage: React.FC<ModifyRealisationProps> = ({
     try {
       const response = await updateRealisation(slug, realisation);
       if (response.success) {
-        toast.success('Réalisation publié avec succés.', {
+        toast.success('Réalisation publié avec succès.', {
           description: formatDateForUX(new Date().toISOString()),
           action: {
             label: 'Fermer',
@@ -221,7 +222,7 @@ const ModifyRealisationPage: React.FC<ModifyRealisationProps> = ({
       }
     } catch (error) {
       console.error(error);
-      toast.warning('Erreur lors de la publication.', {
+      toast.error('Erreur lors de la publication.', {
         description: formatDateForUX(new Date().toISOString()),
         action: {
           label: 'Fermer',
@@ -235,7 +236,7 @@ const ModifyRealisationPage: React.FC<ModifyRealisationProps> = ({
     return (
       <div className="flex size-full items-center justify-center">
         <div
-          className="inline-block size-12 animate-spin rounded-full border-[3px] border-current border-t-transparent text-foreground"
+          className="text-foreground inline-block size-12 animate-spin rounded-full border-[3px] border-current border-t-transparent"
           role="status"
           aria-label="loading"
         ></div>

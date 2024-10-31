@@ -5,18 +5,19 @@ import { HTMLAttributes } from 'react';
 
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 
-import { TItem } from '../page';
+import { Realisation } from '@/types/realisation.interface';
 
 // Define props for the SortableItem component, including item and HTML attributes
 type Props = {
-  item: TItem;
+  item: Realisation;
+  index: number;
 } & HTMLAttributes<HTMLDivElement>; // Allow additional HTML attributes for the div
 
-const SortableItem = ({ item, ...props }: Props) => {
+const SortableItem = ({ item, index, ...props }: Props) => {
   // Use the useSortable hook to manage the item's dragging state and attributes
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
-      id: item.id, // Set the unique ID for the sortable item
+      id: item._id, // Set the unique ID for the sortable item
     });
 
   // Styles for the item, applying transformation and transition effects
@@ -33,10 +34,11 @@ const SortableItem = ({ item, ...props }: Props) => {
       {...attributes} // Spread accessibility attributes for dragging
       {...listeners} // Spread event listeners for drag-and-drop functionality
     >
+      <p className='w-full text-ellipsis text-nowrap overflow-hidden'><span className='font-bold'>{index + 1}.</span>{item.slug}</p>
       <AspectRatio ratio={1 / 1} className="size-full shadow-md">
         <Image
-          src={item.imageUrl}
-          alt={`${item.id}`}
+          src={item.header}
+          alt={`${item._id}`}
           fill
           className="rounded-md object-cover"
         />

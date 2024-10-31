@@ -164,7 +164,7 @@ export function DataTable<TData extends DataWithIdAndSlug, TValue>({
 
   // Function to go to the order page
   const goToSortingPage = () => {
-    router.push('/admin/dashboard/realisations/odre');
+    router.push('/admin/dashboard/realisations/ordre');
   };
 
   return (

@@ -212,7 +212,7 @@ export const columns = (
         statusSelected: Realisation['status']
       ) => {
         try {
-          await updateRealisation(realisation._id, { status: statusSelected });
+          await updateRealisation(realisation.slug, { status: statusSelected });
           console.log('Statut de la réalisation changé avec succès.');
           onRealisationStatusChanged(realisation._id, statusSelected);
         } catch (error) {

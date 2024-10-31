@@ -12,6 +12,17 @@ const fetchAllRealisations = async (): Promise<Realisation[]> => {
   }
 };
 
+// Function to fetch all "active" realisations
+const fetchAllActiveRealisations = async (): Promise<Realisation[]> => {
+  try {
+    const response = await axiosInstance.get('/realisations/active');
+    return response.data;
+  } catch (error) {
+    console.error('Erreur lors de la récupération des réalisations:', error);
+    throw error;
+  }
+};
+
 // Function to fetch a realisation by its slug
 const fetchRealisationBySlug = async (
   slug: string
@@ -20,6 +31,24 @@ const fetchRealisationBySlug = async (
 > => {
   try {
     const response = await axiosInstance.get(`/realisations/${slug}`);
+    return response.data;
+  } catch (error) {
+    console.error(
+      `Erreur lors de la récupération de la réalisation avec slug ${slug}:`,
+      error
+    );
+    throw error;
+  }
+};
+
+// Function to fetch a realisation by its slug
+const fetchActiveRealisationBySlug = async (
+  slug: string
+): Promise<
+  Pick<Realisation, 'title' | 'slug' | 'tags' | 'status' | 'header' | 'content'>
+> => {
+  try {
+    const response = await axiosInstance.get(`/realisations/active/${slug}`);
     return response.data;
   } catch (error) {
     console.error(
@@ -57,6 +86,20 @@ const updateRealisation = async (
   }
 };
 
+
+// Function to change the order of all active realisations
+const updateOrderRealisation = async (
+  orderRealisationArray: Pick<Realisation, 'slug' | 'order'>[]
+): Promise<{ success: boolean }> => {
+  try {
+    const response = await axiosInstance.post(`/realisations/order`, orderRealisationArray);
+    return response.data;
+  } catch (error) {
+    console.error(`Erreur lors de la mise à jour des ordres des réalisations :`, error);
+    throw error;
+  }
+};
+
 // Function to delete a realisation by its ID
 const deleteRealisation = async (id: string): Promise<void> => {
   try {
@@ -73,8 +116,11 @@ const deleteRealisation = async (id: string): Promise<void> => {
 // Consolidated exports
 export {
   fetchAllRealisations,
+  fetchAllActiveRealisations,
   fetchRealisationBySlug,
+  fetchActiveRealisationBySlug,
   createRealisation,
   updateRealisation,
+  updateOrderRealisation,
   deleteRealisation,
 };

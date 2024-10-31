@@ -170,7 +170,7 @@ const CreateRealisationPage: React.FC = () => {
     try {
       const response = await createRealisation(realisation);
       if (response.success) {
-        toast.success('Réalisation publié avec succés.', {
+        toast.success('Réalisation publié avec succès.', {
           description: formatDateForUX(new Date().toISOString()),
           action: {
             label: 'Fermer',

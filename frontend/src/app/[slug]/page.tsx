@@ -11,7 +11,7 @@ import { Realisation } from '@/types/realisation.interface';
 // Fonction pour récupérer les slugs des réalisations (ISR compatible)
 async function generateStaticParams() {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/realisations`
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/realisations/active`
   );
   const realisations: Realisation[] = await response.json();
 
@@ -24,7 +24,7 @@ async function generateStaticParams() {
 // Fonction pour récupérer une réalisation spécifique
 const getRealisation = async (slug: string) => {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/realisations/${slug}`
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/realisations/active/${slug}`
   );
 
   if (!response.ok) {

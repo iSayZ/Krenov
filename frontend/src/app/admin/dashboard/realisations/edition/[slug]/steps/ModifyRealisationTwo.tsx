@@ -1,7 +1,7 @@
 import { Label } from '@/components/ui/label';
 
 import { useModifyRealisation } from '../../../../contexts/ModifyRealisationContext';
-import TinyMCEEditor from '../../../editor/Editor';
+import TinyMCEEditor from '../../../components/Editor';
 
 const ModifyRealisationTwo: React.FC = () => {
   const { formData, content, handleChangeContent, formErrors } =
