@@ -61,4 +61,8 @@ export class UpdateRealisationDto {
   @IsNotEmpty()
   @IsOptional()
   author: string;
+
+  @IsNumber()
+  @IsOptional()
+  __v: number;
 }

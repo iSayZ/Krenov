@@ -13,7 +13,9 @@ import { TwoFactorModule } from './twofactor/twofactor.module';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { CustomThrottlerGuard } from './guards/custom-throttler.guard';
-import { SessionCleanupModule } from './jobs/session-cleanup.module';
+import { ScheduledTasksModule } from './jobs/scheduled-tasks.module';
+
+console.log('ENV BACK :', process.env);
 
 @Module({
   imports: [
@@ -39,7 +41,7 @@ import { SessionCleanupModule } from './jobs/session-cleanup.module';
     AdminModule,
     UploadModule,
     TwoFactorModule,
-    SessionCleanupModule,
+    ScheduledTasksModule,
   ],
   controllers: [AppController],
   providers: [

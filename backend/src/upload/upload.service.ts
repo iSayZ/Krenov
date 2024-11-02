@@ -5,7 +5,14 @@ import { join } from 'path';
 @Injectable()
 export class UploadService {
   public static async deleteImage(imageUrl: string): Promise<void> {
-    const filePath = join(__dirname, '..', '..', 'public', 'uploads', imageUrl); // Complete path of the image
+    const filePath = join(
+      __dirname,
+      '..',
+      '..',
+      'public',
+      'uploads',
+      imageUrl.split(`${process.env.API_URL}`)[1]
+    ); // Complete path of the image
 
     try {
       // Check if the file exists before attempting to delete it

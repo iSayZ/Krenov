@@ -86,16 +86,21 @@ const updateRealisation = async (
   }
 };
 
-
 // Function to change the order of all active realisations
 const updateOrderRealisation = async (
   orderRealisationArray: Pick<Realisation, 'slug' | 'order'>[]
 ): Promise<{ success: boolean }> => {
   try {
-    const response = await axiosInstance.post(`/realisations/order`, orderRealisationArray);
+    const response = await axiosInstance.post(
+      `/realisations/order`,
+      orderRealisationArray
+    );
     return response.data;
   } catch (error) {
-    console.error(`Erreur lors de la mise à jour des ordres des réalisations :`, error);
+    console.error(
+      `Erreur lors de la mise à jour des ordres des réalisations :`,
+      error
+    );
     throw error;
   }
 };

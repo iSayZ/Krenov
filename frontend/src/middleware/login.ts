@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 import { setTokensFromResponse } from '@/lib/cookieManager';
 
-import { refreshTokens, verifyAccess } from '../api/authApi';
+import { verifyAccess, refreshTokens } from './fetchMiddleware';
 
 import type { NextRequest } from 'next/server';
 

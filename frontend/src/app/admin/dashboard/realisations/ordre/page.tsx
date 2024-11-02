@@ -17,19 +17,22 @@ import {
   rectSortingStrategy,
 } from '@dnd-kit/sortable';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
+
+import {
+  fetchAllActiveRealisations,
+  updateOrderRealisation,
+} from '@/api/realisationsApi';
+import { formatDateForUX } from '@/lib/dateUtils';
+import { Realisation } from '@/types/realisation.interface';
 
 import { Section } from '../../components/template/TopbarMenu';
 import { useVisitedSection } from '../../contexts/VisitedSectionContext';
 
 import Item from './components/Item';
 import SortableItem from './components/SortableItem';
-
-import { fetchAllActiveRealisations, updateOrderRealisation } from '@/api/realisationsApi';
-import { Realisation } from '@/types/realisation.interface';
-import { toast } from 'sonner';
-import { formatDateForUX } from '@/lib/dateUtils';
 
 const EditRealisation: React.FC = () => {
   // Update the section for breadcrumb into topbarMenu
@@ -55,7 +58,7 @@ const EditRealisation: React.FC = () => {
   useEffect(() => {
     setVisitedSection(section);
   }, [setVisitedSection]);
-  
+
   // Manage the state of items and active item being dragged
   const [items, setItems] = useState<Realisation[]>([]);
   const [activeItem, setActiveItem] = useState<Realisation>(); // Track the item being dragged
@@ -113,7 +116,10 @@ const EditRealisation: React.FC = () => {
 
   // Handle saving the current order
   const handleButtonClick = async () => {
-    const itemIds = items?.map((item, index) => ({slug: item.slug, order: index + 1}));
+    const itemIds = items?.map((item, index) => ({
+      slug: item.slug,
+      order: index + 1,
+    }));
 
     try {
       const response = await updateOrderRealisation(itemIds);
@@ -148,7 +154,7 @@ const EditRealisation: React.FC = () => {
     return (
       <div className="flex size-full items-center justify-center">
         <div
-          className="text-foreground inline-block size-12 animate-spin rounded-full border-[3px] border-current border-t-transparent"
+          className="inline-block size-12 animate-spin rounded-full border-[3px] border-current border-t-transparent text-foreground"
           role="status"
           aria-label="loading"
         ></div>
@@ -163,7 +169,7 @@ const EditRealisation: React.FC = () => {
         Déplacez les images des articles en fonction de l'ordre d'affichage
         désiré.
       </h2>
-      <p className="text-muted-foreground italic">
+      <p className="italic text-muted-foreground">
         Seuls les articles ayant l'état "
         <span className="font-semibold text-lime-500">Activé</span>" seront
         visibles ici.
@@ -177,11 +183,11 @@ const EditRealisation: React.FC = () => {
         onDragEnd={handleDragEnd}
         onDragCancel={handleDragCancel}
       >
-<SortableContext 
-    items={items.map((item) => ({ id: item.order }))}
-    strategy={rectSortingStrategy}
->          
-{' '}
+        <SortableContext
+          items={items.map((item) => ({ id: item.order }))}
+          strategy={rectSortingStrategy}
+        >
+          {' '}
           {/* Define the sorting strategy */}
           <div className="mx-auto my-8 grid grid-cols-6 gap-4">
             {' '}

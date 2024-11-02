@@ -6,7 +6,7 @@ export type RealisationDocument = Realisation & Document;
 
 @Schema()
 export class Realisation {
-  @Prop({ type: Number, required: true })
+  @Prop({ type: Number, required: true, default: 1 })
   order: number;
 
   @Prop({ type: String, required: true })
@@ -21,7 +21,7 @@ export class Realisation {
   @Prop({ type: [String], required: false })
   imageUrls: string[];
 
-  @Prop({ type: [String], required: true })
+  @Prop({ type: [String], required: false })
   tags: string[];
 
   @Prop({ type: String, required: true })
@@ -29,6 +29,9 @@ export class Realisation {
 
   @Prop({ type: String, required: true })
   author: string;
+
+  @Prop({ type: String, required: true })
+  header: string;
 
   @Prop({ type: Date, required: true, default: Date.now })
   created_at: Date;

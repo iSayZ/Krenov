@@ -6,6 +6,12 @@ import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 
+import {
+  fetchRealisationBySlug,
+  updateRealisation,
+} from '@/api/realisationsApi';
+import { uploadRealisationImage } from '@/api/uploadApi';
+import { formatDateForUX } from '@/lib/dateUtils';
 
 import { Section } from '../../../components/template/TopbarMenu';
 import { useModifyRealisation } from '../../../contexts/ModifyRealisationContext';
@@ -15,13 +21,6 @@ import ModifyRealisationFour from './steps/ModifyRealisationFour';
 import ModifyRealisationOne from './steps/ModifyRealisationOne';
 import ModifyRealisationThree from './steps/ModifyRealisationThree';
 import ModifyRealisationTwo from './steps/ModifyRealisationTwo';
-
-import {
-  fetchRealisationBySlug,
-  updateRealisation,
-} from '@/api/realisationsApi';
-import { uploadRealisationImage } from '@/api/uploadApi';
-import { formatDateForUX } from '@/lib/dateUtils';
 
 const section: Section = {
   items: [
@@ -236,7 +235,7 @@ const ModifyRealisationPage: React.FC<ModifyRealisationProps> = ({
     return (
       <div className="flex size-full items-center justify-center">
         <div
-          className="text-foreground inline-block size-12 animate-spin rounded-full border-[3px] border-current border-t-transparent"
+          className="inline-block size-12 animate-spin rounded-full border-[3px] border-current border-t-transparent text-foreground"
           role="status"
           aria-label="loading"
         ></div>

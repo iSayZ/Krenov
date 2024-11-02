@@ -14,5 +14,6 @@ import { Realisation, RealisationSchema } from './schema/realisation.schema';
   ],
   controllers: [RealisationsController],
   providers: [RealisationService],
+  exports: [RealisationService],
 })
 export class RealisationsModule {}

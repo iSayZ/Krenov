@@ -34,7 +34,10 @@ const SortableItem = ({ item, index, ...props }: Props) => {
       {...attributes} // Spread accessibility attributes for dragging
       {...listeners} // Spread event listeners for drag-and-drop functionality
     >
-      <p className='w-full text-ellipsis text-nowrap overflow-hidden'><span className='font-bold'>{index + 1}.</span>{item.slug}</p>
+      <p className="w-full overflow-hidden text-ellipsis text-nowrap">
+        <span className="font-bold">{index + 1}.</span>
+        {item.slug}
+      </p>
       <AspectRatio ratio={1 / 1} className="size-full shadow-md">
         <Image
           src={item.header}

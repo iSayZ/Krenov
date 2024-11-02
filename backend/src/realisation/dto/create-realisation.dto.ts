@@ -4,16 +4,17 @@ import {
   IsArray,
   IsOptional,
   IsNumber,
+  IsMongoId,
 } from 'class-validator';
 
 export class CreateRealisationDto {
-  @IsNumber()
-  @IsNotEmpty()
-  order: number;
-
   @IsString()
   @IsNotEmpty()
   slug: string;
+
+  @IsNumber()
+  @IsOptional()
+  order: number;
 
   @IsString()
   @IsNotEmpty()
@@ -34,13 +35,14 @@ export class CreateRealisationDto {
 
   @IsArray()
   @IsString({ each: true })
+  @IsOptional()
   tags: string[];
 
   @IsString()
   @IsNotEmpty()
   status: string;
 
-  @IsString()
-  @IsNotEmpty()
+  @IsMongoId()
+  @IsOptional()
   author: string;
 }

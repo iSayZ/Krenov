@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-import { verifyAccess } from '../api/authApi';
+import { verifyAccess } from './fetchMiddleware';
 
 import type { NextRequest } from 'next/server';
 
