@@ -18,7 +18,7 @@ export class AdminService {
     @InjectModel(AdminAccount.name)
     private adminAccountModel: Model<AdminAccountDocument>,
     @InjectModel(AdminProfile.name)
-    private adminProfileModel: Model<AdminProfileDocument>,
+    private adminProfileModel: Model<AdminProfileDocument>
   ) {}
 
   // To search and clean inactives sessions
