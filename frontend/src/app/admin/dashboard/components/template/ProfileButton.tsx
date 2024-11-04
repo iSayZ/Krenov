@@ -15,25 +15,14 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useSidebar } from '@/components/ui/sidebar';
 
-import { fetchAdminProfile } from '@/api/adminApi';
 import { logout } from '@/api/authApi';
 import { AdminProfile } from '@/types/admin.interface';
 
+import useSWR from 'swr';
+import { fetcher } from '@/lib/fetcher';
+
 const ProfileButton: React.FC = () => {
-  const [profile, setProfile] = useState<AdminProfile | null>(null);
-
-  useEffect(() => {
-    const loadProfile = async () => {
-      try {
-        const profileData = await fetchAdminProfile();
-        setProfile(profileData);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    loadProfile();
-  }, []);
+  const { data: profile } = useSWR<AdminProfile | null>('/admin/profile', fetcher);
 
   const router = useRouter();
   const { isMobile } = useSidebar();

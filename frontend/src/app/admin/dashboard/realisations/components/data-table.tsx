@@ -59,6 +59,7 @@ import {
 
 import { deleteRealisation } from '@/api/realisationsApi';
 import { Realisation } from '@/types/realisation.interface';
+import { mutate } from 'swr';
 
 interface DataWithIdAndSlug {
   _id: string;
@@ -68,17 +69,11 @@ interface DataWithIdAndSlug {
 interface DataTableProps<TData extends DataWithIdAndSlug, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  onRealisationDeleted: (id: string) => void;
-  onRealisationStatusChanged: (
-    id: string,
-    newStatus: Realisation['status']
-  ) => void;
 }
 
 export function DataTable<TData extends DataWithIdAndSlug, TValue>({
   columns,
   data,
-  onRealisationDeleted,
 }: DataTableProps<TData, TValue>) {
   const [pageIndex, setPageIndex] = useState<number>(0);
   const [pageSize, setPageSize] = useState<number>(5);
@@ -151,8 +146,8 @@ export function DataTable<TData extends DataWithIdAndSlug, TValue>({
     for (const realisation of selectedRows) {
       try {
         await deleteRealisation(realisation._id);
-        onRealisationDeleted(realisation._id);
         console.log(`Réalisation ${realisation._id} supprimée avec succès.`);
+        mutate('/realisations');
       } catch (error) {
         console.error(
           `Erreur lors de la suppression de la réalisation ${realisation._id}:`,

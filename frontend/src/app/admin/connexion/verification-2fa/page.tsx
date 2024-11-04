@@ -43,13 +43,12 @@ const Login2FAPage: React.FC = () => {
       }
 
       router.push('/admin/dashboard');
-    } catch (err) {
-      if (axios.isAxiosError(err)) {
-        if (err.response?.data.message === 'Token invalide') {
-          router.push('/admin/connexion');
-        } else {
-          setError(err.response?.data.message);
-        }
+    } catch (error) {
+      console.error(error);
+      if (error instanceof Error) {
+        setError(error.message );
+      } else {
+        setError('Une erreur est survenue. Veuillez réessayer.');
       }
     } finally {
       setLoading(false);

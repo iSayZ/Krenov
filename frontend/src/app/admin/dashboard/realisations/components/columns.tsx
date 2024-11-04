@@ -46,14 +46,9 @@ import {
 import { deleteRealisation, updateRealisation } from '@/api/realisationsApi';
 import { formatDateForUX } from '@/lib/dateUtils';
 import { Realisation } from '@/types/realisation.interface';
+import { mutate } from 'swr';
 
-export const columns = (
-  onRealisationDeleted: (id: string) => void,
-  onRealisationStatusChanged: (
-    id: string,
-    newStatus: Realisation['status']
-  ) => void
-): ColumnDef<Realisation>[] => [
+export const columns: ColumnDef<Realisation>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -198,7 +193,7 @@ export const columns = (
         try {
           await deleteRealisation(realisation._id);
           console.log('Réalisation supprimée avec succès.');
-          onRealisationDeleted(realisation._id);
+          mutate('/realisations');
         } catch (error) {
           console.error(
             'Erreur lors de la suppression de la réalisation:',
@@ -214,7 +209,7 @@ export const columns = (
         try {
           await updateRealisation(realisation.slug, { status: statusSelected });
           console.log('Statut de la réalisation changé avec succès.');
-          onRealisationStatusChanged(realisation._id, statusSelected);
+          mutate('/realisations');
         } catch (error) {
           console.error(
             'Erreur lors du changement de statut de la réalisation:',

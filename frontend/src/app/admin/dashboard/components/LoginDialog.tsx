@@ -70,13 +70,10 @@ const LoginDialog: React.FC<LoginProps> = ({ onLoginSuccess, reason }) => {
       }
     } catch (error) {
       console.error(error);
-      if (axios.isAxiosError(error)) {
-        setErrorMsg({ ...errorMsg, other: error.response?.data.message });
+      if (error instanceof Error) {
+        setErrorMsg({ ...errorMsg, other: error.message });
       } else {
-        setErrorMsg({
-          ...errorMsg,
-          other: 'Une erreur inattendue est survenue.',
-        });
+        setErrorMsg({ ...errorMsg, other: 'Une erreur est survenue. Veuillez réessayer.' });
       }
     }
   };

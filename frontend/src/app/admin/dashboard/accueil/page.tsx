@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 
 import { Skeleton } from '@/components/ui/skeleton';
 
-import { fetchAdminProfile } from '@/api/adminApi';
 import { formatDateForUX } from '@/lib/dateUtils';
 import { AdminProfile } from '@/types/admin.interface';
 
@@ -14,6 +13,10 @@ import { useVisitedSection } from '../contexts/VisitedSectionContext';
 
 import IndicatorCard from './components/IndicatorCard';
 import VisitorChart from './components/VisitorChart';
+
+import useSWR from 'swr';
+import { fetcher } from '@/lib/fetcher';
+
 
 const section: Section = {
   items: [],
@@ -24,32 +27,17 @@ const section: Section = {
 };
 
 const Index: React.FC = () => {
-  const [profile, setProfile] = useState<AdminProfile | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    const loadProfile = async () => {
-      try {
-        const profileData = await fetchAdminProfile();
-        setProfile(profileData);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadProfile();
-  }, []);
-
-  // Update the section for breadcrumb into topbarMenu
   const { setVisitedSection } = useVisitedSection();
 
   useEffect(() => {
     setVisitedSection(section);
   }, [setVisitedSection]);
 
-  if (loading) {
+  const { data: profile, error, isLoading } = useSWR<AdminProfile | null>('/admin/profile', fetcher);
+
+  if (error) return <div>Erreur de chargement du profil.</div>;
+
+  if (isLoading) {
     return (
       <div className="flex size-full flex-col gap-6">
         <div className="flex flex-col gap-2">

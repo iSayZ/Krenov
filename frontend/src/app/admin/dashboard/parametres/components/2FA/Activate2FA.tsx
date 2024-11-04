@@ -8,11 +8,7 @@ import LoginDialog from '../../../components/LoginDialog';
 import Init2FA from './Init2FA';
 import InitSuccess2FA from './InitSuccess2FA';
 
-interface Activate2FAProps {
-  onUpdate: (newStatus: boolean) => void;
-}
-
-const Activate2FA: React.FC<Activate2FAProps> = ({ onUpdate }) => {
+const Activate2FA: React.FC = () => {
   const [showLoginDialog, setShowLoginDialog] = useState<boolean>(false);
   const [showQrCodeDialog, setShowQrCodeDialog] = useState<boolean>(false);
   const [showInitSuccess2FA, setShowInitSuccess2FA] = useState<boolean>(false);
@@ -60,7 +56,6 @@ const Activate2FA: React.FC<Activate2FAProps> = ({ onUpdate }) => {
       <Dialog open={showInitSuccess2FA} onOpenChange={setShowInitSuccess2FA}>
         <InitSuccess2FA
           backupCodes={backupCodes}
-          onUpdate={() => onUpdate(true)}
         />
       </Dialog>
     </>

@@ -15,19 +15,6 @@ interface Settings2FAProps {
 }
 
 const Settings2FA: React.FC<Settings2FAProps> = ({ profileSettings }) => {
-  const [status2FAUpdated, setStatus2FAUpdated] = useState<boolean>(false);
-  const [newStatus2FA, setNewStatus2FA] = useState<boolean>(false);
-
-  const handleUpdate2FAStatus = (newStatus: boolean) => {
-    setNewStatus2FA(newStatus);
-    setStatus2FAUpdated(true);
-  };
-
-  // Status of 2FA
-  const twoFAEnabled = status2FAUpdated
-    ? newStatus2FA
-    : profileSettings.two_fa_enabled;
-
   return (
     <div className="flex size-full flex-col gap-6">
       <div className="flex items-center justify-center gap-4">
@@ -35,7 +22,7 @@ const Settings2FA: React.FC<Settings2FAProps> = ({ profileSettings }) => {
           Authentification à deux facteurs (2FA)
         </h2>
         <p className="text-lg font-semibold">-</p>
-        {twoFAEnabled ? (
+        {profileSettings.two_fa_enabled ? (
           <Badge className="bg-lime-500 text-sm font-semibold text-secondary hover:bg-lime-500">
             Activé
             <ShieldCheck className="ml-2 size-4" />
@@ -56,15 +43,15 @@ const Settings2FA: React.FC<Settings2FAProps> = ({ profileSettings }) => {
       </p>
       <hr className="m-auto h-[2px] w-2/3" />
       <div className="mt-2 flex w-full justify-center gap-4">
-        {twoFAEnabled ? (
+        {profileSettings.two_fa_enabled ? (
           <>
             <GenerateBackupCode2FA />
-            <Desactivate2FA onUpdate={handleUpdate2FAStatus} />
+            <Desactivate2FA />
           </>
         ) : (
           <>
             <Info2FA />
-            <Activate2FA onUpdate={handleUpdate2FAStatus} />
+            <Activate2FA />
           </>
         )}
       </div>

@@ -19,6 +19,7 @@ import {
 import { Separator } from '@/components/ui/separator';
 
 import { init2FA, verifyInitCode2FA } from '@/api/twoFaApi';
+import { mutate } from 'swr';
 
 interface Init2FAProps {
   showQrCodeDialog: boolean;
@@ -45,6 +46,7 @@ const Init2FA: React.FC<Init2FAProps> = ({
   const loadQrCode = async () => {
     try {
       const response = await init2FA();
+      console.log(response);
       setQrCode(response);
     } catch (error) {
       console.error('Erreur lors du chargement des réalisations :', error);
@@ -68,6 +70,8 @@ const Init2FA: React.FC<Init2FAProps> = ({
     setCode2FA('');
     try {
       const response = await verifyInitCode2FA(code2FA);
+      mutate('/admin/settings');
+      mutate('/2fa/status');
       onInitSuccess(response);
     } catch {
       setErrorMsg('Code invalide');

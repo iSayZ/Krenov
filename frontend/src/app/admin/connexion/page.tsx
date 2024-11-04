@@ -81,7 +81,6 @@ const LoginPage: React.FC = () => {
 
     try {
       const response = await login(formData);
-
       if (response.require2FA) {
         router.push('/admin/connexion/verification-2fa');
       } else {
@@ -89,13 +88,10 @@ const LoginPage: React.FC = () => {
       }
     } catch (error) {
       console.error(error);
-      if (axios.isAxiosError(error)) {
-        setErrorMsg({ ...errorMsg, other: error.response?.data.message });
+      if (error instanceof Error) {
+        setErrorMsg({ ...errorMsg, other: error.message });
       } else {
-        setErrorMsg({
-          ...errorMsg,
-          other: 'Une erreur inattendue est survenue.',
-        });
+        setErrorMsg({ ...errorMsg, other: 'Une erreur est survenue. Veuillez réessayer.' });
       }
     }
   };

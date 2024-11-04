@@ -11,12 +11,10 @@ import {
 
 interface InitSuccess2FAProps {
   backupCodes: string[];
-  onUpdate: () => void;
 }
 
 const InitSuccess2FA: React.FC<InitSuccess2FAProps> = ({
   backupCodes,
-  onUpdate,
 }) => {
   // Function to download backup codes
   const downloadBackupCodes = (codes: string[]): void => {
@@ -172,7 +170,7 @@ const InitSuccess2FA: React.FC<InitSuccess2FAProps> = ({
           </div>
           <div className="flex justify-center gap-4 sm:justify-end">
             <DialogClose asChild>
-              <Button onClick={onUpdate} className="w-36">
+              <Button className="w-36">
                 Continuer
               </Button>
             </DialogClose>

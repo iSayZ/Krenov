@@ -7,7 +7,6 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 
 import {
-  fetchRealisationBySlug,
   updateRealisation,
 } from '@/api/realisationsApi';
 import { uploadRealisationImage } from '@/api/uploadApi';
@@ -21,6 +20,9 @@ import ModifyRealisationFour from './steps/ModifyRealisationFour';
 import ModifyRealisationOne from './steps/ModifyRealisationOne';
 import ModifyRealisationThree from './steps/ModifyRealisationThree';
 import ModifyRealisationTwo from './steps/ModifyRealisationTwo';
+import useSWR from 'swr';
+import { Realisation } from '@/types/realisation.interface';
+import { fetcher } from '@/lib/fetcher';
 
 const section: Section = {
   items: [
@@ -68,24 +70,20 @@ const ModifyRealisationPage: React.FC<ModifyRealisationProps> = ({
   const router = useRouter();
   const { slug } = params;
 
-  const [loading, setLoading] = useState<boolean>(true);
-
+  const {data: realisation, isLoading, error} = useSWR<Realisation>(`/realisations/${slug}`, fetcher);
+  
   useEffect(() => {
-    const loadRealisation = async () => {
-      try {
-        const realisationData = await fetchRealisationBySlug(slug);
-        setFormData(realisationData);
-        setContent(realisationData.content);
-      } catch (error) {
-        console.error(error);
-        router.push('/admin/dashboard/realisations');
-      } finally {
-        setTimeout(() => setLoading(false), 1000);
-      }
-    };
-
-    loadRealisation();
-  }, [slug]);
+    if (realisation) {
+      setFormData({
+        title: realisation.title,
+        slug: realisation.slug,
+        tags: realisation.tags,
+        status: realisation.status,
+        header: realisation.header,
+      });
+      setContent(realisation.content);
+    }
+  }, [realisation, setFormData, setContent]);
 
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -231,7 +229,7 @@ const ModifyRealisationPage: React.FC<ModifyRealisationProps> = ({
     }
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex size-full items-center justify-center">
         <div
@@ -241,6 +239,10 @@ const ModifyRealisationPage: React.FC<ModifyRealisationProps> = ({
         ></div>
       </div>
     );
+  }
+
+  if (error || !realisation) {
+    return <div>Erreur lors du chargement de la réalisation.</div>;
   }
 
   return (

@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
-import { fetchAllRealisations } from '@/api/realisationsApi';
 import { Realisation } from '@/types/realisation.interface';
 
 import { Section } from '../components/template/TopbarMenu';
@@ -10,6 +9,8 @@ import { useVisitedSection } from '../contexts/VisitedSectionContext';
 
 import { columns } from './components/columns';
 import { DataTable } from './components/data-table';
+import useSWR from 'swr';
+import { fetcher } from '@/lib/fetcher';
 
 const section: Section = {
   items: [
@@ -25,9 +26,6 @@ const section: Section = {
 };
 
 const Realisations: React.FC = () => {
-  const [realisations, setRealisations] = useState<Realisation[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-
   // Update the section for breadcrumb into topbarMenu
   const { setVisitedSection } = useVisitedSection();
 
@@ -35,49 +33,9 @@ const Realisations: React.FC = () => {
     setVisitedSection(section);
   }, [setVisitedSection]);
 
-  // Call API
-  useEffect(() => {
-    const loadRealisations = async () => {
-      try {
-        const data = await fetchAllRealisations();
-        setRealisations(data);
-      } catch (error) {
-        console.error('Erreur lors du chargement des réalisations:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const {data: realisations, isLoading, error} = useSWR<Realisation[]>('/realisations', fetcher);
 
-    loadRealisations();
-  }, []);
-
-  // Function to refresh the data-table without the deleted element
-  const handleRealisationDeleted = (deletedId: string) => {
-    setRealisations((prevRealisations) =>
-      prevRealisations.filter((realisation) => realisation._id !== deletedId)
-    );
-  };
-
-  // Function to refresh the data-table with good status
-  const handleRealisationStatusChanged = (
-    changedId: string,
-    newStatus: Realisation['status']
-  ) => {
-    setRealisations((prevRealisations) =>
-      prevRealisations.map((realisation) =>
-        realisation._id === changedId
-          ? { ...realisation, status: newStatus }
-          : realisation
-      )
-    );
-  };
-
-  const columnsWithActions = columns(
-    handleRealisationDeleted,
-    handleRealisationStatusChanged
-  );
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex size-full items-center justify-center">
         <div
@@ -89,13 +47,15 @@ const Realisations: React.FC = () => {
     );
   }
 
+  if (error || !realisations) {
+    return <div>Erreur lors du chargement des réalisations.</div>;
+  }
+
   return (
     <div className="flex flex-col gap-6">
       <DataTable
-        columns={columnsWithActions}
+        columns={columns}
         data={realisations}
-        onRealisationDeleted={handleRealisationDeleted}
-        onRealisationStatusChanged={handleRealisationStatusChanged}
       />
     </div>
   );

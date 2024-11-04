@@ -14,12 +14,9 @@ import { disable2FA } from '@/api/twoFaApi';
 import { use2FACheck } from '@/hooks/2FA/use2FACheck';
 
 import Verify2FAModal from '../../../components/Verify2FAModal';
+import { mutate } from 'swr';
 
-interface Desactivate2FAProps {
-  onUpdate: (newStatus: boolean) => void;
-}
-
-const Desactivate2FA: React.FC<Desactivate2FAProps> = ({ onUpdate }) => {
+const Desactivate2FA: React.FC = () => {
   const [showAlertDialog, setShowAlertDialog] = useState<boolean>(false);
   const [showConfirmationDialog, setShowConfirmationDialog] =
     useState<boolean>(false);
@@ -37,6 +34,8 @@ const Desactivate2FA: React.FC<Desactivate2FAProps> = ({ onUpdate }) => {
   const handleDisable2FA = async () => {
     try {
       await disable2FA();
+      mutate('/admin/settings');
+      mutate('/2fa/status');
       setShowAlertDialog(false); // Close Alert Dialog
       setShowConfirmationDialog(true); // Open Confirmation Dialog
     } catch (error) {
@@ -113,7 +112,7 @@ const Desactivate2FA: React.FC<Desactivate2FAProps> = ({ onUpdate }) => {
               </DialogDescription>
               <div className="flex justify-end gap-4 max-sm:justify-center">
                 <DialogClose className="min-w-36" asChild>
-                  <Button onClick={() => onUpdate(false)}>Continuer</Button>
+                  <Button>Continuer</Button>
                 </DialogClose>
               </div>
             </div>

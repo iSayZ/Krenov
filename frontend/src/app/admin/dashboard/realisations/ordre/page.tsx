@@ -22,7 +22,6 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 
 import {
-  fetchAllActiveRealisations,
   updateOrderRealisation,
 } from '@/api/realisationsApi';
 import { formatDateForUX } from '@/lib/dateUtils';
@@ -33,6 +32,8 @@ import { useVisitedSection } from '../../contexts/VisitedSectionContext';
 
 import Item from './components/Item';
 import SortableItem from './components/SortableItem';
+import useSWR, { mutate } from 'swr';
+import { fetcher } from '@/lib/fetcher';
 
 const EditRealisation: React.FC = () => {
   // Update the section for breadcrumb into topbarMenu
@@ -59,27 +60,21 @@ const EditRealisation: React.FC = () => {
     setVisitedSection(section);
   }, [setVisitedSection]);
 
+  const {data: items, isLoading, error} = useSWR<Realisation[]>('/realisations/active', fetcher);
+
   // Manage the state of items and active item being dragged
-  const [items, setItems] = useState<Realisation[]>([]);
   const [activeItem, setActiveItem] = useState<Realisation>(); // Track the item being dragged
   const sensors = useSensors(useSensor(PointerSensor), useSensor(TouchSensor)); // Define sensors for drag-and-drop
-  const [loading, setLoading] = useState<boolean>(true);
 
-  const loadActiveRealisations = async () => {
-    try {
-      const data = await fetchAllActiveRealisations();
-      setItems(data);
-    } catch (error) {
-      console.error('Erreur lors du chargement des réalisations:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Local state for temporarily rearranged items
+  const [tempItems, setTempItems] = useState<Realisation[] | undefined>(items);
 
-  // Call API
   useEffect(() => {
-    loadActiveRealisations();
-  }, []);
+    // Sync tempItems with items loaded from SWR
+    if (items) {
+      setTempItems(items);
+    }
+  }, [items]);
 
   // Function to handle drag start event
   const handleDragStart = (event: DragStartEvent) => {
@@ -90,24 +85,21 @@ const EditRealisation: React.FC = () => {
   // Function to handle drag end event
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-    if (!over) return;
-
-    // Find the active and the over items
-    const activeItem = items?.find((item) => item._id === active.id);
-    const overItem = items?.find((item) => item._id === over.id);
-
-    if (!activeItem || !overItem) {
-      return;
-    }
-
-    // Get their indices and rearrange items if necessary
-    const activeIndex = items?.findIndex((item) => item._id === active.id);
-    const overIndex = items?.findIndex((item) => item._id === over.id);
-
+    if (!over || !tempItems) return;
+  
+    // Trouver les index de l'élément actif et de l'élément cible
+    const activeIndex = tempItems.findIndex((item) => item._id === active.id);
+    const overIndex = tempItems.findIndex((item) => item._id === over.id);
+  
     if (activeIndex !== overIndex) {
-      setItems((prev) => arrayMove<Realisation>(prev, activeIndex, overIndex)); // Use arrayMove to change positions
+      // Appliquer arrayMove sur l'état local temporaire
+      const newOrder = arrayMove(tempItems, activeIndex, overIndex);
+      setTempItems(newOrder); // Mise à jour temporaire pour l'affichage immédiat
+  
+      // Mettre à jour SWR sans re-fetch immédiat
+      mutate('/realisations/active', newOrder, false);
     }
-    setActiveItem(undefined); // Reset active item after drag ends
+    setActiveItem(undefined); // Réinitialiser l'élément actif
   };
 
   const handleDragCancel = () => {
@@ -116,12 +108,13 @@ const EditRealisation: React.FC = () => {
 
   // Handle saving the current order
   const handleButtonClick = async () => {
-    const itemIds = items?.map((item, index) => ({
+    const itemIds: { slug: string; order: number; }[] | undefined = items?.map((item, index) => ({
       slug: item.slug,
       order: index + 1,
     }));
 
     try {
+      if (!itemIds) throw error;
       const response = await updateOrderRealisation(itemIds);
       if (response.success) {
         toast.success('Ordre des articles mis à jour avec succès.', {
@@ -146,11 +139,11 @@ const EditRealisation: React.FC = () => {
 
   // Reset the order to the original array
   const handleRefresh = () => {
-    loadActiveRealisations();
+    mutate('/realisations/active');
     alert('Ordre réinitialisé !');
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex size-full items-center justify-center">
         <div
@@ -160,6 +153,10 @@ const EditRealisation: React.FC = () => {
         ></div>
       </div>
     );
+  }
+
+  if (error || !items) {
+    return <div>Erreur lors du chargement des réalisations.</div>;
   }
 
   return (

@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-import { fetchAdminSettings } from '@/api/adminApi';
 import { AdminSettings } from '@/types/admin.interface';
 
 import { Section } from '../components/template/TopbarMenu';
@@ -12,6 +11,8 @@ import { useVisitedSection } from '../contexts/VisitedSectionContext';
 
 import ProfileInformation from './components/ProfileInformation';
 import SecuritySettings from './components/SecuritySettings';
+import useSWR, { mutate } from 'swr';
+import { fetcher } from '@/lib/fetcher';
 
 const section: Section = {
   items: [
@@ -34,33 +35,8 @@ const ProfileSettings: React.FC = () => {
     setVisitedSection(section);
   }, [setVisitedSection]);
 
-  const [profileSettings, setProfileSettings] = useState<AdminSettings>({
-    email: '',
-    two_fa_enabled: false,
-    firstname: '',
-    lastname: '',
-    role: '',
-    biography: '',
-    avatar: '',
-    last_login: '',
-  });
-  const [loading, setLoading] = useState<boolean>(true);
+  const {data: profileSettings, isLoading, error} = useSWR<AdminSettings>('/admin/settings', fetcher);
 
-  // Call API
-  useEffect(() => {
-    const loadProfileSettings = async () => {
-      try {
-        const profileSettingsData = await fetchAdminSettings();
-        setProfileSettings(profileSettingsData);
-      } catch (error) {
-        console.error('Erreur lors du chargement des réalisations :', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadProfileSettings();
-  }, []);
 
   // To switch section tab
   const [sectionValue, setSectionValue] = useState<string>('du Profil');
@@ -75,14 +51,13 @@ const ProfileSettings: React.FC = () => {
   ) => {
     const { name, value } = e.target;
 
-    setProfileSettings((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    // Optimistically update the profileSettings state
+    const updatedProfileSettings = { ...profileSettings, [name]: value };
+    mutate('/admin/settings', updatedProfileSettings, false); // Update the cached data without revalidation
   };
 
   // Loading to wait data initializing
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex size-full items-center justify-center">
         <div
@@ -92,6 +67,10 @@ const ProfileSettings: React.FC = () => {
         ></div>
       </div>
     );
+  }
+
+  if (error || !profileSettings) {
+    return <div>Erreur lors du chargement des paramètres du profil.</div>;
   }
 
   return (

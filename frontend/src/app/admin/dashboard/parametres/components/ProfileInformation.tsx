@@ -76,9 +76,10 @@ const ProfileInformation: React.FC<ProfileProps> = ({
         formData.append('avatar', newAvatar);
         const source = `${profileSettings?.firstname}-${profileSettings?.lastname}`;
         const avatarSrc = await uploadAvatar(formData, source.toLowerCase());
+        console.log(avatarSrc)
         profileData.avatar = avatarSrc;
-      } catch (error) {
-        console.error("Erreur lors de l'upload de l'avatar :", error);
+      } catch (e) {
+        console.error(e);
       }
     }
 
@@ -92,7 +93,13 @@ const ProfileInformation: React.FC<ProfileProps> = ({
         },
       });
     } catch (error) {
-      console.error('Erreur lors de la mise à jour du profil :', error);
+      toast.error('Erreur lors de la mise à jour du profil.', {
+        description: formatDateForUX(new Date().toISOString()),
+        action: {
+          label: 'Fermer',
+          onClick: () => '',
+        },
+      });
     }
   };
 
