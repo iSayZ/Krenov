@@ -1,7 +1,3 @@
-import { AxiosResponse } from 'axios';
-
-import axiosInstance from '@/lib/axiosInstance';
-
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 // Function to login

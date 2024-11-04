@@ -1,4 +1,3 @@
-import axiosInstance from '@/lib/axiosInstance';
 import { AdminProfile } from '@/types/admin.interface';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;

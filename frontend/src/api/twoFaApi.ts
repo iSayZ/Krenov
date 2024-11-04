@@ -95,4 +95,30 @@ const generateBackupCodes2FA = async (): Promise<string[]> => {
   }
 };
 
-export { init2FA, verifyInitCode2FA, disable2FA, generateBackupCodes2FA };
+// Function to verify two FA before important action
+const verifyTwoFA = async (code: string): Promise<{ success: boolean; message: string }> => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/2fa/verify-2fa`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({ code }),
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      const errorResponse = await response.json();
+      throw new Error(errorResponse.message || 'Erreur lors de la vérification 2FA');
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Erreur lors de la vérification 2FA :', error);
+    throw error;
+  }
+};
+
+export { init2FA, verifyInitCode2FA, disable2FA, generateBackupCodes2FA, verifyTwoFA };

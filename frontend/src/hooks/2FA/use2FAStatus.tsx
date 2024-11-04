@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 
-import axiosInstance from '@/lib/axiosInstance';
 import useSWR from 'swr';
 import { fetcher } from '@/lib/fetcher';
 

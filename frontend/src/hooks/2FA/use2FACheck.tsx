@@ -3,9 +3,8 @@
 
 import { useState } from 'react';
 
-import axiosInstance from '@/lib/axiosInstance';
-
 import { use2FAStatus } from './use2FAStatus';
+import { verifyTwoFA } from '@/api/twoFaApi';
 
 interface Use2FACheckResult {
   is2FAModalOpen: boolean;
@@ -36,8 +35,8 @@ export function use2FACheck(): Use2FACheckResult {
     code: string
   ): Promise<{ success: boolean; message: string }> => {
     try {
-      const response = await axiosInstance.post('/2fa/verify-2fa', { code });
-      return response.data.success;
+      const response = await verifyTwoFA(code);
+      return response;
     } catch (error) {
       console.error('Erreur lors de la verification 2FA :', error);
       throw error;

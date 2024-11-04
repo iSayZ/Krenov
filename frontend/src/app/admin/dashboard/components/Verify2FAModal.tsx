@@ -1,6 +1,5 @@
 'use client';
 
-import axios from 'axios';
 import { Lock } from 'lucide-react';
 import React, { useState } from 'react';
 
@@ -53,8 +52,8 @@ const Verify2FAModal: React.FC<Verify2FAModalProps> = ({
       onVerify();
       onClose();
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        setError(err.response?.data.message);
+      if (err instanceof Error)  {
+        setError(err.message);
       }
     } finally {
       setLoading(false);
