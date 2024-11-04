@@ -14,8 +14,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { CustomThrottlerGuard } from './guards/custom-throttler.guard';
 import { ScheduledTasksModule } from './jobs/scheduled-tasks.module';
-
-console.log('ENV BACK :', process.env);
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -42,6 +41,7 @@ console.log('ENV BACK :', process.env);
     UploadModule,
     TwoFactorModule,
     ScheduledTasksModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [
