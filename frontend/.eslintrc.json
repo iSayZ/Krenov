@@ -24,7 +24,9 @@
     "@typescript-eslint", // Plugin TypeScript pour ESLint
     "tailwindcss" // Plugin pour vérifier les classes Tailwind
   ],
+  "ignorePatterns": ["public/tinymce/js/tin"],
   "rules": {
+    "prettier/prettier": "off",
     // Règles spécifiques de TailwindCSS
     "tailwindcss/classnames-order": "warn", // Avertissement pour l'ordre des classes Tailwind
     "tailwindcss/no-custom-classname": "off", // Désactiver la règle qui interdit les classes CSS personnalisées
@@ -34,6 +36,47 @@
     "react/prop-types": "off", // Désactiver les PropTypes (vu qu'on utilise TypeScript)
     "no-mixed-spaces-and-tabs": "off", // Désactiver si Prettier gère
     "@typescript-eslint/no-require-imports": "error",
-    "prettier/prettier": "error"
-  }
+    "react/no-unescaped-entities": "off",
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index",
+          "object",
+          "type"
+        ],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        },
+        "pathGroups": [
+          {
+            "pattern": "@/components/**",
+            "group": "internal",
+            "position": "before"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["builtin"]
+      }
+    ],
+    "import/no-duplicates": "error", // interdit les imports en double
+    "import/group-exports": "error" // groupe les exports par source
+  },
+  "overrides": [
+    {
+      "files": ["**/*.ts", "**/*.tsx"],
+      "env": {
+        "development": true
+      },
+      "rules": {
+        "import/no-unresolved": "off" // Désactiver pendant le développement
+      }
+    }
+  ]
 }

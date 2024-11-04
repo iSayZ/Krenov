@@ -1,19 +1,20 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { promises as fs } from 'fs';
 import { Model } from 'mongoose';
-import { Realisation, RealisationDocument } from './realisation.schema';
+import { join } from 'path';
 import { CreateRealisationDto } from './dto/create-realisation.dto';
 import { UpdateRealisationDto } from './dto/update-realisation.dto';
-import { promises as fs } from 'fs';
-import { join } from 'path';
+import { Realisation, RealisationDocument } from './schema/realisation.schema';
 
 @Injectable()
-export class RealisationsService {
+export class RealisationService {
   constructor(
     @InjectModel(Realisation.name)
     private realisationModel: Model<RealisationDocument>
   ) {}
 
+  // Function to delete an image
   private async deleteImage(imageUrl: string): Promise<void> {
     const filePath = join(__dirname, '..', '..', 'public', 'uploads', imageUrl); // Complete path of the image
 
@@ -36,67 +37,342 @@ export class RealisationsService {
     }
   }
 
-  async create(
-    createRealisationDto: CreateRealisationDto
-  ): Promise<Realisation> {
-    const createdRealisation = new this.realisationModel(createRealisationDto);
-    return createdRealisation.save();
+  // Function to move a file to a new destination
+  private async moveFile(source, destination) {
+    try {
+      // Get complete path of file
+      const sourcePath = join(
+        __dirname,
+        '..',
+        '..',
+        'public',
+        'uploads',
+        source
+      );
+      const destinationPath = join(
+        __dirname,
+        '..',
+        '..',
+        'public',
+        'uploads',
+        destination
+      );
+
+      // Check if the folder exist, else create this
+      const destinationDir = destinationPath.substring(
+        0,
+        destinationPath.lastIndexOf('/')
+      );
+      await fs.mkdir(destinationDir, { recursive: true });
+
+      await fs.copyFile(sourcePath, destinationPath); // Copy file to the new destination
+      await fs.unlink(sourcePath); // Delete old file
+      console.log(`Fichier déplacé de ${sourcePath} vers ${destinationPath}`);
+      return true;
+    } catch (error) {
+      console.error('Erreur lors du déplacement du fichier:', error);
+      return false;
+    }
   }
 
+  // Function to delete a folder
+  private async deleteFolder(slug: string): Promise<void> {
+    const folderPath = join(
+      __dirname,
+      '..',
+      '..',
+      'public',
+      'uploads',
+      'realisations',
+      slug
+    );
+    try {
+      await fs.rm(folderPath, { recursive: true, force: true });
+      console.log(`Dossier supprimé : ${folderPath}`);
+    } catch (error) {
+      console.error(
+        `Erreur lors de la suppression du dossier ${folderPath}:`,
+        error
+      );
+    }
+  }
+
+  // Function to fix all order when add an new "active" article
+  private async addArticleToActiveOrder() {
+    // Get all realisations
+    const realisations = await this.realisationModel
+      .find({ status: 'active' })
+      .exec();
+
+    console.log('activeRealisations', realisations);
+    // Increment order by 1
+    realisations.forEach((realisation) => {
+      const newOrder = realisation.order + 1;
+      realisation.updateOne({ order: newOrder }).exec();
+    });
+  }
+
+  // Function to fix all order when remove an "active" article
+  private async removeArticleFromActiveOrder(order: Realisation['order']) {
+    console.log(order);
+    // Get all realisations
+    const realisations = await this.realisationModel
+      .find({ status: 'active' })
+      .exec();
+    // Filter all actives realisations where ordre is > at the current order
+    const activeRealisations = realisations.filter(
+      (realisation) => realisation.order > order
+    );
+
+    console.log('activeRealisations', activeRealisations);
+    // Decrement all realisations by 1
+    activeRealisations.forEach((realisation) => {
+      const newOrder = realisation.order - 1;
+      realisation.updateOne({ order: newOrder }).exec();
+    });
+  }
+
+  // Function to synchronize all path of the content to the new slug
+  private async syncImageContentPathsWithSlug(
+    realisation: CreateRealisationDto | UpdateRealisationDto
+  ): Promise<Realisation['content']> {
+    const totalUrls = realisation.imageUrls.length; // Total d'URLs à traiter
+
+    for (let index = 0; index < totalUrls; index++) {
+      const url = realisation.imageUrls[index];
+      // Split src
+      const segments = url.split('/');
+      // Get slug
+      const slug = segments[2];
+      // Get file
+      const file = segments[3];
+
+      // If the current slug of article is not the same of the src :
+      // - Move the file in the good directory
+      // - Change the content by the new src
+      if (slug !== realisation.slug) {
+        const destination = `/realisations/${realisation.slug}/${file}`;
+        const moving = await this.moveFile(url, destination);
+
+        if (moving) {
+          // Change slug in content only on the last URL
+          if (index === totalUrls - 1) {
+            console.log('replace content index :', index);
+            const contentWithNewSrc = realisation.content.replaceAll(
+              `realisations/${slug}/`,
+              `realisations/${realisation.slug}/`
+            );
+            realisation.content = contentWithNewSrc;
+          }
+        }
+      }
+    }
+
+    return realisation.content;
+  }
+
+  // Function to create an article
+  async create(createRealisationDto: CreateRealisationDto) {
+    // If the slug already exist, add a number in the end
+    let uniqueSlug = createRealisationDto.slug;
+    let counter = 1;
+
+    while (await this.realisationModel.findOne({ slug: uniqueSlug }).exec()) {
+      uniqueSlug = `${createRealisationDto.slug}-${counter}`;
+      counter++;
+    }
+
+    createRealisationDto.slug = uniqueSlug;
+
+    // If the state of the realization is active, increment the order of all active realisations by 1,
+    // to bring the new realization to the foreground.
+    if (createRealisationDto.status === 'active') {
+      this.addArticleToActiveOrder();
+      createRealisationDto.order = 1;
+    } else {
+      createRealisationDto.order = 0;
+    }
+
+    // Synchronize the path of content images with the correct slug
+    const newContent =
+      await this.syncImageContentPathsWithSlug(createRealisationDto);
+    createRealisationDto.content = newContent;
+
+    try {
+      const createdRealisation = new this.realisationModel(
+        createRealisationDto
+      );
+      createdRealisation.save();
+    } catch {
+      throw new Error(
+        `Erreur lors de la création de la réalisation ${uniqueSlug}`
+      );
+    }
+  }
+
+  // Return all realisations
   async findAll(): Promise<Realisation[]> {
-    return this.realisationModel.find().exec();
+    return this.realisationModel.find().sort({ updated_at: 'desc' }).exec();
   }
 
-  async findOne(id: string): Promise<Realisation | null> {
-    const realisation = await this.realisationModel.findById(id).exec();
+  // Return all "active" realisations
+  async findAllActive(): Promise<Realisation[]> {
+    return this.realisationModel
+      .find({ status: 'active' })
+      .sort({ order: 'asc' })
+      .exec();
+  }
+
+  // Return all slugs of all realisations
+  async findAllSlugs(): Promise<string[]> {
+    const realisations = await this.realisationModel.find().exec();
+    const slugs = realisations.map((realisation) => {
+      return realisation.slug;
+    });
+    return slugs;
+  }
+
+  // Return the realisation by slug
+  async findOne(slug: string): Promise<Partial<Realisation> | null> {
+    const realisation = await this.realisationModel
+      .findOne({ slug })
+      .lean()
+      .exec();
 
     if (!realisation) {
-      throw new NotFoundException(`Realisation with ID ${id} not found`);
+      throw new NotFoundException(`Realisation with slug "${slug}" not found`);
     }
 
-    return realisation;
+    // Destructure object for match to dto in backend on update
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { _id, created_at, updated_at, ...newRealisation } = realisation;
+
+    return newRealisation;
   }
 
+  // Return the realisation "active" by slug
+  async findOneActive(slug: string): Promise<Partial<Realisation> | null> {
+    const realisation = await this.realisationModel
+      .findOne({ slug, status: 'active' })
+      .lean()
+      .exec();
+
+    if (!realisation) {
+      throw new NotFoundException(`Realisation with slug "${slug}" not found`);
+    }
+
+    // Destructure object for match to dto in backend on update
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { _id, created_at, updated_at, ...newRealisation } = realisation;
+
+    return newRealisation;
+  }
+
+  // Function to update an article
   async updateRealisation(
-    id: string,
+    slug: string,
     updateRealisationDto: UpdateRealisationDto
-  ): Promise<Realisation | null> {
+  ) {
     // Get the realisation to update
-    const realisation = await this.realisationModel.findById(id).exec();
+    const realisation = await this.realisationModel.findOne({ slug }).exec();
 
     if (!realisation) {
-      throw new NotFoundException(`Réalisation avec ID ${id} non trouvée`);
-    }
-
-    // Delete the image if there is an image to delete
-    if (updateRealisationDto.imagesToDelete) {
-      await Promise.all(
-        updateRealisationDto.imagesToDelete.map((imageUrl) =>
-          this.deleteImage(imageUrl)
-        )
-      );
-      realisation.imageUrls = realisation.imageUrls.filter(
-        (image) => !updateRealisationDto.imagesToDelete.includes(image)
+      throw new NotFoundException(
+        `Réalisation avec le slug ${slug} non trouvée`
       );
     }
+    console.log('a update', updateRealisationDto.slug);
+    console.log('realisation', realisation.slug);
 
-    // Add the new image uploaded
-    updateRealisationDto.imageUrls = [
-      ...realisation.imageUrls,
-      ...updateRealisationDto.imageUrls,
-    ];
+    // If the slug has changed
+    if (
+      updateRealisationDto.slug &&
+      updateRealisationDto.slug !== realisation.slug
+    ) {
+      // If the slug already exist, add a number in the end
+      let uniqueSlug = updateRealisationDto.slug;
+      let counter = 1;
+
+      while (await this.realisationModel.findOne({ slug: uniqueSlug }).exec()) {
+        uniqueSlug = `${updateRealisationDto.slug}-${counter}`;
+        counter++;
+      }
+
+      updateRealisationDto.slug = uniqueSlug;
+
+      // If the header has changed :
+      // - Move file, and replace src of header value
+      if (
+        updateRealisationDto.header &&
+        updateRealisationDto.header === realisation.header
+      ) {
+        const oldPath = realisation.header.split(`${process.env.API_URL}/`)[1];
+        const newPath = oldPath.replace(
+          realisation.slug,
+          updateRealisationDto.slug
+        );
+
+        const movingHeader = await this.moveFile(oldPath, newPath);
+
+        if (movingHeader) {
+          updateRealisationDto.header = realisation.header.replace(
+            realisation.slug,
+            updateRealisationDto.slug
+          );
+        }
+      }
+
+      // Synchronize the path of content images with the correct slug
+      const newContent =
+        await this.syncImageContentPathsWithSlug(updateRealisationDto);
+      updateRealisationDto.content = newContent;
+    }
+
+    if (
+      updateRealisationDto.status &&
+      updateRealisationDto.status !== realisation.status
+    ) {
+      // If the state of the realization is active, increment the order of all active realisations by 1,
+      // to bring the new realization to the foreground.
+      if (updateRealisationDto.status === 'active') {
+        console.log('Active');
+        await this.addArticleToActiveOrder();
+        updateRealisationDto.order = 1;
+      } else {
+        console.log('Desactive | draft');
+        await this.removeArticleFromActiveOrder(realisation.order);
+        updateRealisationDto.order = 0;
+      }
+    }
 
     const updatedRealisation = await this.realisationModel
-      .findByIdAndUpdate(id, updateRealisationDto, { new: true })
+      .findOneAndUpdate({ slug }, updateRealisationDto, { new: true })
       .exec();
 
     if (!updatedRealisation) {
-      throw new Error(`Réalisation avec ID ${id} non trouvée`);
+      throw new Error(`Réalisation avec le slug ${slug} non trouvée`);
     }
-
-    return updatedRealisation;
   }
 
+  // Function to change the order of all active realisations
+  async changeOrderRealisation(
+    orderRealisationArray: Pick<Realisation, 'slug' | 'order'>[]
+  ): Promise<void> {
+    try {
+      for (const realisation of orderRealisationArray) {
+        await this.realisationModel
+          .findOneAndUpdate(
+            { slug: realisation.slug },
+            { order: realisation.order }
+          )
+          .exec();
+      }
+    } catch (error) {
+      throw new Error(`Erreur lors de la mise à jour des ordres : ${error}`);
+    }
+  }
+
+  // Function to delete an article
   async deleteRealisation(id: string): Promise<{ message: string }> {
     // Get the realisation to delete
     const realisation = await this.realisationModel.findById(id).exec();
@@ -105,10 +381,7 @@ export class RealisationsService {
       throw new NotFoundException(`Réalisation avec ID ${id} non trouvée`);
     }
 
-    // Delete all images before deleting the realisation
-    await Promise.all(
-      realisation.imageUrls.map((imageUrl) => this.deleteImage(imageUrl))
-    );
+    await this.deleteFolder(realisation.slug);
 
     const result = await this.realisationModel.deleteOne({ _id: id }).exec();
 

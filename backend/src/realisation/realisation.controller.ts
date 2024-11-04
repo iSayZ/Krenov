@@ -5,70 +5,84 @@ import {
   Delete,
   Put,
   Body,
-  UseInterceptors,
-  UploadedFiles,
   Param,
+  UseGuards,
 } from '@nestjs/common';
-import { FilesInterceptor } from '@nestjs/platform-express';
-import { RealisationsService } from './realisation.service';
+import { RealisationService } from './realisation.service';
 import { CreateRealisationDto } from './dto/create-realisation.dto';
 import { UpdateRealisationDto } from './dto/update-realisation.dto';
 import { FindOneParams } from '../common/dto/find-one-params.dto';
-import { diskStorage } from 'multer';
-import { extname } from 'path';
-
-// Storage config for multer
-const storage = diskStorage({
-  destination: './public/uploads',
-  filename: (req, file, cb) => {
-    const uniqueSuffix =
-      Date.now() + '-' + Math.random().toString(36).substring(2, 15);
-    cb(null, `${uniqueSuffix}${extname(file.originalname)}`);
-  },
-});
+import { FindOneSlug } from './dto/find-one-slug.dto';
+import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
+import { User } from 'src/decorators/user.decorator';
+import { Realisation } from './schema/realisation.schema';
 
 @Controller('realisations')
 export class RealisationsController {
-  constructor(private readonly realisationsService: RealisationsService) {}
+  constructor(private readonly realisationService: RealisationService) {}
 
   @Post()
-  @UseInterceptors(FilesInterceptor('images', 10, { storage })) // Intercept images in the 'images' key
+  @UseGuards(JwtAuthGuard)
   async create(
-    @UploadedFiles() files: Express.Multer.File[],
+    @User('sub') userId: string,
     @Body() createRealisationDto: CreateRealisationDto
-  ) {
-    const imageUrls = files.map((file) => `/${file.filename}`);
-    createRealisationDto.imageUrls = imageUrls;
-    return this.realisationsService.create(createRealisationDto);
+  ): Promise<{ success: boolean }> {
+    createRealisationDto.author = userId;
+
+    await this.realisationService.create(createRealisationDto);
+
+    return { success: true };
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   async findAll() {
-    return this.realisationsService.findAll();
+    return this.realisationService.findAll();
   }
 
-  @Get(':id')
-  async findOne(@Param() params: FindOneParams) {
-    return this.realisationsService.findOne(params.id);
+  @Get('active')
+  async findAllActive() {
+    return this.realisationService.findAllActive();
   }
 
-  @Put(':id')
-  @UseInterceptors(FilesInterceptor('images', 10, { storage })) // Intercept images in the 'images' key
+  @Get(':slug')
+  @UseGuards(JwtAuthGuard)
+  async findOne(@Param() params: FindOneSlug) {
+    return this.realisationService.findOne(params.slug);
+  }
+
+  @Get('active/:slug')
+  async findOneActive(@Param() params: FindOneSlug) {
+    return this.realisationService.findOneActive(params.slug);
+  }
+
+  @Put(':slug')
+  @UseGuards(JwtAuthGuard)
   async updateRealisation(
-    @UploadedFiles() files: Express.Multer.File[],
     @Body() updateRealisationDto: UpdateRealisationDto,
-    @Param() params: FindOneParams
+    @Param() params: FindOneSlug
   ) {
-    const imageUrls = files.map((file) => `/${file.filename}`);
-    updateRealisationDto.imageUrls = imageUrls;
-    return this.realisationsService.updateRealisation(
-      params.id,
+    await this.realisationService.updateRealisation(
+      params.slug,
       updateRealisationDto
     );
+
+    return { success: true };
+  }
+
+  @Post('order')
+  @UseGuards(JwtAuthGuard)
+  async changeOrderRealisation(
+    @Body() orderRealisationArray: Pick<Realisation, 'slug' | 'order'>[]
+  ) {
+    await this.realisationService.changeOrderRealisation(orderRealisationArray);
+
+    return { success: true };
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   async deleteRealisation(@Param() params: FindOneParams) {
-    return this.realisationsService.deleteRealisation(params.id);
+    return this.realisationService.deleteRealisation(params.id);
   }
 }

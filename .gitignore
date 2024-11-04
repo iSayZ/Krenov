@@ -37,3 +37,8 @@ Thumbs.db
 
 # Husky
 .husky/*
+
+# Docker
+Dockerfile
+*.yml
+*.sh
