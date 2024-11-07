@@ -5,13 +5,7 @@ import { useEffect, useState } from 'react';
 import useSWR from 'swr';
 
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 import { confirmChangeRequest } from '@/api/changeRequestApi';
 import { fetcher } from '@/lib/fetcher';
@@ -29,7 +23,7 @@ const ConfirmChangeRequest: React.FC = () => {
   useEffect(() => {
     if (data || error) {
       setIsLoading(false);
-      console.log(data)
+      console.log(data);
     }
   }, [data, error]);
 
@@ -51,30 +45,45 @@ const ConfirmChangeRequest: React.FC = () => {
       case 'change_email':
         return (
           <>
-            <p>Votre demande de changement d'adresse mail a été validée. Veuillez confirmer pour appliquer le changement.</p>
-            <br/>
-            <p className='font-semibold'>Nouvelle adresse mail :</p>
+            <p>
+              Votre demande de changement d'adresse mail a été validée. Veuillez
+              confirmer pour appliquer le changement.
+            </p>
+            <br />
+            <p className="font-semibold">Nouvelle adresse mail :</p>
             <p>{data?.newValue}</p>
           </>
         );
       case 'change_password':
         return (
-          <p>Votre demande de changement de mot de passe a été validée. Veuillez confirmer pour appliquer le changement.</p>
+          <p>
+            Votre demande de changement de mot de passe a été validée. Veuillez
+            confirmer pour appliquer le changement.
+          </p>
         );
       case 'reset_password':
         return (
-          <p>Votre demande de réinitialisation de mot de passe a été validée. Veuillez confirmer pour continuer.</p>
+          <p>
+            Votre demande de réinitialisation de mot de passe a été validée.
+            Veuillez confirmer pour continuer.
+          </p>
         );
       case 'reset_2fa_backup_codes':
         return (
-          <p>Votre demande de réinitialisation des codes 2FA a été validée. Veuillez confirmer pour appliquer la réinitialisation.</p>
+          <p>
+            Votre demande de réinitialisation des codes 2FA a été validée.
+            Veuillez confirmer pour appliquer la réinitialisation.
+          </p>
         );
       default:
         return (
-          <p>Demande inconnue. Veuillez vérifier votre lien ou contacter le support.</p>
+          <p>
+            Demande inconnue. Veuillez vérifier votre lien ou contacter le
+            support.
+          </p>
         );
     }
-  }  
+  };
 
   return (
     <div className="flex h-screen items-center justify-center bg-gray-100 max-md:px-4">

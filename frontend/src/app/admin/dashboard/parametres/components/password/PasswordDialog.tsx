@@ -12,12 +12,12 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
+import { ApiError, changePassword } from '@/api/changeRequestApi';
+import { use2FACheck } from '@/hooks/2FA/use2FACheck';
+
 import Verify2FAModal from '../../../components/Verify2FAModal';
 
 import PasswordChangeAlert from './PasswordChangeAlert';
-
-import { ApiError, changePassword } from '@/api/changeRequestApi';
-import { use2FACheck } from '@/hooks/2FA/use2FACheck';
 
 interface PasswordForm {
   currentPassword: string;
@@ -73,6 +73,12 @@ const PasswordDialog: React.FC = () => {
     }
   };
 
+  // To check if it's a complex password
+  function validatePassword(password) {
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+={}\[\]|\\:;"'<>,.?/-]).{12,}$/;
+    return passwordRegex.test(password)
+  }
+
   // To open alert on submit success
   const [isAlertOpen, setIsAlertOpen] = useState(false);
 
@@ -95,6 +101,15 @@ const PasswordDialog: React.FC = () => {
       return setErrorMsg((prevError) => ({
         ...prevError,
         newPassword: 'Veuillez remplir tous les champs.',
+      }));
+    }
+
+    const checkNewEmail = validatePassword(passwordForm.newPassword);
+
+    if (!checkNewEmail) {
+      return setErrorMsg((prevError) => ({
+        ...prevError,
+        newPassword: 'Le mot de passe doit comporter au moins 12 caractères, inclure une majuscule, une minuscule, un chiffre, et un caractère spécial.',
       }));
     }
 

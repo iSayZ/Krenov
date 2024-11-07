@@ -57,10 +57,10 @@ export class ChangeRequestController {
     }
 
     if (changeRequest.request_type === 'change_email') {
-      return { 
+      return {
         requestType: changeRequest.request_type,
-        newValue: changeRequest.new_value
-       };
+        newValue: changeRequest.new_value,
+      };
     } else {
       return { requestType: changeRequest.request_type };
     }

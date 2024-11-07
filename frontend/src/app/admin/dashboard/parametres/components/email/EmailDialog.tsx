@@ -12,12 +12,12 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
+import { ApiError, changeEmail } from '@/api/changeRequestApi';
+import { use2FACheck } from '@/hooks/2FA/use2FACheck';
+
 import Verify2FAModal from '../../../components/Verify2FAModal';
 
 import EmailChangeAlert from './EmailChangeAlert';
-
-import { ApiError, changeEmail } from '@/api/changeRequestApi';
-import { use2FACheck } from '@/hooks/2FA/use2FACheck';
 
 interface EmailForm {
   currentEmail: string;
@@ -207,9 +207,7 @@ const EmailDialog: React.FC = () => {
                 value={emailForm.newEmail}
                 onChange={handleChangeEmailForm}
                 className={
-                  errorMsg.newEmail
-                    ? 'outline outline-1 outline-red-500'
-                    : ''
+                  errorMsg.newEmail ? 'outline outline-1 outline-red-500' : ''
                 }
               />
             </div>
@@ -221,9 +219,7 @@ const EmailDialog: React.FC = () => {
                 value={emailForm.confirmationEmail}
                 onChange={handleChangeEmailForm}
                 className={
-                  errorMsg.newEmail
-                    ? 'outline outline-1 outline-red-500'
-                    : ''
+                  errorMsg.newEmail ? 'outline outline-1 outline-red-500' : ''
                 }
               />
             </div>
