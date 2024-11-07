@@ -13,7 +13,10 @@ import {
   AdminProfile,
   AdminProfileDocument,
 } from '../admin/schema/admin-profile.schema';
-import { updatePasswordAccountDto, updateEmailAccountDto } from '../admin/dto/update-admin-account.dto';
+import {
+  updatePasswordAccountDto,
+  updateEmailAccountDto,
+} from '../admin/dto/update-admin-account.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { MailService } from 'src/mail/mail.service';
 import { JwtService } from '@nestjs/jwt';
@@ -128,7 +131,12 @@ export class ChangeRequestService {
         await this.deleteChangeRequest(changeRequest.change_request_id);
         return passwordResult;
       case 'change_email':
-        return;
+        const emailResult = this.adminService.changeEmail(
+          changeRequest.user_id,
+          changeRequest.new_value
+        );
+        await this.deleteChangeRequest(changeRequest.change_request_id);
+        return emailResult;
       case 'reset_password':
         return;
       case 'reset_2fa_backup_codes':

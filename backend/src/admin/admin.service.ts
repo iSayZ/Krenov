@@ -128,9 +128,27 @@ export class AdminService {
     return 'Profile updated successfully';
   }
 
+  // To apply change request type "change-password"
   async changePassword(userId: string, newValue: string) {
     const updatedAccount = await this.adminAccountModel
       .findOneAndUpdate({ _id: userId }, { password: newValue }, { new: true })
+      .exec();
+
+    if (!updatedAccount) {
+      throw new NotFoundException('Account not found');
+    }
+
+    return {
+      message: 'Password updated successfully',
+      statusCode: HttpStatus.OK,
+      redirectUrl: '/success',
+    };
+  }
+
+  // To apply change request type "change-email"
+  async changeEmail(userId: string, newValue: string) {
+    const updatedAccount = await this.adminAccountModel
+      .findOneAndUpdate({ _id: userId }, { email: newValue }, { new: true })
       .exec();
 
     if (!updatedAccount) {
