@@ -61,13 +61,6 @@ const ConfirmChangeRequest: React.FC = () => {
             confirmer pour appliquer le changement.
           </p>
         );
-      case 'reset_password':
-        return (
-          <p>
-            Votre demande de réinitialisation de mot de passe a été validée.
-            Veuillez confirmer pour continuer.
-          </p>
-        );
       case 'reset_2fa_backup_codes':
         return (
           <p>
@@ -94,7 +87,11 @@ const ConfirmChangeRequest: React.FC = () => {
         </CardHeader>
         <CardContent className="text-md">
           {isLoading ? (
-            <p>Chargement...</p>
+            <div
+              className="inline-block size-12 animate-spin rounded-full border-[3px] border-current border-t-transparent text-foreground m-auto"
+              role="status"
+              aria-label="loading"
+            />
           ) : error ? (
             <p className="text-red-500">Token invalide ou expiré.</p>
           ) : (

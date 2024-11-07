@@ -168,7 +168,9 @@ const LoginPage: React.FC = () => {
               )}
             </div>
           </form>
-          <p className="cursor-pointer text-sm text-foreground hover:underline">
+          <p className="cursor-pointer text-sm text-foreground hover:underline"
+            onClick={() => router.push('/admin/connexion/mdp-oublie')}
+          >
             Mot de passe oublié ?
           </p>
         </CardContent>
