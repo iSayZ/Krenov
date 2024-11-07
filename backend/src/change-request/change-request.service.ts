@@ -229,11 +229,11 @@ export class ChangeRequestService {
     const changePasswordToken = await this.saveChangeRequest(
       userId,
       'change_email',
-      email
+      updateEmailAccountDto.newEmail
     );
 
     // Send an email to the user to confirm the action
-    await this.mailService.sendConfirmPasswordChangeMail(
+    await this.mailService.sendConfirmEmailChangeMail(
       account,
       profile,
       changePasswordToken

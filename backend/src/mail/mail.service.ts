@@ -5,6 +5,7 @@ import { AdminAccount } from 'src/admin/schema/admin-account.schema';
 import { AdminProfile } from 'src/admin/schema/admin-profile.schema';
 import { render } from '@react-email/components';
 import PasswordChangedEmail from './emails/PasswordChangedEmail';
+import EmailAdressChangedEmail from './emails/EmailAdressChangedEmail';
 
 @Injectable()
 export class MailService {
@@ -64,8 +65,8 @@ export class MailService {
 
       const mailData: MailData = {
         to: account.email,
-        subject: 'Changement de Mot de Passe',
-        template: PasswordChangedEmail({ name, appName, appUrl, token }),
+        subject: "Changement d'adresse mail",
+        template: EmailAdressChangedEmail({ name, appName, appUrl, token }),
       };
 
       await this.sendMail(mailData);

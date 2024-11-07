@@ -56,7 +56,14 @@ export class ChangeRequestController {
       throw new UnauthorizedException('Invalid or expired token');
     }
 
-    return { requestType: changeRequest.request_type };
+    if (changeRequest.request_type === 'change_email') {
+      return { 
+        requestType: changeRequest.request_type,
+        newValue: changeRequest.new_value
+       };
+    } else {
+      return { requestType: changeRequest.request_type };
+    }
   }
 
   // Route to apply change of the change request after check token

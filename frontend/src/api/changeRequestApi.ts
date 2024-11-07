@@ -58,7 +58,7 @@ const changePassword = async (
     );
 
     if (!response.ok) {
-      const errorData = await response.json(); // Récupère les données d'erreur depuis le backend
+      const errorData = await response.json();
       throw new ApiError(
         response.status,
         errorData.message || 'Erreur lors de la mise à jour du mot de passe.'
@@ -72,5 +72,37 @@ const changePassword = async (
   }
 };
 
+// Function to change the password
+const changeEmail = async (
+  data: Partial<{ currentEmail: string; newEmail: string }>
+): Promise<Response> => {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/change-requests/change-email`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+        credentials: 'include',
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new ApiError(
+        response.status,
+        errorData.message || "Erreur lors de la mise à jour de l'adresse mail."
+      );
+    }
+
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 // Consolidated exports
-export { confirmChangeRequest, changePassword, ApiError };
+export { confirmChangeRequest, changePassword, changeEmail, ApiError };

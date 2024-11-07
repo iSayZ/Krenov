@@ -49,7 +49,7 @@ const PasswordChangedEmail = (
           <div className={content}>
             <p className={paragraph}>Bonjour {name},</p>
             <p className={paragraph}>
-              Votre demande de mise à jour de d'adresse mail a bien été reçue.
+              Votre demande de mise à jour de vote adresse mail a bien été reçue.
               Cependant, ce changement ne sera effectif qu'après votre confirmation.
             </p>
             <p className={paragraph}>

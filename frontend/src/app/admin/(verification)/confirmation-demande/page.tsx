@@ -29,6 +29,7 @@ const ConfirmChangeRequest: React.FC = () => {
   useEffect(() => {
     if (data || error) {
       setIsLoading(false);
+      console.log(data)
     }
   }, [data, error]);
 
@@ -48,24 +49,39 @@ const ConfirmChangeRequest: React.FC = () => {
   const getMessage = () => {
     switch (data?.requestType) {
       case 'change_email':
-        return "Votre demande de changement d'email a été validée. Veuillez confirmer pour appliquer le changement.";
+        return (
+          <>
+            <p>Votre demande de changement d'adresse mail a été validée. Veuillez confirmer pour appliquer le changement.</p>
+            <br/>
+            <p className='font-semibold'>Nouvelle adresse mail :</p>
+            <p>{data?.newValue}</p>
+          </>
+        );
       case 'change_password':
-        return 'Votre demande de changement de mot de passe a été validée. Veuillez confirmer pour appliquer le changement.';
+        return (
+          <p>Votre demande de changement de mot de passe a été validée. Veuillez confirmer pour appliquer le changement.</p>
+        );
       case 'reset_password':
-        return 'Votre demande de réinitialisation de mot de passe a été validée. Veuillez confirmer pour continuer.';
+        return (
+          <p>Votre demande de réinitialisation de mot de passe a été validée. Veuillez confirmer pour continuer.</p>
+        );
       case 'reset_2fa_backup_codes':
-        return 'Votre demande de réinitialisation des codes 2FA a été validée. Veuillez confirmer pour appliquer la réinitialisation.';
+        return (
+          <p>Votre demande de réinitialisation des codes 2FA a été validée. Veuillez confirmer pour appliquer la réinitialisation.</p>
+        );
       default:
-        return 'Demande inconnue. Veuillez vérifier votre lien ou contacter le support.';
+        return (
+          <p>Demande inconnue. Veuillez vérifier votre lien ou contacter le support.</p>
+        );
     }
-  };
+  }  
 
   return (
     <div className="flex h-screen items-center justify-center bg-gray-100 max-md:px-4">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-lg">Confirmation de la Demande</CardTitle>
-          <CardDescription className="text-md">{getMessage()}</CardDescription>
+          <div className="text-md">{getMessage()}</div>
         </CardHeader>
         <CardContent className="text-md">
           {isLoading ? (
