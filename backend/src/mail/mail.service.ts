@@ -34,18 +34,40 @@ export class MailService {
     account: AdminAccount,
     profile: AdminProfile,
     token: string
-  ) {    
+  ) {
     try {
       const name = profile.firstname;
       const appName = process.env.APP_NAME;
       const appUrl = process.env.CLIENT_URL;
-    
+
       const mailData: MailData = {
         to: account.email,
         subject: 'Changement de Mot de Passe',
-        template: PasswordChangedEmail({ name, appName, appUrl, token })
+        template: PasswordChangedEmail({ name, appName, appUrl, token }),
       };
-    
+
+      await this.sendMail(mailData);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async sendConfirmEmailChangeMail(
+    account: AdminAccount,
+    profile: AdminProfile,
+    token: string
+  ) {
+    try {
+      const name = profile.firstname;
+      const appName = process.env.APP_NAME;
+      const appUrl = process.env.CLIENT_URL;
+
+      const mailData: MailData = {
+        to: account.email,
+        subject: 'Changement de Mot de Passe',
+        template: PasswordChangedEmail({ name, appName, appUrl, token }),
+      };
+
       await this.sendMail(mailData);
     } catch (error) {
       console.log(error);

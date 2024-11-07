@@ -12,10 +12,9 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
-import Verify2FAModal from '../../../components/Verify2FAModal';
-
 import { use2FACheck } from '@/hooks/2FA/use2FACheck';
 
+import Verify2FAModal from '../../../components/Verify2FAModal';
 
 const EmailDialog: React.FC = () => {
   const [showDialog, setShowDialog] = useState<boolean>(false);
@@ -43,7 +42,7 @@ const EmailDialog: React.FC = () => {
           }
         >
           Modifier mon adresse mail
-          <Mail className="text-foreground ml-3 size-5" />
+          <Mail className="ml-3 size-5 text-foreground" />
         </Button>
         <DialogContent
           className="max-w-sm"

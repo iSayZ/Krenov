@@ -12,7 +12,10 @@ import {
   AdminProfileSchema,
 } from '../admin/schema/admin-profile.schema';
 import { MailModule } from 'src/mail/mail.module';
-import { ChangeRequest, ChangeRequestSchema } from './schema/change-request.schema';
+import {
+  ChangeRequest,
+  ChangeRequestSchema,
+} from './schema/change-request.schema';
 import { AdminModule } from 'src/admin/admin.module';
 
 @Module({
@@ -20,7 +23,7 @@ import { AdminModule } from 'src/admin/admin.module';
     MongooseModule.forFeature([
       { name: AdminAccount.name, schema: AdminAccountSchema },
       { name: AdminProfile.name, schema: AdminProfileSchema },
-      { name: ChangeRequest.name, schema: ChangeRequestSchema},
+      { name: ChangeRequest.name, schema: ChangeRequestSchema },
     ]),
     AuthModule,
     MailModule,

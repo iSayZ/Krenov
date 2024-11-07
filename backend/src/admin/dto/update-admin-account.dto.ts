@@ -10,17 +10,14 @@ class updatePasswordAccountDto {
   newPassword: string;
 }
 
-class updateMailAccountDto {
-    @IsString()
-    @IsNotEmpty()
-    currentMailAdress: string;
-  
-    @IsString()
-    @IsNotEmpty()
-    newMailAdress: string;
+class updateEmailAccountDto {
+  @IsString()
+  @IsNotEmpty()
+  currentEmail: string;
+
+  @IsString()
+  @IsNotEmpty()
+  newEmail: string;
 }
 
-export {
-    updatePasswordAccountDto,
-    updateMailAccountDto,
-}
+export { updatePasswordAccountDto, updateEmailAccountDto };

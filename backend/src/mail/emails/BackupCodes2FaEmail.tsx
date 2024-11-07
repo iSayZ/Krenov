@@ -24,7 +24,7 @@ const BackupCodes2FaEmail = (
   { name, appName, appUrl, token }: MailProps
 ) => {
 
-  const backupLink = `${appUrl}/account/backup-codes/${token}`;
+  const backupLink = `${appUrl}/account/confirmation-demande?code_confirmation=${token}`;
 
   return (
     <Tailwind

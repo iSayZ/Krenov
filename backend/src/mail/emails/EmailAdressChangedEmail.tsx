@@ -24,7 +24,7 @@ const PasswordChangedEmail = (
   { name, appName, appUrl, token }: MailProps
 ) => {
 
-  const confirmationLink = `${appUrl}/admin/confirmation-changement-mail?token=${token}`;
+  const confirmationLink = `${appUrl}/admin/confirmation-demande?code_confirmation=${token}`;
 
   return (
     <Tailwind
@@ -48,7 +48,10 @@ const PasswordChangedEmail = (
           </div>
           <div className={content}>
             <p className={paragraph}>Bonjour {name},</p>
-            <p className={paragraph}>Votre adresse mail a bien été mis à jour.</p>
+            <p className={paragraph}>
+              Votre demande de mise à jour de d'adresse mail a bien été reçue.
+              Cependant, ce changement ne sera effectif qu'après votre confirmation.
+            </p>
             <p className={paragraph}>
               Si vous n'êtes pas à l'origine de ce changement, veuillez ignorer cet e-mail. 
               Sinon, pour confirmer ce changement, veuillez cliquer sur le bouton ci-dessous :

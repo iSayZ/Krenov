@@ -12,11 +12,11 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
+import { ApiError, changePassword } from '@/api/changeRequestApi';
+import { use2FACheck } from '@/hooks/2FA/use2FACheck';
 
 import Verify2FAModal from '../../../components/Verify2FAModal';
 
-import { ApiError, changePassword } from '@/api/changeRequestApi';
-import { use2FACheck } from '@/hooks/2FA/use2FACheck';
 import PasswordChangeAlert from './PasswordChangeAlert';
 
 interface PasswordForm {
@@ -41,17 +41,20 @@ const PasswordDialog: React.FC = () => {
   const [passwordForm, setPasswordForm] = useState<PasswordForm>({
     currentPassword: '',
     newPassword: '',
-    confirmationPassword: ''
-  })
+    confirmationPassword: '',
+  });
 
-  const [errorMsg, setErrorMsg] = useState<{currentPassword: string, newPassword: string}>({
+  const [errorMsg, setErrorMsg] = useState<{
+    currentPassword: string;
+    newPassword: string;
+  }>({
     currentPassword: '',
-    newPassword: ''
+    newPassword: '',
   });
 
   const handleChangePasswordForm = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
-  
+
     setPasswordForm((prevState) => ({
       ...prevState,
       [id]: value,
@@ -78,7 +81,7 @@ const PasswordDialog: React.FC = () => {
     // Reset all errors
     setErrorMsg({
       currentPassword: '',
-      newPassword: ''
+      newPassword: '',
     });
 
     if (!passwordForm.currentPassword) {
@@ -88,7 +91,7 @@ const PasswordDialog: React.FC = () => {
       }));
     }
 
-    if (!passwordForm.newPassword || !passwordForm.confirmationPassword ) {
+    if (!passwordForm.newPassword || !passwordForm.confirmationPassword) {
       return setErrorMsg((prevError) => ({
         ...prevError,
         newPassword: 'Veuillez remplir tous les champs.',
@@ -104,12 +107,12 @@ const PasswordDialog: React.FC = () => {
 
     const data = {
       currentPassword: passwordForm.currentPassword,
-      newPassword: passwordForm.newPassword
-    }
+      newPassword: passwordForm.newPassword,
+    };
 
     try {
       const response = await changePassword(data);
-      console.log("STATUS",response.status);
+      console.log('STATUS', response.status);
       if (response.status === 201) {
         setShowDialog(false);
         setIsAlertOpen(true);
@@ -122,13 +125,13 @@ const PasswordDialog: React.FC = () => {
             currentPassword: 'Le mot de passe est incorrect.',
           }));
         } else {
-          console.log("Erreur:", error.message);
+          console.log('Erreur:', error.message);
         }
       } else {
-        console.log("Erreur inconnue:", error);
+        console.log('Erreur inconnue:', error);
       }
     }
-  }
+  };
 
   return (
     <>
@@ -161,19 +164,55 @@ const PasswordDialog: React.FC = () => {
           <div className="flex flex-col gap-4">
             <div className="space-y-1">
               <Label htmlFor="currentPassword">Ancien mot de passe</Label>
-              <Input id="currentPassword" type="password" value={passwordForm.currentPassword} onChange={handleChangePasswordForm} className={errorMsg.currentPassword ? 'outline outline-1 outline-red-500' : ''} />
+              <Input
+                id="currentPassword"
+                type="password"
+                value={passwordForm.currentPassword}
+                onChange={handleChangePasswordForm}
+                className={
+                  errorMsg.currentPassword
+                    ? 'outline outline-1 outline-red-500'
+                    : ''
+                }
+              />
             </div>
             <div className="space-y-1">
               <Label htmlFor="newPassword">Nouveau mot de passe</Label>
-              <Input id="newPassword" type="password" value={passwordForm.newPassword} onChange={handleChangePasswordForm} className={errorMsg.newPassword ? 'outline outline-1 outline-red-500' : ''} />
+              <Input
+                id="newPassword"
+                type="password"
+                value={passwordForm.newPassword}
+                onChange={handleChangePasswordForm}
+                className={
+                  errorMsg.newPassword
+                    ? 'outline outline-1 outline-red-500'
+                    : ''
+                }
+              />
             </div>
             <div className="space-y-1">
               <Label htmlFor="confirmationPassword">Confirmation</Label>
-              <Input id="confirmationPassword" type="password" value={passwordForm.confirmationPassword} onChange={handleChangePasswordForm} className={errorMsg.newPassword ? 'outline outline-1 outline-red-500' : ''} />
+              <Input
+                id="confirmationPassword"
+                type="password"
+                value={passwordForm.confirmationPassword}
+                onChange={handleChangePasswordForm}
+                className={
+                  errorMsg.newPassword
+                    ? 'outline outline-1 outline-red-500'
+                    : ''
+                }
+              />
             </div>
-            {(errorMsg.currentPassword || errorMsg.newPassword) &&
-            <p className='text-sm text-red-600'>{errorMsg.currentPassword || errorMsg.newPassword}</p>}
-            <Button className="ml-auto mt-2 w-1/2 max-sm:m-auto" onClick={handleSubmit}>
+            {(errorMsg.currentPassword || errorMsg.newPassword) && (
+              <p className="text-sm text-red-600">
+                {errorMsg.currentPassword || errorMsg.newPassword}
+              </p>
+            )}
+            <Button
+              className="ml-auto mt-2 w-1/2 max-sm:m-auto"
+              onClick={handleSubmit}
+            >
               Enregistrer
             </Button>
           </div>
