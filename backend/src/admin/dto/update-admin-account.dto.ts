@@ -20,4 +20,10 @@ class updateEmailAccountDto {
   newEmail: string;
 }
 
-export { updatePasswordAccountDto, updateEmailAccountDto };
+class resetPasswordAccountDto {
+  @IsString()
+  @IsNotEmpty()
+  email: string;
+}
+
+export { updatePasswordAccountDto, updateEmailAccountDto, resetPasswordAccountDto };

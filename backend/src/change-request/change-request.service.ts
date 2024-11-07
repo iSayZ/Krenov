@@ -16,6 +16,7 @@ import {
 import {
   updatePasswordAccountDto,
   updateEmailAccountDto,
+  resetPasswordAccountDto
 } from '../admin/dto/update-admin-account.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { MailService } from 'src/mail/mail.service';
@@ -234,6 +235,47 @@ export class ChangeRequestService {
 
     // Send an email to the user to confirm the action
     await this.mailService.sendConfirmEmailChangeMail(
+      account,
+      profile,
+      changePasswordToken
+    );
+  }
+
+  // Route to generate a change request to reset password
+  async resetPasswordRequest(
+    resetPasswordAccountDto: resetPasswordAccountDto
+  ) {
+    // Check if the current email matches with an account
+    const email = resetPasswordAccountDto.email;
+
+    const account = await this.adminAccountModel.findOne({ email }).exec();
+
+    if (!account) {
+      throw new NotFoundException(`Aucun compte correspondant.`);
+    }
+
+    if (account.email !== email) {
+      throw new UnauthorizedException(`L'adresse e-mail est incorrecte.`);
+    }
+
+    // Get the profile info corresponding to the account for the mail
+    const profile = await this.adminProfileModel
+      .findOne({ admin_id: account._id })
+      .exec();
+
+    if (!profile) {
+      throw new NotFoundException(`Aucun profil correspondant.`);
+    }
+
+    // Generate and stock the token on BDD
+    const changePasswordToken = await this.saveChangeRequest(
+      account._id as string,
+      'change_email',
+      'null'
+    );
+
+    // Send an email to the user to confirm the action
+    await this.mailService.sendConfirmResetPasswordMail(
       account,
       profile,
       changePasswordToken

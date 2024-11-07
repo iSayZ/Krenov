@@ -1,11 +1,17 @@
-"use client";
+'use client';
 
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import useSWR from 'swr';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
@@ -27,7 +33,7 @@ const ResetPasswordPage: React.FC = () => {
       console.log(data);
     }
   }, [data, error]);
-  
+
   const [formData, setFormData] = useState({
     newPassword: '',
     confirmPassword: '',
@@ -91,12 +97,14 @@ const ResetPasswordPage: React.FC = () => {
     <div className="flex h-screen w-screen items-center justify-center p-4">
       <Card className="w-[350px]">
         <CardHeader>
-          <CardTitle className="text-3xl">Réinitialisation du mot de passe</CardTitle>
+          <CardTitle className="text-3xl">
+            Réinitialisation du mot de passe
+          </CardTitle>
         </CardHeader>
         {isLoading ? (
           <CardContent className="flex flex-col gap-4">
             <div
-              className="inline-block size-12 animate-spin rounded-full border-[3px] border-current border-t-transparent text-foreground m-auto"
+              className="m-auto inline-block size-12 animate-spin rounded-full border-[3px] border-current border-t-transparent text-foreground"
               role="status"
               aria-label="loading"
             />
@@ -117,14 +125,20 @@ const ResetPasswordPage: React.FC = () => {
                   placeholder="Entrez votre nouveau mot de passe"
                   value={formData.newPassword}
                   onChange={handleChange}
-                  className={errorMsg.newPassword ? 'outline outline-1 outline-red-500' : ''}
+                  className={
+                    errorMsg.newPassword
+                      ? 'outline outline-1 outline-red-500'
+                      : ''
+                  }
                 />
                 {errorMsg.newPassword && (
                   <p className="text-sm text-red-500">{errorMsg.newPassword}</p>
                 )}
               </div>
               <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="confirmPassword">Confirmer le mot de passe</Label>
+                <Label htmlFor="confirmPassword">
+                  Confirmer le mot de passe
+                </Label>
                 <Input
                   id="confirmPassword"
                   type="password"
@@ -132,10 +146,16 @@ const ResetPasswordPage: React.FC = () => {
                   placeholder="Confirmez votre mot de passe"
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className={errorMsg.confirmPassword ? 'outline outline-1 outline-red-500' : ''}
+                  className={
+                    errorMsg.confirmPassword
+                      ? 'outline outline-1 outline-red-500'
+                      : ''
+                  }
                 />
                 {errorMsg.confirmPassword && (
-                  <p className="text-sm text-red-500">{errorMsg.confirmPassword}</p>
+                  <p className="text-sm text-red-500">
+                    {errorMsg.confirmPassword}
+                  </p>
                 )}
               </div>
               {errorMsg.other && (

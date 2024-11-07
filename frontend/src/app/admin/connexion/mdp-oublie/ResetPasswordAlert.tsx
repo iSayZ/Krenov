@@ -29,8 +29,9 @@ const ResetPasswordAlert: React.FC<ResetPasswordAlertProps> = ({
               Réinitialisation de mot de passe
             </AlertDialogTitle>
             <AlertDialogDescription>
-              Un e-mail de réinitialisation de mot de passe a été envoyé à votre adresse. 
-              Veuillez vérifier votre boîte de réception et suivre les instructions pour réinitialiser votre mot de passe.
+              Un e-mail de réinitialisation de mot de passe a été envoyé à votre
+              adresse. Veuillez vérifier votre boîte de réception et suivre les
+              instructions pour réinitialiser votre mot de passe.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

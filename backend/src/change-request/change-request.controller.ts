@@ -11,6 +11,7 @@ import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import {
   updatePasswordAccountDto,
   updateEmailAccountDto,
+  resetPasswordAccountDto
 } from '../admin/dto/update-admin-account.dto';
 import { ChangeRequestService } from './change-request.service';
 import { User } from 'src/decorators/user.decorator';
@@ -42,6 +43,16 @@ export class ChangeRequestController {
     return this.changeRequestService.changeEmailRequest(
       userId,
       updateEmailAccountDto
+    );
+  }
+
+  // Route to create a change request to reset password
+  @Post('reset-password')
+  async resetPasswordRequest(
+    @Body() resetPasswordAccountDto: resetPasswordAccountDto,
+  ) {
+    return this.changeRequestService.resetPasswordRequest(
+      resetPasswordAccountDto
     );
   }
 

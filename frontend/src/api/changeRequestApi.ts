@@ -105,9 +105,7 @@ const changeEmail = async (
 };
 
 // Function to reset password
-const resetPassword = async (
-  data: { email: string }
-): Promise<Response> => {
+const resetPassword = async (data: { email: string }): Promise<Response> => {
   try {
     const response = await fetch(
       `${API_BASE_URL}/change-requests/reset-password`,
@@ -125,7 +123,8 @@ const resetPassword = async (
       const errorData = await response.json();
       throw new ApiError(
         response.status,
-        errorData.message || "Erreur lors de la demande de réinitialisation du mot de passe."
+        errorData.message ||
+          'Erreur lors de la demande de réinitialisation du mot de passe.'
       );
     }
 
@@ -137,4 +136,10 @@ const resetPassword = async (
 };
 
 // Consolidated exports
-export { confirmChangeRequest, changePassword, changeEmail, resetPassword, ApiError };
+export {
+  confirmChangeRequest,
+  changePassword,
+  changeEmail,
+  resetPassword,
+  ApiError,
+};

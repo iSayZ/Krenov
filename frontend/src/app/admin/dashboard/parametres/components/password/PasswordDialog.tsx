@@ -12,12 +12,12 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
+import { ApiError, changePassword } from '@/api/changeRequestApi';
+import { use2FACheck } from '@/hooks/2FA/use2FACheck';
+
 import Verify2FAModal from '../../../components/Verify2FAModal';
 
 import PasswordChangeAlert from './PasswordChangeAlert';
-
-import { ApiError, changePassword } from '@/api/changeRequestApi';
-import { use2FACheck } from '@/hooks/2FA/use2FACheck';
 
 interface PasswordForm {
   currentPassword: string;

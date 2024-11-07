@@ -88,7 +88,7 @@ const ConfirmChangeRequest: React.FC = () => {
         <CardContent className="text-md">
           {isLoading ? (
             <div
-              className="inline-block size-12 animate-spin rounded-full border-[3px] border-current border-t-transparent text-foreground m-auto"
+              className="m-auto inline-block size-12 animate-spin rounded-full border-[3px] border-current border-t-transparent text-foreground"
               role="status"
               aria-label="loading"
             />
