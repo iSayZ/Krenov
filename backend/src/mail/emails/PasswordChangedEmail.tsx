@@ -24,7 +24,7 @@ const PasswordChangedEmail = (
   { name, appName, appUrl, token }: MailProps
 ) => {
 
-  const confirmationLink = `${appUrl}/admin/confirmation-changement-mdp/${token}`;
+  const confirmationLink = `${appUrl}/admin/confirmation-changement-mdp?token=${token}`;
 
   return (
     <Tailwind
@@ -58,6 +58,8 @@ const PasswordChangedEmail = (
                 Confirmer le changement de mot de passe
               </a>
             </div>
+            <p className={paragraph}>
+              Veuillez noter que le lien expirera dans 1 heure. Assurez-vous de l'utiliser avant cette période.            </p>
             <p className={paragraph}>
               Bien à vous,
               <br />

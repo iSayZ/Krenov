@@ -1,5 +1,7 @@
+import { ReactElement } from "react";
+
 export interface MailData {
   to: string;
   subject: string;
-  html: string;
+  template: ReactElement;
 }

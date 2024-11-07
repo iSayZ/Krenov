@@ -24,7 +24,7 @@ const PasswordResetEmail = (
   { name, appName, appUrl, token }: MailProps
 ) => {
 
-  const resetLink = `${appUrl}/admin/reset-password/${token}`;
+  const resetLink = `${appUrl}/admin/reset-mdp/${token}`;
 
   return (
     <Tailwind

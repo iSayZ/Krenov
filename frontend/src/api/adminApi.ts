@@ -32,4 +32,6 @@ const updateAdminProfile = async (
 };
 
 // Consolidated exports
-export { updateAdminProfile };
+export { 
+  updateAdminProfile,
+};

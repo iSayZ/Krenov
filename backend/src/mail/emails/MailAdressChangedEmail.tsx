@@ -24,7 +24,7 @@ const PasswordChangedEmail = (
   { name, appName, appUrl, token }: MailProps
 ) => {
 
-  const confirmationLink = `${appUrl}/admin/confirmation-changement-mail/${token}`;
+  const confirmationLink = `${appUrl}/admin/confirmation-changement-mail?token=${token}`;
 
   return (
     <Tailwind

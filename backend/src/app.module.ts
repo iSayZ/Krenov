@@ -15,6 +15,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { CustomThrottlerGuard } from './guards/custom-throttler.guard';
 import { ScheduledTasksModule } from './jobs/scheduled-tasks.module';
 import { MailModule } from './mail/mail.module';
+import { ChangeRequestModule } from './change-request/change-request.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { MailModule } from './mail/mail.module';
     TwoFactorModule,
     ScheduledTasksModule,
     MailModule,
+    ChangeRequestModule,
   ],
   controllers: [AppController],
   providers: [
