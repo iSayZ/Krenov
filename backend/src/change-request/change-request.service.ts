@@ -143,8 +143,8 @@ export class ChangeRequestService {
         const resetPasswordResult = this.adminService.resetPassword(
           changeRequest.user_id,
           changeRequest.new_value
-        )
-        // await this.deleteChangeRequest(changeRequest.change_request_id);
+        );
+        await this.deleteChangeRequest(changeRequest.change_request_id);
         return resetPasswordResult;
       case 'reset_2fa_backup_codes':
         return;
@@ -154,18 +154,19 @@ export class ChangeRequestService {
   }
 
   // To update new_value in change request
-  async updateNewValueRequest(
-    changeRequestId: string,
-    newPassword: string
-  ) {
-    try {      
-      return await this.changeRequestModel.findOneAndUpdate(
-        { change_request_id: changeRequestId },
-        {new_value: newPassword},
-        { new: true }
-      ).exec();
+  async updateNewValueRequest(changeRequestId: string, newPassword: string) {
+    try {
+      return await this.changeRequestModel
+        .findOneAndUpdate(
+          { change_request_id: changeRequestId },
+          { new_value: newPassword },
+          { new: true }
+        )
+        .exec();
     } catch {
-      throw new InternalServerErrorException('Erreur lors de la mise à jour de la valeur.');
+      throw new InternalServerErrorException(
+        'Erreur lors de la mise à jour de la valeur.'
+      );
     }
   }
 

@@ -21,7 +21,7 @@ import { AuthService } from 'src/auth/auth.service';
 export class ChangeRequestController {
   constructor(
     private readonly changeRequestService: ChangeRequestService,
-    private readonly authService: AuthService,
+    private readonly authService: AuthService
   ) {}
 
   // Route to create a change request to change password
@@ -86,20 +86,22 @@ export class ChangeRequestController {
   async confirmChangeRequest(
     @Param('token') token: string,
     @Body('requestType') requestType: string,
-    @Body('newPassword') newPassword: string,
+    @Body('newPassword') newPassword: string
   ) {
-    
     let changeRequest =
-    await this.changeRequestService.verifyTokenAndGetRequest(token);
+      await this.changeRequestService.verifyTokenAndGetRequest(token);
     if (!changeRequest || changeRequest.request_type !== requestType) {
       throw new UnauthorizedException('Invalid request');
     }
-      
+
     if (requestType === 'reset_password') {
       const hashedPassword = await this.authService.hashPassword(newPassword);
-      changeRequest = await this.changeRequestService.updateNewValueRequest(changeRequest.change_request_id, hashedPassword);
+      changeRequest = await this.changeRequestService.updateNewValueRequest(
+        changeRequest.change_request_id,
+        hashedPassword
+      );
     }
-      
+
     // Process the request (e.g., change password, update email, etc.)
     const result =
       await this.changeRequestService.processChangeRequest(changeRequest);

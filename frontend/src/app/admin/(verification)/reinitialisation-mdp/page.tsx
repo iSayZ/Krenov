@@ -15,8 +15,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
-import { fetcher } from '@/lib/fetcher';
 import { confirmChangeRequest } from '@/api/changeRequestApi';
+import { fetcher } from '@/lib/fetcher';
 
 const ResetPasswordPage: React.FC = () => {
   const searchParams = useSearchParams();
@@ -33,7 +33,8 @@ const ResetPasswordPage: React.FC = () => {
       if (data && data.requestType !== 'reset_password') {
         setErrorMsg((prevError) => ({
           ...prevError,
-          other: "Type de demande invalide pour la réinitialisation du mot de passe.",
+          other:
+            'Type de demande invalide pour la réinitialisation du mot de passe.',
         }));
       }
       setIsLoading(false);
@@ -99,7 +100,11 @@ const ResetPasswordPage: React.FC = () => {
     }
 
     try {
-      const result = await confirmChangeRequest(token, data.requestType, formData.newPassword);
+      const result = await confirmChangeRequest(
+        token,
+        data.requestType,
+        formData.newPassword
+      );
       router.push(result.redirectUrl); // Redirect to the specify URL of the request type
     } catch (error) {
       console.error(
