@@ -28,6 +28,7 @@ import {
   ChangeRequestDocument,
 } from './schema/change-request.schema';
 import { AdminService } from 'src/admin/admin.service';
+import { TwoFactorService } from 'src/twofactor/twofactor.service';
 
 @Injectable()
 export class ChangeRequestService {
@@ -41,7 +42,8 @@ export class ChangeRequestService {
     private authService: AuthService,
     private adminService: AdminService,
     private mailService: MailService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
+    private twoFactorService: TwoFactorService,
   ) {}
 
   // Generate an unique token to create a change request
@@ -147,8 +149,11 @@ export class ChangeRequestService {
         );
         await this.deleteChangeRequest(changeRequest.change_request_id);
         return resetPasswordResult;
-      case 'reset_2fa_backup_codes':
-        return;
+      case 'reset_backup_codes':
+        const backupCodes = await this.twoFactorService.generateAndStoreBackupCodes(changeRequest.user_id);
+        const backupCodesResult = await this.mailService.sendNewBackupCodesMail(changeRequest.user_id, backupCodes);
+        await this.deleteChangeRequest(changeRequest.change_request_id);
+        return backupCodesResult;
       default:
         throw new NotFoundException('Request type not supported');
     }
@@ -305,7 +310,9 @@ export class ChangeRequestService {
   }
 
   // Route to generate a change request to reset password
-  async resetBackupCodes(resetBackupCodesAccountDto: resetBackupCodesAccountDto) {
+  async resetBackupCodes(
+    resetBackupCodesAccountDto: resetBackupCodesAccountDto
+  ) {
     // Check if the current email matches with an account
     const email = resetBackupCodesAccountDto.email;
 

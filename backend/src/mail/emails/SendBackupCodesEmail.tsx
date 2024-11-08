@@ -5,7 +5,7 @@ interface MailProps {
   name: string;
   appName: string;
   appUrl: string;
-  token: string;
+  backupCodes: string[];
 }
 
 const main = "bg-gray-100 font-sans py-6 px-2";
@@ -15,16 +15,15 @@ const logo = "w-1/2 min-md:w-1/3";
 const headerText = "text-2xl font-semibold m-0";
 const content = "p-8 flex flex-col gap-8";
 const paragraph = "text-base leading-6 text-gray-700 m-0";
-const btnContainer = "text-center my-6";
+const btnContainer = "text-center my-4";
 const button = "bg-brand px-6 py-4 rounded-md shadow-md no-underline text-slate-50 text-wrap block leading-7";
 const footer = "text-gray-600 text-sm text-center py-4 border-t border-gray-200";
 const copyright = "text-sm leading-6 text-gray-700 m-0";
 
-const BackupCodes2FaEmail = (
-  { name, appName, appUrl, token }: MailProps
+const SendBackupCodesEmail = (
+  { name, appName, appUrl, backupCodes }: MailProps
 ) => {
-
-  const backupLink = `${appUrl}/admin/confirmation-demande?code_confirmation=${token}`;
+  const connexionLink = `${appUrl}/admin/connexion`;
 
   return (
     <Tailwind
@@ -44,27 +43,34 @@ const BackupCodes2FaEmail = (
             <div className={logo}>
               <img src={`${appUrl}/assets/images/logo-cropped.svg`} alt={`Logo de ${appName}`} />
             </div>
-            <h1 className={headerText}>Accédez à vos Codes de Secours 2FA</h1>
+            <h1 className={headerText}>Vos Codes de Secours 2FA</h1>
           </div>
           <div className={content}>
             <p className={paragraph}>Bonjour {name},</p>
             <p className={paragraph}>
-              Pour assurer une sécurité accrue de votre compte {appName}, vous pouvez générer des codes de secours uniques qui vous permettront d'accéder à votre compte en cas de perte d'accès à votre 2FA.
+              Pour renforcer la sécurité de votre compte {appName}, nous vous avons généré des codes de secours uniques que vous pouvez utiliser si vous perdez l'accès à votre authentification 2FA.
             </p>
             <p className={paragraph}>
-              Pour créer vos codes de secours, cliquez sur le bouton ci-dessous. Vous serez dirigé vers une page sécurisée de votre compte pour effectuer cette action.
+              <strong>Voici vos codes de secours :</strong>
+            </p>
+            <ul className={paragraph}>
+              {backupCodes.map((code, index) => (
+                <li key={index} className="text-base text-gray-700">
+                  {code}
+                </li>
+              ))}
+            </ul>
+            <p className={paragraph}>
+              Nous vous recommandons de conserver ces codes dans un endroit sûr.
+            </p>
+            <p className={paragraph}>
+            <strong>Important</strong> : Si vous avez perdu l'accès à votre système 2FA et que vous recevez cet email, il est conseillé de <strong>désactiver puis réactiver</strong> votre authentification 2FA pour réinitialiser votre accès. Cela vous permettra de configurer à nouveau votre 2FA.
             </p>
             <div className={btnContainer}>
-              <a href={backupLink} className={button}>
-                Générer mes codes de secours
+              <a href={connexionLink} className={button}>
+                Se connecter
               </a>
             </div>
-            <p className={paragraph}>
-              Une fois générés, nous vous conseillons d'enregistrer ces codes de secours dans un endroit sûr. Si vous n'êtes pas à l'origine de cette demande, veuillez ignorer cet e-mail.
-            </p>
-            <p className={paragraph}>
-              Veuillez noter que le lien expirera dans 1 heure. Assurez-vous de l'utiliser avant cette période.
-            </p>
             <p className={paragraph}>
               Bien à vous,
               <br />
@@ -80,4 +86,4 @@ const BackupCodes2FaEmail = (
   );
 };
 
-export default BackupCodes2FaEmail;
+export default SendBackupCodesEmail;

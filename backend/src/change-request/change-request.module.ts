@@ -17,6 +17,7 @@ import {
   ChangeRequestSchema,
 } from './schema/change-request.schema';
 import { AdminModule } from 'src/admin/admin.module';
+import { TwoFactorModule } from 'src/twofactor/twofactor.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { AdminModule } from 'src/admin/admin.module';
     AuthModule,
     MailModule,
     AdminModule,
+    TwoFactorModule,
   ],
   controllers: [ChangeRequestController],
   providers: [ChangeRequestService],

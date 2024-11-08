@@ -13,18 +13,18 @@ const container = "max-w-lg mx-auto bg-white rounded-lg shadow-lg overflow-hidde
 const header = "bg-brand text-white text-center py-8 px-4 flex flex-col items-center gap-8";
 const logo = "w-1/2 min-md:w-1/3";
 const headerText = "text-2xl font-semibold m-0";
-const content = "p-8 flex flex-col gap-8"
+const content = "p-8 flex flex-col gap-8";
 const paragraph = "text-base leading-6 text-gray-700 m-0";
 const btnContainer = "text-center my-4";
 const button = "bg-brand px-6 py-4 rounded-md shadow-md no-underline text-slate-50 text-wrap block leading-7";
 const footer = "text-gray-600 text-sm text-center py-4 border-t border-gray-200";
 const copyright = "text-sm leading-6 text-gray-700 m-0";
 
-const PasswordResetEmail = (
+const ResetBackupCodesEmail = (
   { name, appName, appUrl, token }: MailProps
 ) => {
 
-  const resetLink = `${appUrl}/admin/reinitialisation-mdp?code_confirmation=${token}`;
+  const backupLink = `${appUrl}/admin/confirmation-demande?code_confirmation=${token}`;
 
   return (
     <Tailwind
@@ -44,23 +44,26 @@ const PasswordResetEmail = (
             <div className={logo}>
               <img src={`${appUrl}/assets/images/logo-cropped.svg`} alt={`Logo de ${appName}`} />
             </div>
-            <h1 className={headerText}>Réinitialisation de Mot de Passe</h1>
+            <h1 className={headerText}>Réinitialisez vos Codes de Secours 2FA</h1>
           </div>
           <div className={content}>
             <p className={paragraph}>Bonjour {name},</p>
             <p className={paragraph}>
-              Vous avez récemment demandé la réinitialisation de votre mot de passe pour votre compte sur {appName}.
+              Pour assurer une sécurité accrue de votre compte {appName}, vous pouvez générer des codes de secours uniques qui vous permettront d'accéder à votre compte en cas de perte d'accès à votre 2FA.
             </p>
             <p className={paragraph}>
-              Pour continuer et créer un nouveau mot de passe, cliquez sur le bouton ci-dessous :
+              Pour créer vos codes de secours, cliquez sur le bouton ci-dessous. Vous serez dirigé vers une page sécurisée de votre compte pour effectuer cette action.
             </p>
             <div className={btnContainer}>
-              <a href={resetLink} className={button}>
-                Réinitialiser mon mot de passe
+              <a href={backupLink} className={button}>
+                Générer mes codes de secours
               </a>
             </div>
             <p className={paragraph}>
-              Si vous n'êtes pas à l'origine de cette demande, vous pouvez ignorer cet e-mail. Ce lien expirera dans 24 heures.
+              Une fois générés, nous vous conseillons d'enregistrer ces codes de secours dans un endroit sûr. Si vous n'êtes pas à l'origine de cette demande, veuillez ignorer cet e-mail.
+            </p>
+            <p className={paragraph}>
+              Veuillez noter que le lien expirera dans 1 heure. Assurez-vous de l'utiliser avant cette période.
             </p>
             <p className={paragraph}>
               Bien à vous,
@@ -77,4 +80,4 @@ const PasswordResetEmail = (
   );
 };
 
-export default PasswordResetEmail;
+export default ResetBackupCodesEmail;

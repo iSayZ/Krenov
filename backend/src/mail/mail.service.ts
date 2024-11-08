@@ -1,17 +1,26 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { render } from '@react-email/components';
-import { AdminAccount } from 'src/admin/schema/admin-account.schema';
-import { AdminProfile } from 'src/admin/schema/admin-profile.schema';
+import { AdminAccount, AdminAccountDocument } from 'src/admin/schema/admin-account.schema';
+import { AdminProfile, AdminProfileDocument } from 'src/admin/schema/admin-profile.schema';
 import EmailAdressChangedEmail from './emails/EmailAdressChangedEmail';
 import PasswordChangedEmail from './emails/PasswordChangedEmail';
 import PasswordResetEmail from './emails/PasswordResetEmail';
+import ResetBackupCodesEmail from './emails/ResetBackupCodesEmail';
 import { MailConfig } from './mail.config';
 import { MailData } from './mail.types';
-import BackupCodes2FaEmail from './emails/BackupCodes2FaEmail';
+import SendBackupCodesEmail from './emails/SendBackupCodesEmail';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class MailService {
-  constructor(private readonly mailConfig: MailConfig) {}
+  constructor(
+    @InjectModel(AdminAccount.name)
+    private adminAccountModel: Model<AdminAccountDocument>,
+    @InjectModel(AdminProfile.name)
+    private adminProfileModel: Model<AdminProfileDocument>,
+    private readonly mailConfig: MailConfig
+  ) {}
 
   // To send an e-mail with a template
   async sendMail(mailData: MailData) {
@@ -117,10 +126,54 @@ export class MailService {
       const mailData: MailData = {
         to: account.email,
         subject: 'Réinitialisation des codes de secours 2FA',
-        template: BackupCodes2FaEmail({ name, appName, appUrl, token }),
+        template: ResetBackupCodesEmail({ name, appName, appUrl, token }),
       };
 
       await this.sendMail(mailData);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  // To send an email for with new backup codes
+  async sendNewBackupCodesMail(
+    userId: string,
+    backupCodes: string[]
+  ) {
+    try {
+      // Get the account info for the mail
+      const account = await this.adminAccountModel.findById( userId ).exec();
+
+      if (!account) {
+        throw new NotFoundException(`Aucun compte correspondant.`);
+      }
+
+      // Get the profile info corresponding to the account for the mail
+      const profile = await this.adminProfileModel
+      .findOne({ admin_id: account._id })
+      .exec();
+
+      if (!profile) {
+        throw new NotFoundException(`Aucun profil correspondant.`);
+      }
+
+      const name = profile.firstname;
+      const appName = process.env.APP_NAME;
+      const appUrl = process.env.CLIENT_URL;
+
+      const mailData: MailData = {
+        to: account.email,
+        subject: 'Vos codes de secours 2FA pour sécuriser votre compte',
+        template: SendBackupCodesEmail({ name, appName, appUrl, backupCodes }),
+      };
+
+      await this.sendMail(mailData);
+
+      return {
+        message: 'Password updated successfully',
+        statusCode: HttpStatus.OK,
+        redirectUrl: '/success',
+      };
     } catch (error) {
       console.error(error);
     }
