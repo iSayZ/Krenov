@@ -16,6 +16,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
 import { fetcher } from '@/lib/fetcher';
+import { confirmChangeRequest } from '@/api/changeRequestApi';
 
 const ResetPasswordPage: React.FC = () => {
   const searchParams = useSearchParams();
@@ -29,8 +30,13 @@ const ResetPasswordPage: React.FC = () => {
 
   useEffect(() => {
     if (data || error) {
+      if (data && data.requestType !== 'reset_password') {
+        setErrorMsg((prevError) => ({
+          ...prevError,
+          other: "Type de demande invalide pour la réinitialisation du mot de passe.",
+        }));
+      }
       setIsLoading(false);
-      console.log(data);
     }
   }, [data, error]);
 
@@ -68,7 +74,9 @@ const ResetPasswordPage: React.FC = () => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    if (!token) return;
+
     if (formData.newPassword === '') {
       return setErrorMsg((prev) => ({
         ...prev,
@@ -90,7 +98,15 @@ const ResetPasswordPage: React.FC = () => {
       }));
     }
 
-    // Call API here
+    try {
+      const result = await confirmChangeRequest(token, data.requestType, formData.newPassword);
+      router.push(result.redirectUrl); // Redirect to the specify URL of the request type
+    } catch (error) {
+      console.error(
+        "Une erreur s'est produite lors de la confirmation :",
+        error
+      );
+    }
   };
 
   return (
@@ -109,7 +125,7 @@ const ResetPasswordPage: React.FC = () => {
               aria-label="loading"
             />
           </CardContent>
-        ) : error ? (
+        ) : error || errorMsg.other ? (
           <CardContent className="flex flex-col gap-4">
             <p className="text-red-500">Token invalide ou expiré.</p>
           </CardContent>

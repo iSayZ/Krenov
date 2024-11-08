@@ -104,7 +104,6 @@ export class RealisationService {
       .find({ status: 'active' })
       .exec();
 
-    console.log('activeRealisations', realisations);
     // Increment order by 1
     realisations.forEach((realisation) => {
       const newOrder = realisation.order + 1;
@@ -114,7 +113,6 @@ export class RealisationService {
 
   // Function to fix all order when remove an "active" article
   private async removeArticleFromActiveOrder(order: Realisation['order']) {
-    console.log(order);
     // Get all realisations
     const realisations = await this.realisationModel
       .find({ status: 'active' })
@@ -124,7 +122,6 @@ export class RealisationService {
       (realisation) => realisation.order > order
     );
 
-    console.log('activeRealisations', activeRealisations);
     // Decrement all realisations by 1
     activeRealisations.forEach((realisation) => {
       const newOrder = realisation.order - 1;
@@ -157,7 +154,6 @@ export class RealisationService {
         if (moving) {
           // Change slug in content only on the last URL
           if (index === totalUrls - 1) {
-            console.log('replace content index :', index);
             const contentWithNewSrc = realisation.content.replaceAll(
               `realisations/${slug}/`,
               `realisations/${realisation.slug}/`
@@ -281,8 +277,6 @@ export class RealisationService {
         `Réalisation avec le slug ${slug} non trouvée`
       );
     }
-    console.log('a update', updateRealisationDto.slug);
-    console.log('realisation', realisation.slug);
 
     // If the slug has changed
     if (
@@ -335,11 +329,9 @@ export class RealisationService {
       // If the state of the realization is active, increment the order of all active realisations by 1,
       // to bring the new realization to the foreground.
       if (updateRealisationDto.status === 'active') {
-        console.log('Active');
         await this.addArticleToActiveOrder();
         updateRealisationDto.order = 1;
       } else {
-        console.log('Desactive | draft');
         await this.removeArticleFromActiveOrder(realisation.order);
         updateRealisationDto.order = 0;
       }

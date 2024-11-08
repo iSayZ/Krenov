@@ -156,6 +156,23 @@ export class AdminService {
     }
 
     return {
+      message: 'Email updated successfully',
+      statusCode: HttpStatus.OK,
+      redirectUrl: '/success',
+    };
+  }
+
+  // To apply change request type "reset-password"
+  async resetPassword(userId: string, newValue: string) {
+    const updatedAccount = await this.adminAccountModel
+      .findOneAndUpdate({ _id: userId }, { password: newValue }, { new: true })
+      .exec();
+
+    if (!updatedAccount) {
+      throw new NotFoundException('Account not found');
+    }
+
+    return {
       message: 'Password updated successfully',
       statusCode: HttpStatus.OK,
       redirectUrl: '/success',

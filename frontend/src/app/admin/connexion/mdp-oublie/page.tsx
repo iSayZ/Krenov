@@ -103,8 +103,10 @@ const LostPasswordPage: React.FC = () => {
             </CardDescription>
           ) : (
             <CardDescription>
-              Un email contenant les instructions pour réinitialiser votre mot de passe vous a été envoyé. Veuillez vérifier votre boîte de réception ainsi que vos spams.
-            </CardDescription>  
+              Un email contenant les instructions pour réinitialiser votre mot
+              de passe vous a été envoyé. Veuillez vérifier votre boîte de
+              réception ainsi que vos spams.
+            </CardDescription>
           )}
         </CardHeader>
         {!demandWasSent ? (
@@ -126,7 +128,9 @@ const LostPasswordPage: React.FC = () => {
                       }
                       required
                     />
-                    {errorMsg && <p className="text-sm text-red-500">{errorMsg}</p>}
+                    {errorMsg && (
+                      <p className="text-sm text-red-500">{errorMsg}</p>
+                    )}
                   </div>
                 </div>
               </form>
@@ -146,11 +150,15 @@ const LostPasswordPage: React.FC = () => {
         ) : (
           <>
             <CardContent className="flex flex-col gap-4">
-              <p className='font-semibold'>Mail envoyé à l'adresse :</p>
-              <p className='underline text-blue-600'>{formData.email}</p>
+              <p className="font-semibold">Mail envoyé à l'adresse :</p>
+              <p className="text-blue-600 underline">{formData.email}</p>
             </CardContent>
             <CardFooter>
-              <Button type="button" onClick={() => router.push('/admin/connexion')} className="w-full">
+              <Button
+                type="button"
+                onClick={() => router.push('/admin/connexion')}
+                className="w-full"
+              >
                 Retour à la page de connexion
               </Button>
             </CardFooter>

@@ -1,15 +1,15 @@
 import {
+  BadRequestException,
+  Body,
   Controller,
+  Get,
   Post,
   UseGuards,
-  Get,
-  Body,
-  BadRequestException,
 } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
+import { User } from 'src/decorators/user.decorator';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { TwoFactorService } from './twofactor.service';
-import { User } from 'src/decorators/user.decorator';
-import { Throttle } from '@nestjs/throttler';
 
 @Controller('2fa')
 @UseGuards(JwtAuthGuard)
@@ -23,7 +23,7 @@ export class TwoFactorController {
       const qrCode = await this.twoFactorService.initializeSecret(userId);
       return qrCode;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       throw new BadRequestException(
         "Erreur lors de l'initialisation de la 2FA"
       );

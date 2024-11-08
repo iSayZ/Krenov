@@ -1,5 +1,6 @@
 import {
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -16,7 +17,7 @@ import {
 import {
   updatePasswordAccountDto,
   updateEmailAccountDto,
-  resetPasswordAccountDto
+  resetPasswordAccountDto,
 } from '../admin/dto/update-admin-account.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { MailService } from 'src/mail/mail.service';
@@ -139,11 +140,32 @@ export class ChangeRequestService {
         await this.deleteChangeRequest(changeRequest.change_request_id);
         return emailResult;
       case 'reset_password':
-        return;
+        const resetPasswordResult = this.adminService.resetPassword(
+          changeRequest.user_id,
+          changeRequest.new_value
+        )
+        // await this.deleteChangeRequest(changeRequest.change_request_id);
+        return resetPasswordResult;
       case 'reset_2fa_backup_codes':
         return;
       default:
         throw new NotFoundException('Request type not supported');
+    }
+  }
+
+  // To update new_value in change request
+  async updateNewValueRequest(
+    changeRequestId: string,
+    newPassword: string
+  ) {
+    try {      
+      return await this.changeRequestModel.findOneAndUpdate(
+        { change_request_id: changeRequestId },
+        {new_value: newPassword},
+        { new: true }
+      ).exec();
+    } catch {
+      throw new InternalServerErrorException('Erreur lors de la mise à jour de la valeur.');
     }
   }
 
@@ -242,9 +264,7 @@ export class ChangeRequestService {
   }
 
   // Route to generate a change request to reset password
-  async resetPasswordRequest(
-    resetPasswordAccountDto: resetPasswordAccountDto
-  ) {
+  async resetPasswordRequest(resetPasswordAccountDto: resetPasswordAccountDto) {
     // Check if the current email matches with an account
     const email = resetPasswordAccountDto.email;
 
@@ -270,7 +290,7 @@ export class ChangeRequestService {
     // Generate and stock the token on BDD
     const changePasswordToken = await this.saveChangeRequest(
       account._id as string,
-      'change_email',
+      'reset_password',
       'null'
     );
 

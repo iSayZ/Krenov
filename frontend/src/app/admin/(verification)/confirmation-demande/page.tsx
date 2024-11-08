@@ -23,7 +23,6 @@ const ConfirmChangeRequest: React.FC = () => {
   useEffect(() => {
     if (data || error) {
       setIsLoading(false);
-      console.log(data);
     }
   }, [data, error]);
 

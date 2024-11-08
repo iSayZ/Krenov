@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { MailConfig } from './mail.config';
-import { MailData } from './mail.types';
+import { render } from '@react-email/components';
 import { AdminAccount } from 'src/admin/schema/admin-account.schema';
 import { AdminProfile } from 'src/admin/schema/admin-profile.schema';
-import { render } from '@react-email/components';
-import PasswordChangedEmail from './emails/PasswordChangedEmail';
 import EmailAdressChangedEmail from './emails/EmailAdressChangedEmail';
+import PasswordChangedEmail from './emails/PasswordChangedEmail';
 import PasswordResetEmail from './emails/PasswordResetEmail';
+import { MailConfig } from './mail.config';
+import { MailData } from './mail.types';
 
 @Injectable()
 export class MailService {
@@ -52,7 +52,7 @@ export class MailService {
 
       await this.sendMail(mailData);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 
@@ -75,7 +75,7 @@ export class MailService {
 
       await this.sendMail(mailData);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 
@@ -92,13 +92,13 @@ export class MailService {
 
       const mailData: MailData = {
         to: account.email,
-        subject: "Réinitialisation du mot de passe",
+        subject: 'Réinitialisation du mot de passe',
         template: PasswordResetEmail({ name, appName, appUrl, token }),
       };
 
       await this.sendMail(mailData);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 }

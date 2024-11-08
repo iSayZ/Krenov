@@ -11,8 +11,14 @@ class ApiError extends Error {
   }
 }
 
-const confirmChangeRequest = async (token: string, requestType: string) => {
+const confirmChangeRequest = async (token: string, requestType: string, newPassword?: string) => {
   try {
+    // Créez l'objet body avec les données nécessaires
+    const bodyData = {
+      requestType,
+      ...(newPassword && { newPassword }), // Ajoute newPassword seulement s'il est défini
+    };
+    
     const response = await fetch(
       `${API_BASE_URL}/change-requests/confirm/${token}`,
       {
@@ -20,7 +26,7 @@ const confirmChangeRequest = async (token: string, requestType: string) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ requestType }),
+        body: JSON.stringify(bodyData),
         credentials: 'include',
       }
     );

@@ -26,4 +26,8 @@ class resetPasswordAccountDto {
   email: string;
 }
 
-export { updatePasswordAccountDto, updateEmailAccountDto, resetPasswordAccountDto };
+export {
+  updatePasswordAccountDto,
+  updateEmailAccountDto,
+  resetPasswordAccountDto,
+};

@@ -11,14 +11,18 @@ import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import {
   updatePasswordAccountDto,
   updateEmailAccountDto,
-  resetPasswordAccountDto
+  resetPasswordAccountDto,
 } from '../admin/dto/update-admin-account.dto';
 import { ChangeRequestService } from './change-request.service';
 import { User } from 'src/decorators/user.decorator';
+import { AuthService } from 'src/auth/auth.service';
 
 @Controller('change-requests')
 export class ChangeRequestController {
-  constructor(private readonly changeRequestService: ChangeRequestService) {}
+  constructor(
+    private readonly changeRequestService: ChangeRequestService,
+    private readonly authService: AuthService,
+  ) {}
 
   // Route to create a change request to change password
   @Post('change-password')
@@ -49,7 +53,7 @@ export class ChangeRequestController {
   // Route to create a change request to reset password
   @Post('reset-password')
   async resetPasswordRequest(
-    @Body() resetPasswordAccountDto: resetPasswordAccountDto,
+    @Body() resetPasswordAccountDto: resetPasswordAccountDto
   ) {
     return this.changeRequestService.resetPasswordRequest(
       resetPasswordAccountDto
@@ -81,16 +85,21 @@ export class ChangeRequestController {
   @Post('confirm/:token')
   async confirmChangeRequest(
     @Param('token') token: string,
-    @Body('requestType') requestType: string
+    @Body('requestType') requestType: string,
+    @Body('newPassword') newPassword: string,
   ) {
-    const changeRequest =
-      await this.changeRequestService.verifyTokenAndGetRequest(token);
-    console.log(changeRequest);
-    console.log(requestType);
+    
+    let changeRequest =
+    await this.changeRequestService.verifyTokenAndGetRequest(token);
     if (!changeRequest || changeRequest.request_type !== requestType) {
       throw new UnauthorizedException('Invalid request');
     }
-
+      
+    if (requestType === 'reset_password') {
+      const hashedPassword = await this.authService.hashPassword(newPassword);
+      changeRequest = await this.changeRequestService.updateNewValueRequest(changeRequest.change_request_id, hashedPassword);
+    }
+      
     // Process the request (e.g., change password, update email, etc.)
     const result =
       await this.changeRequestService.processChangeRequest(changeRequest);

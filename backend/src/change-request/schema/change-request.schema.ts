@@ -18,7 +18,7 @@ export class ChangeRequest {
   @Prop({
     type: String,
     required: true,
-    enum: ['change_password', 'change_email'],
+    enum: ['change_password', 'change_email', 'reset_password'],
   })
   request_type: string; // Indicates whether it is a password or email change request
 
