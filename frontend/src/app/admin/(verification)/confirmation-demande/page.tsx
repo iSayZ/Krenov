@@ -60,7 +60,7 @@ const ConfirmChangeRequest: React.FC = () => {
             confirmer pour appliquer le changement.
           </p>
         );
-      case 'reset_2fa_backup_codes':
+      case 'reset_backup_codes':
         return (
           <p>
             Votre demande de réinitialisation des codes 2FA a été validée.

@@ -12,6 +12,7 @@ import {
   updatePasswordAccountDto,
   updateEmailAccountDto,
   resetPasswordAccountDto,
+  resetBackupCodesAccountDto,
 } from '../admin/dto/update-admin-account.dto';
 import { ChangeRequestService } from './change-request.service';
 import { User } from 'src/decorators/user.decorator';
@@ -57,6 +58,16 @@ export class ChangeRequestController {
   ) {
     return this.changeRequestService.resetPasswordRequest(
       resetPasswordAccountDto
+    );
+  }
+
+  // Route to create a change request to reset backup codes
+  @Post('reset-backup-codes')
+  async resetBackupCodes(
+    @Body() resetBackupCodesAccountDto: resetBackupCodesAccountDto
+  ) {
+    return this.changeRequestService.resetBackupCodes(
+      resetBackupCodesAccountDto
     );
   }
 

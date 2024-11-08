@@ -7,6 +7,7 @@ import PasswordChangedEmail from './emails/PasswordChangedEmail';
 import PasswordResetEmail from './emails/PasswordResetEmail';
 import { MailConfig } from './mail.config';
 import { MailData } from './mail.types';
+import BackupCodes2FaEmail from './emails/BackupCodes2FaEmail';
 
 @Injectable()
 export class MailService {
@@ -94,6 +95,29 @@ export class MailService {
         to: account.email,
         subject: 'Réinitialisation du mot de passe',
         template: PasswordResetEmail({ name, appName, appUrl, token }),
+      };
+
+      await this.sendMail(mailData);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  // To send an email for reset backup codes
+  async sendConfirmResetBackupCodesMail(
+    account: AdminAccount,
+    profile: AdminProfile,
+    token: string
+  ) {
+    try {
+      const name = profile.firstname;
+      const appName = process.env.APP_NAME;
+      const appUrl = process.env.CLIENT_URL;
+
+      const mailData: MailData = {
+        to: account.email,
+        subject: 'Réinitialisation des codes de secours 2FA',
+        template: BackupCodes2FaEmail({ name, appName, appUrl, token }),
       };
 
       await this.sendMail(mailData);

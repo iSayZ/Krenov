@@ -26,8 +26,15 @@ class resetPasswordAccountDto {
   email: string;
 }
 
+class resetBackupCodesAccountDto {
+  @IsString()
+  @IsNotEmpty()
+  email: string;
+}
+
 export {
   updatePasswordAccountDto,
   updateEmailAccountDto,
   resetPasswordAccountDto,
+  resetBackupCodesAccountDto,
 };

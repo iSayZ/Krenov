@@ -18,6 +18,7 @@ import {
   updatePasswordAccountDto,
   updateEmailAccountDto,
   resetPasswordAccountDto,
+  resetBackupCodesAccountDto,
 } from '../admin/dto/update-admin-account.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { MailService } from 'src/mail/mail.service';
@@ -177,7 +178,7 @@ export class ChangeRequestService {
   ) {
     // Check if the current password matches with account
     const password = updatePasswordAccountDto.currentPassword;
-    
+
     const account = await this.adminAccountModel.findById(userId).exec();
 
     if (!account) {
@@ -250,7 +251,7 @@ export class ChangeRequestService {
     }
 
     // Generate and stock the token on BDD
-    const changePasswordToken = await this.saveChangeRequest(
+    const changeEmailToken = await this.saveChangeRequest(
       userId,
       'change_email',
       updateEmailAccountDto.newEmail
@@ -260,7 +261,7 @@ export class ChangeRequestService {
     await this.mailService.sendConfirmEmailChangeMail(
       account,
       profile,
-      changePasswordToken
+      changeEmailToken
     );
   }
 
@@ -289,7 +290,7 @@ export class ChangeRequestService {
     }
 
     // Generate and stock the token on BDD
-    const changePasswordToken = await this.saveChangeRequest(
+    const changeResetPasswordToken = await this.saveChangeRequest(
       account._id as string,
       'reset_password',
       'null'
@@ -299,7 +300,46 @@ export class ChangeRequestService {
     await this.mailService.sendConfirmResetPasswordMail(
       account,
       profile,
-      changePasswordToken
+      changeResetPasswordToken
+    );
+  }
+
+  // Route to generate a change request to reset password
+  async resetBackupCodes(resetBackupCodesAccountDto: resetBackupCodesAccountDto) {
+    // Check if the current email matches with an account
+    const email = resetBackupCodesAccountDto.email;
+
+    const account = await this.adminAccountModel.findOne({ email }).exec();
+
+    if (!account) {
+      throw new NotFoundException(`Aucun compte correspondant.`);
+    }
+
+    if (account.email !== email) {
+      throw new UnauthorizedException(`L'adresse e-mail est incorrecte.`);
+    }
+
+    // Get the profile info corresponding to the account for the mail
+    const profile = await this.adminProfileModel
+      .findOne({ admin_id: account._id })
+      .exec();
+
+    if (!profile) {
+      throw new NotFoundException(`Aucun profil correspondant.`);
+    }
+
+    // Generate and stock the token on BDD
+    const changeResetBackupCodesToken = await this.saveChangeRequest(
+      account._id as string,
+      'reset_backup_codes',
+      'null'
+    );
+
+    // Send an email to the user to confirm the action
+    await this.mailService.sendConfirmResetBackupCodesMail(
+      account,
+      profile,
+      changeResetBackupCodesToken
     );
   }
 }

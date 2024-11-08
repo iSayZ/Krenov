@@ -20,6 +20,7 @@ import BackupCodeAlert from './BackupCodeAlert'; // Créer un composant alert sp
 
 import { ApiError, resetBackupCodes } from '@/api/changeRequestApi';
 
+
 const BackupCodeRecoveryPage: React.FC = () => {
   const router = useRouter();
 
@@ -78,14 +79,18 @@ const BackupCodeRecoveryPage: React.FC = () => {
       </div>
       <Card className="relative z-10 w-[350px]">
         <CardHeader>
-          <CardTitle className="text-3xl">Récupérer vos codes de secours</CardTitle>
+          <CardTitle className="text-3xl">
+            Récupérer vos codes de secours
+          </CardTitle>
           {!requestSent ? (
             <CardDescription>
-              Entrez votre adresse email pour recevoir un lien afin de récupérer vos codes de secours.
+              Entrez votre adresse email pour recevoir un lien afin de récupérer
+              vos codes de secours.
             </CardDescription>
           ) : (
             <CardDescription>
-              Un email avec les instructions pour récupérer vos codes de secours a été envoyé. Veuillez vérifier votre boîte de réception.
+              Un email avec les instructions pour récupérer vos codes de secours
+              a été envoyé. Veuillez vérifier votre boîte de réception.
             </CardDescription>
           )}
         </CardHeader>
@@ -103,10 +108,14 @@ const BackupCodeRecoveryPage: React.FC = () => {
                       placeholder="Entrez votre email"
                       value={formData.email}
                       onChange={handleChange}
-                      className={errorMsg ? 'outline outline-1 outline-red-500' : ''}
+                      className={
+                        errorMsg ? 'outline outline-1 outline-red-500' : ''
+                      }
                       required
                     />
-                    {errorMsg && <p className="text-sm text-red-500">{errorMsg}</p>}
+                    {errorMsg && (
+                      <p className="text-sm text-red-500">{errorMsg}</p>
+                    )}
                   </div>
                 </div>
               </form>

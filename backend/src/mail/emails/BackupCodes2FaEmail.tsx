@@ -24,7 +24,7 @@ const BackupCodes2FaEmail = (
   { name, appName, appUrl, token }: MailProps
 ) => {
 
-  const backupLink = `${appUrl}/account/confirmation-demande?code_confirmation=${token}`;
+  const backupLink = `${appUrl}/admin/confirmation-demande?code_confirmation=${token}`;
 
   return (
     <Tailwind
@@ -60,7 +60,11 @@ const BackupCodes2FaEmail = (
               </a>
             </div>
             <p className={paragraph}>
-                Une fois générés, nous vous conseillons d'enregistrer ces codes de secours dans un endroit sûr. Si vous n'êtes pas à l'origine de cette demande, veuillez ignorer cet e-mail.            </p>
+              Une fois générés, nous vous conseillons d'enregistrer ces codes de secours dans un endroit sûr. Si vous n'êtes pas à l'origine de cette demande, veuillez ignorer cet e-mail.
+            </p>
+            <p className={paragraph}>
+              Veuillez noter que le lien expirera dans 1 heure. Assurez-vous de l'utiliser avant cette période.
+            </p>
             <p className={paragraph}>
               Bien à vous,
               <br />

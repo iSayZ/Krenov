@@ -62,7 +62,8 @@ const PasswordChangedEmail = (
               </a>
             </div>
             <p className={paragraph}>
-              Veuillez noter que le lien expirera dans 1 heure. Assurez-vous de l'utiliser avant cette période.            </p>
+              Veuillez noter que le lien expirera dans 1 heure. Assurez-vous de l'utiliser avant cette période.
+            </p>
             <p className={paragraph}>
               Bien à vous,
               <br />
