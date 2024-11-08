@@ -141,7 +141,7 @@ export class AdminService {
     return {
       message: 'Password updated successfully',
       statusCode: HttpStatus.OK,
-      redirectUrl: '/success',
+      redirectUrl: '/admin/confirmation-demande/succes?type=changement_mdp',
     };
   }
 
@@ -158,7 +158,7 @@ export class AdminService {
     return {
       message: 'Email updated successfully',
       statusCode: HttpStatus.OK,
-      redirectUrl: '/success',
+      redirectUrl: '/admin/confirmation-demande/succes?type=changement_email',
     };
   }
 
@@ -175,7 +175,7 @@ export class AdminService {
     return {
       message: 'Password updated successfully',
       statusCode: HttpStatus.OK,
-      redirectUrl: '/success',
+      redirectUrl: '/admin/confirmation-demande/succes?type=reset_mdp',
     };
   }
 }

@@ -43,7 +43,7 @@ export class ChangeRequestService {
     private adminService: AdminService,
     private mailService: MailService,
     private jwtService: JwtService,
-    private twoFactorService: TwoFactorService,
+    private twoFactorService: TwoFactorService
   ) {}
 
   // Generate an unique token to create a change request
@@ -150,8 +150,14 @@ export class ChangeRequestService {
         await this.deleteChangeRequest(changeRequest.change_request_id);
         return resetPasswordResult;
       case 'reset_backup_codes':
-        const backupCodes = await this.twoFactorService.generateAndStoreBackupCodes(changeRequest.user_id);
-        const backupCodesResult = await this.mailService.sendNewBackupCodesMail(changeRequest.user_id, backupCodes);
+        const backupCodes =
+          await this.twoFactorService.generateAndStoreBackupCodes(
+            changeRequest.user_id
+          );
+        const backupCodesResult = await this.mailService.sendNewBackupCodesMail(
+          changeRequest.user_id,
+          backupCodes
+        );
         await this.deleteChangeRequest(changeRequest.change_request_id);
         return backupCodesResult;
       default:

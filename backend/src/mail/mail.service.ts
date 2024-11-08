@@ -1,7 +1,13 @@
 import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { render } from '@react-email/components';
-import { AdminAccount, AdminAccountDocument } from 'src/admin/schema/admin-account.schema';
-import { AdminProfile, AdminProfileDocument } from 'src/admin/schema/admin-profile.schema';
+import {
+  AdminAccount,
+  AdminAccountDocument,
+} from 'src/admin/schema/admin-account.schema';
+import {
+  AdminProfile,
+  AdminProfileDocument,
+} from 'src/admin/schema/admin-profile.schema';
 import EmailAdressChangedEmail from './emails/EmailAdressChangedEmail';
 import PasswordChangedEmail from './emails/PasswordChangedEmail';
 import PasswordResetEmail from './emails/PasswordResetEmail';
@@ -136,13 +142,10 @@ export class MailService {
   }
 
   // To send an email for with new backup codes
-  async sendNewBackupCodesMail(
-    userId: string,
-    backupCodes: string[]
-  ) {
+  async sendNewBackupCodesMail(userId: string, backupCodes: string[]) {
     try {
       // Get the account info for the mail
-      const account = await this.adminAccountModel.findById( userId ).exec();
+      const account = await this.adminAccountModel.findById(userId).exec();
 
       if (!account) {
         throw new NotFoundException(`Aucun compte correspondant.`);
@@ -150,8 +153,8 @@ export class MailService {
 
       // Get the profile info corresponding to the account for the mail
       const profile = await this.adminProfileModel
-      .findOne({ admin_id: account._id })
-      .exec();
+        .findOne({ admin_id: account._id })
+        .exec();
 
       if (!profile) {
         throw new NotFoundException(`Aucun profil correspondant.`);
@@ -172,7 +175,7 @@ export class MailService {
       return {
         message: 'Password updated successfully',
         statusCode: HttpStatus.OK,
-        redirectUrl: '/success',
+        redirectUrl: '/admin/confirmation-demande/succes?type=reset_codes_secours',
       };
     } catch (error) {
       console.error(error);
