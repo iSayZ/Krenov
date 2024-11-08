@@ -145,11 +145,43 @@ const resetPassword = async (data: { email: string }): Promise<Response> => {
   }
 };
 
+// Function to reset backup code 2FA
+const resetBackupCodes = async (data: { email: string }): Promise<Response> => {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/change-requests/reset-backup-codes`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+        credentials: 'include',
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new ApiError(
+        response.status,
+        errorData.message ||
+          'Erreur lors de la demande de réinitialisation des codes de secours 2FA.'
+      );
+    }
+
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 // Consolidated exports
 export {
   confirmChangeRequest,
   changePassword,
   changeEmail,
   resetPassword,
+  resetBackupCodes,
   ApiError,
 };

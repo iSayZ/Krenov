@@ -16,61 +16,45 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
-import ResetPasswordAlert from './ResetPasswordAlert';
+import BackupCodeAlert from './BackupCodeAlert'; // Créer un composant alert spécifique si nécessaire
 
-import { ApiError, resetPassword } from '@/api/changeRequestApi';
+import { ApiError, resetBackupCodes } from '@/api/changeRequestApi';
 
-
-const LostPasswordPage: React.FC = () => {
+const BackupCodeRecoveryPage: React.FC = () => {
   const router = useRouter();
 
   const [formData, setFormData] = useState<{ email: string }>({ email: '' });
-
   const [errorMsg, setErrorMsg] = useState<string>('');
+  const [requestSent, setRequestSent] = useState<boolean>(false);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
 
-  const [demandWasSent, setDemandWasSent] = useState<boolean>(false);
-
-  // Handle changes in the form fields
+  // Gérer les changements dans le champ email
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-
-    // Reset error messages when the user starts typing
-    if (name === 'email') {
-      setErrorMsg('');
-    }
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    if (name === 'email') setErrorMsg('');
   };
 
-  // To check if it's a valid e-mail adress
+  // Vérifier si l'email est valide
   const isValidEmail = (email: string): boolean => {
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return regex.test(email);
   };
 
-  // To open alert on submit success
-  const [isAlertOpen, setIsAlertOpen] = useState(false);
-
-  // Submit the form
+  // Envoyer le formulaire
   const handleSubmit = async () => {
     if (formData.email === '') {
       return setErrorMsg('Le champ email est obligatoire.');
     }
-
-    const checkCurrentEmail = isValidEmail(formData.email);
-
-    if (!checkCurrentEmail) {
+    if (!isValidEmail(formData.email)) {
       return setErrorMsg('Adresse e-mail invalide.');
     }
 
     try {
-      const response = await resetPassword(formData);
+      const response = await resetBackupCodes(formData);
       if (response.status === 201) {
         setIsAlertOpen(true);
-        setDemandWasSent(true);
+        setRequestSent(true);
       }
     } catch (error) {
       if (error instanceof ApiError) {
@@ -83,34 +67,29 @@ const LostPasswordPage: React.FC = () => {
 
   return (
     <div className="flex h-screen w-screen items-center justify-center overflow-hidden p-4">
-      <ResetPasswordAlert isOpen={isAlertOpen} setIsOpen={setIsAlertOpen} />
+      <BackupCodeAlert isOpen={isAlertOpen} setIsOpen={setIsAlertOpen} />
       <div className="absolute inset-0 w-screen">
         <Image
           src="https://images.unsplash.com/photo-1620121478247-ec786b9be2fa?q=80&w=2832&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           fill
-          alt="Image"
+          alt="Background image for backup code recovery"
           className="object-cover"
         />
       </div>
       <Card className="relative z-10 w-[350px]">
         <CardHeader>
-          <CardTitle className="text-3xl">
-            Réinitialiser votre mot de passe
-          </CardTitle>
-          {!demandWasSent ? (
+          <CardTitle className="text-3xl">Récupérer vos codes de secours</CardTitle>
+          {!requestSent ? (
             <CardDescription>
-              Veuillez entrer votre adresse email pour recevoir un lien de
-              réinitialisation.
+              Entrez votre adresse email pour recevoir un lien afin de récupérer vos codes de secours.
             </CardDescription>
           ) : (
             <CardDescription>
-              Un email contenant les instructions pour réinitialiser votre mot
-              de passe vous a été envoyé. Veuillez vérifier votre boîte de
-              réception ainsi que vos spams.
+              Un email avec les instructions pour récupérer vos codes de secours a été envoyé. Veuillez vérifier votre boîte de réception.
             </CardDescription>
           )}
         </CardHeader>
-        {!demandWasSent ? (
+        {!requestSent ? (
           <>
             <CardContent className="flex flex-col gap-4">
               <form>
@@ -124,34 +103,30 @@ const LostPasswordPage: React.FC = () => {
                       placeholder="Entrez votre email"
                       value={formData.email}
                       onChange={handleChange}
-                      className={
-                        errorMsg ? 'outline outline-1 outline-red-500' : ''
-                      }
+                      className={errorMsg ? 'outline outline-1 outline-red-500' : ''}
                       required
                     />
-                    {errorMsg && (
-                      <p className="text-sm text-red-500">{errorMsg}</p>
-                    )}
+                    {errorMsg && <p className="text-sm text-red-500">{errorMsg}</p>}
                   </div>
                 </div>
               </form>
               <p
                 className="text-foreground mt-2 cursor-pointer text-sm hover:underline"
-                onClick={() => router.push('/admin/connexion')}
+                onClick={() => router.push('/admin/connexion/verification-2fa')}
               >
-                Vous avez déjà un compte ? Connectez-vous
+                Revenir à la page de connexion 2FA
               </p>
             </CardContent>
             <CardFooter>
               <Button type="button" onClick={handleSubmit} className="w-full">
-                Réinitialiser le mot de passe
+                Récupérer les codes de secours
               </Button>
             </CardFooter>
           </>
         ) : (
           <>
             <CardContent className="flex flex-col gap-4">
-              <p className="font-semibold">Mail envoyé à l'adresse :</p>
+              <p className="font-semibold">Email envoyé à l'adresse :</p>
               <p className="text-blue-600 underline">{formData.email}</p>
             </CardContent>
             <CardFooter>
@@ -170,4 +145,4 @@ const LostPasswordPage: React.FC = () => {
   );
 };
 
-export default LostPasswordPage;
+export default BackupCodeRecoveryPage;

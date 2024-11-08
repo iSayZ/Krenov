@@ -177,7 +177,7 @@ export class ChangeRequestService {
   ) {
     // Check if the current password matches with account
     const password = updatePasswordAccountDto.currentPassword;
-
+    
     const account = await this.adminAccountModel.findById(userId).exec();
 
     if (!account) {
