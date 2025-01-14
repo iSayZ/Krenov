@@ -13,7 +13,7 @@ const fetchArticles = async (): Promise<Realisation[]> => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_BASE_URL}/realisations/active`,
     {
-      next: { revalidate: 600 }, // Revalidation ISR every 10 minutes
+      next: { revalidate: 60 }, // Revalidation ISR every 10 minutes
     }
   );
   if (!response.ok) {
@@ -31,7 +31,7 @@ const App: React.FC = async () => {
       <div className="flex w-full flex-col items-center gap-6 sm:flex-row">
         {articles.map((article, index) => (
           <div key={index} className="space-y-2">
-            <p className="w-full overflow-hidden text-ellipsis">
+            <p className="w-64 overflow-hidden text-nowrap text-ellipsis">
               {article.title}
             </p>
             <Link

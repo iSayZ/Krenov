@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, UpdateWriteOpResult } from 'mongoose';
 import { UploadService } from 'src/upload/upload.service';
@@ -45,7 +45,7 @@ export class AdminService {
       .lean()
       .exec();
     const adminAccount = await this.adminAccountModel
-      .findById({ _id: userId })
+      .findById(userId)
       .lean()
       .exec();
 
@@ -74,7 +74,7 @@ export class AdminService {
       .lean()
       .exec();
     const adminAccount = await this.adminAccountModel
-      .findById({ _id: userId })
+      .findById(userId)
       .lean()
       .exec();
 
@@ -98,7 +98,7 @@ export class AdminService {
     return settingsProfile;
   }
 
-  // Road to update admin_profile
+  // Route to update admin_profile
   async updateSettingsProfile(
     userId: string,
     updateProfileAccountDto: UpdateProfileAccountDto
@@ -126,5 +126,56 @@ export class AdminService {
     }
 
     return 'Profile updated successfully';
+  }
+
+  // To apply change request type "change-password"
+  async changePassword(userId: string, newValue: string) {
+    const updatedAccount = await this.adminAccountModel
+      .findOneAndUpdate({ _id: userId }, { password: newValue }, { new: true })
+      .exec();
+
+    if (!updatedAccount) {
+      throw new NotFoundException('Account not found');
+    }
+
+    return {
+      message: 'Password updated successfully',
+      statusCode: HttpStatus.OK,
+      redirectUrl: '/admin/confirmation-demande/succes?type=changement_mdp',
+    };
+  }
+
+  // To apply change request type "change-email"
+  async changeEmail(userId: string, newValue: string) {
+    const updatedAccount = await this.adminAccountModel
+      .findOneAndUpdate({ _id: userId }, { email: newValue }, { new: true })
+      .exec();
+
+    if (!updatedAccount) {
+      throw new NotFoundException('Account not found');
+    }
+
+    return {
+      message: 'Email updated successfully',
+      statusCode: HttpStatus.OK,
+      redirectUrl: '/admin/confirmation-demande/succes?type=changement_email',
+    };
+  }
+
+  // To apply change request type "reset-password"
+  async resetPassword(userId: string, newValue: string) {
+    const updatedAccount = await this.adminAccountModel
+      .findOneAndUpdate({ _id: userId }, { password: newValue }, { new: true })
+      .exec();
+
+    if (!updatedAccount) {
+      throw new NotFoundException('Account not found');
+    }
+
+    return {
+      message: 'Password updated successfully',
+      statusCode: HttpStatus.OK,
+      redirectUrl: '/admin/confirmation-demande/succes?type=reset_mdp',
+    };
   }
 }

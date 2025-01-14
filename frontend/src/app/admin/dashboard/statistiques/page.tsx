@@ -26,7 +26,14 @@ const Statistiques: React.FC = () => {
     setVisitedSection(section);
   }, [setVisitedSection]);
 
-  return <h1 className="text-2xl font-bold">Statistiques du site</h1>;
+  return (
+    <>
+      <h1 className="text-2xl font-bold">Statistiques du site</h1>
+      <div className="flex h-full items-center justify-center">
+        <p className="text-4xl font-bold">EN CONSTRUCTION</p>
+      </div>
+    </>
+  );
 };
 
 export default Statistiques;

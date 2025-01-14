@@ -90,7 +90,10 @@ const LoginPage: React.FC = () => {
       if (error instanceof Error) {
         setErrorMsg({ ...errorMsg, other: error.message });
       } else {
-        setErrorMsg({ ...errorMsg, other: 'Une erreur est survenue. Veuillez réessayer.' });
+        setErrorMsg({
+          ...errorMsg,
+          other: 'Une erreur est survenue. Veuillez réessayer.',
+        });
       }
     }
   };
@@ -165,7 +168,10 @@ const LoginPage: React.FC = () => {
               )}
             </div>
           </form>
-          <p className="cursor-pointer text-sm text-foreground hover:underline">
+          <p
+            className="cursor-pointer text-sm text-foreground hover:underline"
+            onClick={() => router.push('/admin/connexion/mdp-oublie')}
+          >
             Mot de passe oublié ?
           </p>
         </CardContent>

@@ -46,7 +46,6 @@ export class AuthService {
   ): Promise<{ access_token: string; refresh_token: string }> {
     // Generate sessionId to identificate the session
     const sessionId = this.generateSessionId();
-    console.log('generate session id', sessionId);
     // Content of payload
     const payload = {
       session: sessionId,
@@ -83,14 +82,12 @@ export class AuthService {
       created_at: new Date(),
     };
 
-    console.log('session id de newSession', newSession);
-
     // Push the new session into account
     try {
       adminAccount.sessions.push(newSession);
       await adminAccount.save();
     } catch (error) {
-      console.log(error);
+      console.error(error);
       throw new InternalServerErrorException(
         'Impossible de récupérer les informations de session. Veuillez réessayer.'
       );
@@ -120,7 +117,6 @@ export class AuthService {
         throw new UnauthorizedException('Invalid refresh token');
       }
 
-      console.log('Payload session refresh ', payload.session);
       // Get index of session
       const currentIndexSession = account.sessions.findIndex(
         (session) => session.session_id === payload.session
@@ -190,7 +186,7 @@ export class AuthService {
   // --------------------------------------------------------- Auth Services - Functions ---------------------------------------------------------
 
   // Function to generate unique ID (objectId from mongoose)
-  private generateSessionId(): string {
+  generateSessionId(): string {
     return new mongoose.Types.ObjectId().toString();
   }
 

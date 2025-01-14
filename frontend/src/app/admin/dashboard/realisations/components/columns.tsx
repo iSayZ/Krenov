@@ -14,6 +14,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useRef } from 'react';
+import { mutate } from 'swr';
 
 import {
   AlertDialog,
@@ -46,7 +47,6 @@ import {
 import { deleteRealisation, updateRealisation } from '@/api/realisationsApi';
 import { formatDateForUX } from '@/lib/dateUtils';
 import { Realisation } from '@/types/realisation.interface';
-import { mutate } from 'swr';
 
 export const columns: ColumnDef<Realisation>[] = [
   {
@@ -244,7 +244,7 @@ export const columns: ColumnDef<Realisation>[] = [
                 <Trash2 className="mr-2 size-4" />
                 <span>Supprimer la réalisation</span>
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem disabled={realisation.status !== 'active' ? true : false}>
                 <ExternalLink className="mr-2 size-4" />
                 <Link href={`/${realisation.slug}`} target="_blank">
                   <span>Voir la réalisation</span>
