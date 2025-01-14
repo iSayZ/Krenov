@@ -29,8 +29,10 @@ const BackupCodeAlert: React.FC<BackupCodeAlertProps> = ({
               Récupération de codes de secours
             </AlertDialogTitle>
             <AlertDialogDescription>
-              Un e-mail a été envoyé à l'adresse que vous avez fournie. Cet e-mail contient un lien pour régénérer vos codes de secours. 
-              Veuillez vérifier votre boîte de réception, ainsi que vos spams, et suivre les instructions pour générer de nouveaux codes.
+              Un e-mail a été envoyé à l'adresse que vous avez fournie. Cet
+              e-mail contient un lien pour régénérer vos codes de secours.
+              Veuillez vérifier votre boîte de réception, ainsi que vos spams,
+              et suivre les instructions pour générer de nouveaux codes.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

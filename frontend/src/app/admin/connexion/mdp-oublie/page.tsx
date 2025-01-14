@@ -16,10 +16,9 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
-import ResetPasswordAlert from './ResetPasswordAlert';
-
 import { ApiError, resetPassword } from '@/api/changeRequestApi';
 
+import ResetPasswordAlert from './ResetPasswordAlert';
 
 const LostPasswordPage: React.FC = () => {
   const router = useRouter();
@@ -136,7 +135,7 @@ const LostPasswordPage: React.FC = () => {
                 </div>
               </form>
               <p
-                className="text-foreground mt-2 cursor-pointer text-sm hover:underline"
+                className="mt-2 cursor-pointer text-sm text-foreground hover:underline"
                 onClick={() => router.push('/admin/connexion')}
               >
                 Vous avez déjà un compte ? Connectez-vous

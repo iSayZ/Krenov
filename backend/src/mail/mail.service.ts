@@ -175,7 +175,8 @@ export class MailService {
       return {
         message: 'Password updated successfully',
         statusCode: HttpStatus.OK,
-        redirectUrl: '/admin/confirmation-demande/succes?type=reset_codes_secours',
+        redirectUrl:
+          '/admin/confirmation-demande/succes?type=reset_codes_secours',
       };
     } catch (error) {
       console.error(error);

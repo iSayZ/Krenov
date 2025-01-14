@@ -132,7 +132,7 @@ const ResetPasswordPage: React.FC = () => {
           </CardContent>
         ) : error || errorMsg.other ? (
           <CardContent className="flex flex-col gap-4">
-            <p className="text-red-500">Token invalide ou expiré.</p>
+            <p className="font-bold text-red-500">Token invalide ou expiré.</p>
           </CardContent>
         ) : (
           <>

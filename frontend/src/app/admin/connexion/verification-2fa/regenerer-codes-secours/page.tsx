@@ -16,7 +16,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
-import BackupCodeAlert from './BackupCodeAlert'; // Créer un composant alert spécifique si nécessaire
+import BackupCodeAlert from './BackupCodeAlert';
 
 import { ApiError, resetBackupCodes } from '@/api/changeRequestApi';
 
@@ -29,20 +29,22 @@ const BackupCodeRecoveryPage: React.FC = () => {
   const [requestSent, setRequestSent] = useState<boolean>(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
 
-  // Gérer les changements dans le champ email
+  // Handle changes in the form fields
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
+    // Reset error messages when the user starts typing
     setFormData((prevData) => ({ ...prevData, [name]: value }));
     if (name === 'email') setErrorMsg('');
   };
 
-  // Vérifier si l'email est valide
+  // To check if it's a valid e-mail adress
   const isValidEmail = (email: string): boolean => {
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return regex.test(email);
   };
 
-  // Envoyer le formulaire
+  // Submit the form
   const handleSubmit = async () => {
     if (formData.email === '') {
       return setErrorMsg('Le champ email est obligatoire.');

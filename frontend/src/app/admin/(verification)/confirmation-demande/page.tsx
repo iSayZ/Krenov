@@ -27,7 +27,9 @@ const ConfirmChangeRequest: React.FC = () => {
   }, [data, error]);
 
   const handleConfirm = async () => {
-    if (!token) return;
+    if (!token) {
+      return;
+    }
     try {
       const result = await confirmChangeRequest(token, data.requestType);
       router.push(result.redirectUrl); // Redirect to the specify URL of the request type
@@ -92,7 +94,7 @@ const ConfirmChangeRequest: React.FC = () => {
               aria-label="loading"
             />
           ) : error ? (
-            <p className="text-red-500">Token invalide ou expiré.</p>
+            <p className="font-bold text-red-500">Token invalide ou expiré.</p>
           ) : (
             <Button onClick={handleConfirm} className="mt-4 w-full">
               Confirmer la Demande

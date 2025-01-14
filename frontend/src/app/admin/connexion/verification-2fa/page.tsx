@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -93,9 +94,12 @@ const Login2FAPage: React.FC = () => {
             </InputOTPGroup>
           </InputOTP>
           {error && <p className="text-sm text-red-600">{error}</p>}
-          <a href="#" className="text-sm hover:underline">
+          <Link
+            href="/admin/connexion/verification-2fa/regenerer-codes-secours"
+            className="text-sm hover:underline"
+          >
             Vous n'avez plus accès à la 2FA ?
-          </a>
+          </Link>
         </CardContent>
         <CardFooter>
           <Button
