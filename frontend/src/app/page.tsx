@@ -31,7 +31,7 @@ const App: React.FC = async () => {
       <div className="flex w-full flex-col items-center gap-6 sm:flex-row">
         {articles.map((article, index) => (
           <div key={index} className="space-y-2">
-            <p className="w-64 overflow-hidden text-nowrap text-ellipsis">
+            <p className="w-64 overflow-hidden text-ellipsis text-nowrap">
               {article.title}
             </p>
             <Link

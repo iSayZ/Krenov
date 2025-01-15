@@ -63,7 +63,7 @@ const RealisationPage = async ({ params }: { params: { slug: string } }) => {
       </div>
       <div className="relative -top-28 m-auto flex w-2/3 flex-col items-center bg-card p-12">
         <div className="space-y-6">
-          <h1 className="text-4xl font-bold w-full">{realisation.title}</h1>
+          <h1 className="w-full text-4xl font-bold">{realisation.title}</h1>
           <div
             className="prose max-w-none"
             dangerouslySetInnerHTML={{ __html: cleanContent }}

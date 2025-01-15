@@ -16,10 +16,9 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
-import BackupCodeAlert from './BackupCodeAlert';
-
 import { ApiError, resetBackupCodes } from '@/api/changeRequestApi';
 
+import BackupCodeAlert from './BackupCodeAlert';
 
 const BackupCodeRecoveryPage: React.FC = () => {
   const router = useRouter();
@@ -122,7 +121,7 @@ const BackupCodeRecoveryPage: React.FC = () => {
                 </div>
               </form>
               <p
-                className="text-foreground mt-2 cursor-pointer text-sm hover:underline"
+                className="mt-2 cursor-pointer text-sm text-foreground hover:underline"
                 onClick={() => router.push('/admin/connexion/verification-2fa')}
               >
                 Revenir à la page de connexion 2FA

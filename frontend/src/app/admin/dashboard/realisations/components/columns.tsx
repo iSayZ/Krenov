@@ -244,7 +244,9 @@ export const columns: ColumnDef<Realisation>[] = [
                 <Trash2 className="mr-2 size-4" />
                 <span>Supprimer la réalisation</span>
               </DropdownMenuItem>
-              <DropdownMenuItem disabled={realisation.status !== 'active' ? true : false}>
+              <DropdownMenuItem
+                disabled={realisation.status !== 'active' ? true : false}
+              >
                 <ExternalLink className="mr-2 size-4" />
                 <Link href={`/${realisation.slug}`} target="_blank">
                   <span>Voir la réalisation</span>
