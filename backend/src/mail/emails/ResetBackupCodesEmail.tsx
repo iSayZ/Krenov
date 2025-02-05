@@ -1,4 +1,5 @@
 import { Tailwind } from "@react-email/tailwind";
+import { tailwindConfig } from "../config/tailwind.config";
 import * as React from "react";
 
 interface MailProps {
@@ -28,15 +29,7 @@ const ResetBackupCodesEmail = (
 
   return (
     <Tailwind
-      config={{
-        theme: {
-          extend: {
-            colors: {
-              brand: "#004A6B",
-            },
-          },
-        },
-      }}
+      config={tailwindConfig}
     >
       <div className={main}>
         <div className={container}>
