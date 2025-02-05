@@ -1,9 +1,10 @@
 'use client';
 
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import useSWR from 'swr';
 
+import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -80,29 +81,31 @@ const ConfirmChangeRequest: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen items-center justify-center bg-gray-100 max-md:px-4">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-lg">Confirmation de la Demande</CardTitle>
-          <div className="text-md">{getMessage()}</div>
-        </CardHeader>
-        <CardContent className="text-md">
-          {isLoading ? (
-            <div
-              className="m-auto inline-block size-12 animate-spin rounded-full border-[3px] border-current border-t-transparent text-foreground"
-              role="status"
-              aria-label="loading"
-            />
-          ) : error ? (
-            <p className="font-bold text-red-500">Token invalide ou expiré.</p>
-          ) : (
-            <Button onClick={handleConfirm} className="mt-4 w-full">
-              Confirmer la Demande
-            </Button>
-          )}
-        </CardContent>
-      </Card>
-    </div>
+    <Suspense fallback={<LoadingSpinner />}>
+      <div className="flex h-screen items-center justify-center bg-gray-100 max-md:px-4">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle className="text-lg">Confirmation de la Demande</CardTitle>
+            <div className="text-md">{getMessage()}</div>
+          </CardHeader>
+          <CardContent className="text-md">
+            {isLoading ? (
+              <div
+                className="text-foreground m-auto inline-block size-12 animate-spin rounded-full border-[3px] border-current border-t-transparent"
+                role="status"
+                aria-label="loading"
+              />
+            ) : error ? (
+              <p className="font-bold text-red-500">Token invalide ou expiré.</p>
+            ) : (
+              <Button onClick={handleConfirm} className="mt-4 w-full">
+                Confirmer la Demande
+              </Button>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </Suspense>
   );
 };
 

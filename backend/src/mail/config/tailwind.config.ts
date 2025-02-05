@@ -4,7 +4,7 @@ export const tailwindConfig: TailwindConfig = {
   theme: {
     extend: {
       colors: {
-        brand: "#004A6B",
+        brand: '#004A6B',
       },
     },
   },
@@ -18,7 +18,7 @@ export const tailwindConfig: TailwindConfig = {
   experimental: {},
   darkMode: 'class',
   corePlugins: {
-    preflight: true
+    preflight: true,
   },
   plugins: [],
 };

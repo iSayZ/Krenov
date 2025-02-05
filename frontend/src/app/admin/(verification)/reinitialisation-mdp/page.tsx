@@ -1,9 +1,10 @@
 'use client';
 
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import useSWR from 'swr';
 
+import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -115,83 +116,85 @@ const ResetPasswordPage: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen w-screen items-center justify-center p-4">
-      <Card className="w-[350px]">
-        <CardHeader>
-          <CardTitle className="text-3xl">
-            Réinitialisation du mot de passe
-          </CardTitle>
-        </CardHeader>
-        {isLoading ? (
-          <CardContent className="flex flex-col gap-4">
-            <div
-              className="m-auto inline-block size-12 animate-spin rounded-full border-[3px] border-current border-t-transparent text-foreground"
-              role="status"
-              aria-label="loading"
-            />
-          </CardContent>
-        ) : error || errorMsg.other ? (
-          <CardContent className="flex flex-col gap-4">
-            <p className="font-bold text-red-500">Token invalide ou expiré.</p>
-          </CardContent>
-        ) : (
-          <>
+    <Suspense fallback={<LoadingSpinner />}>
+      <div className="flex h-screen w-screen items-center justify-center p-4">
+        <Card className="w-[350px]">
+          <CardHeader>
+            <CardTitle className="text-3xl">
+              Réinitialisation du mot de passe
+            </CardTitle>
+          </CardHeader>
+          {isLoading ? (
             <CardContent className="flex flex-col gap-4">
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="newPassword">Nouveau mot de passe</Label>
-                <Input
-                  id="newPassword"
-                  type="password"
-                  name="newPassword"
-                  placeholder="Entrez votre nouveau mot de passe"
-                  value={formData.newPassword}
-                  onChange={handleChange}
-                  className={
-                    errorMsg.newPassword
-                      ? 'outline outline-1 outline-red-500'
-                      : ''
-                  }
-                />
-                {errorMsg.newPassword && (
-                  <p className="text-sm text-red-500">{errorMsg.newPassword}</p>
-                )}
-              </div>
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="confirmPassword">
-                  Confirmer le mot de passe
-                </Label>
-                <Input
-                  id="confirmPassword"
-                  type="password"
-                  name="confirmPassword"
-                  placeholder="Confirmez votre mot de passe"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  className={
-                    errorMsg.confirmPassword
-                      ? 'outline outline-1 outline-red-500'
-                      : ''
-                  }
-                />
-                {errorMsg.confirmPassword && (
-                  <p className="text-sm text-red-500">
-                    {errorMsg.confirmPassword}
-                  </p>
-                )}
-              </div>
-              {errorMsg.other && (
-                <p className="text-sm text-red-500">{errorMsg.other}</p>
-              )}
+              <div
+                className="text-foreground m-auto inline-block size-12 animate-spin rounded-full border-[3px] border-current border-t-transparent"
+                role="status"
+                aria-label="loading"
+              />
             </CardContent>
-            <CardFooter>
-              <Button type="button" onClick={handleSubmit}>
-                Réinitialiser le mot de passe
-              </Button>
-            </CardFooter>
-          </>
-        )}
-      </Card>
-    </div>
+          ) : error || errorMsg.other ? (
+            <CardContent className="flex flex-col gap-4">
+              <p className="font-bold text-red-500">Token invalide ou expiré.</p>
+            </CardContent>
+          ) : (
+            <>
+              <CardContent className="flex flex-col gap-4">
+                <div className="flex flex-col space-y-1.5">
+                  <Label htmlFor="newPassword">Nouveau mot de passe</Label>
+                  <Input
+                    id="newPassword"
+                    type="password"
+                    name="newPassword"
+                    placeholder="Entrez votre nouveau mot de passe"
+                    value={formData.newPassword}
+                    onChange={handleChange}
+                    className={
+                      errorMsg.newPassword
+                        ? 'outline outline-1 outline-red-500'
+                        : ''
+                    }
+                  />
+                  {errorMsg.newPassword && (
+                    <p className="text-sm text-red-500">{errorMsg.newPassword}</p>
+                  )}
+                </div>
+                <div className="flex flex-col space-y-1.5">
+                  <Label htmlFor="confirmPassword">
+                    Confirmer le mot de passe
+                  </Label>
+                  <Input
+                    id="confirmPassword"
+                    type="password"
+                    name="confirmPassword"
+                    placeholder="Confirmez votre mot de passe"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    className={
+                      errorMsg.confirmPassword
+                        ? 'outline outline-1 outline-red-500'
+                        : ''
+                    }
+                  />
+                  {errorMsg.confirmPassword && (
+                    <p className="text-sm text-red-500">
+                      {errorMsg.confirmPassword}
+                    </p>
+                  )}
+                </div>
+                {errorMsg.other && (
+                  <p className="text-sm text-red-500">{errorMsg.other}</p>
+                )}
+              </CardContent>
+              <CardFooter>
+                <Button type="button" onClick={handleSubmit}>
+                  Réinitialiser le mot de passe
+                </Button>
+              </CardFooter>
+            </>
+          )}
+        </Card>
+      </div>
+    </Suspense>
   );
 };
 
