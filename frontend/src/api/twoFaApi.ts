@@ -1,4 +1,6 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+import { getApiUrl } from "@/lib/api-url";
+
+const API_BASE_URL = getApiUrl();
 
 // Function to initialize 2FA
 const init2FA = async (): Promise<string> => {

@@ -1,4 +1,6 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+import { getApiUrl } from "@/lib/api-url";
+
+const API_BASE_URL = getApiUrl();
 
 // Function to verify access, use header authorization to use middleware
 const verifyAccess = async (token: string): Promise<{ message: string }> => {

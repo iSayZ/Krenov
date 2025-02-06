@@ -1,17 +1,18 @@
-// pages/articles/index.tsx
-
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 
+import { getApiUrl } from '@/lib/api-url';
 import { Realisation } from '@/types/realisation.interface';
+
+const API_BASE_URL = getApiUrl();
 
 // Function to get article with ISR
 const fetchArticles = async (): Promise<Realisation[]> => {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/realisations/active`,
+    `${API_BASE_URL}/realisations/active`,
     {
       next: { revalidate: 60 }, // Revalidation ISR every 10 minutes
     }

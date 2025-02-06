@@ -1,6 +1,7 @@
+import { getApiUrl } from '@/lib/api-url';
 import { Realisation } from '@/types/realisation.interface';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const API_BASE_URL = getApiUrl();
 
 // Function to create a realisation
 const createRealisation = async (

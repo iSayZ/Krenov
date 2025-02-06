@@ -1,6 +1,7 @@
+import { getApiUrl } from '@/lib/api-url';
 import { AdminProfile } from '@/types/admin.interface';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const API_BASE_URL = getApiUrl();
 
 // Function to upload an avatar
 const uploadAvatar = async (

@@ -127,14 +127,16 @@ const ResetPasswordPage: React.FC = () => {
           {isLoading ? (
             <CardContent className="flex flex-col gap-4">
               <div
-                className="text-foreground m-auto inline-block size-12 animate-spin rounded-full border-[3px] border-current border-t-transparent"
+                className="m-auto inline-block size-12 animate-spin rounded-full border-[3px] border-current border-t-transparent text-foreground"
                 role="status"
                 aria-label="loading"
               />
             </CardContent>
           ) : error || errorMsg.other ? (
             <CardContent className="flex flex-col gap-4">
-              <p className="font-bold text-red-500">Token invalide ou expiré.</p>
+              <p className="font-bold text-red-500">
+                Token invalide ou expiré.
+              </p>
             </CardContent>
           ) : (
             <>
@@ -155,7 +157,9 @@ const ResetPasswordPage: React.FC = () => {
                     }
                   />
                   {errorMsg.newPassword && (
-                    <p className="text-sm text-red-500">{errorMsg.newPassword}</p>
+                    <p className="text-sm text-red-500">
+                      {errorMsg.newPassword}
+                    </p>
                   )}
                 </div>
                 <div className="flex flex-col space-y-1.5">

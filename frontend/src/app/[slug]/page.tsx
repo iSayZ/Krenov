@@ -6,12 +6,15 @@ import React from 'react';
 
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 
+import { getApiUrl } from '@/lib/api-url';
 import { Realisation } from '@/types/realisation.interface';
+
+const API_BASE_URL = getApiUrl();
 
 // Fonction pour récupérer les slugs des réalisations (ISR compatible)
 async function generateStaticParams() {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/realisations/active`
+    `${API_BASE_URL}/realisations/active`
   );
   const realisations: Realisation[] = await response.json();
 
@@ -24,7 +27,7 @@ async function generateStaticParams() {
 // Fonction pour récupérer une réalisation spécifique
 const getRealisation = async (slug: string) => {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/realisations/active/${slug}`
+    `${process.env.API_BASE_URL}/realisations/active/${slug}`
   );
 
   if (!response.ok) {
@@ -61,7 +64,7 @@ const RealisationPage = async ({ params }: { params: { slug: string } }) => {
           />
         </AspectRatio>
       </div>
-      <div className="relative -top-28 m-auto flex w-2/3 flex-col items-center bg-card p-12">
+      <div className="bg-card relative -top-28 m-auto flex w-2/3 flex-col items-center p-12">
         <div className="space-y-6">
           <h1 className="w-full text-4xl font-bold">{realisation.title}</h1>
           <div

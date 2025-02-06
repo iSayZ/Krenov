@@ -85,18 +85,22 @@ const ConfirmChangeRequest: React.FC = () => {
       <div className="flex h-screen items-center justify-center bg-gray-100 max-md:px-4">
         <Card className="w-full max-w-md">
           <CardHeader>
-            <CardTitle className="text-lg">Confirmation de la Demande</CardTitle>
+            <CardTitle className="text-lg">
+              Confirmation de la Demande
+            </CardTitle>
             <div className="text-md">{getMessage()}</div>
           </CardHeader>
           <CardContent className="text-md">
             {isLoading ? (
               <div
-                className="text-foreground m-auto inline-block size-12 animate-spin rounded-full border-[3px] border-current border-t-transparent"
+                className="m-auto inline-block size-12 animate-spin rounded-full border-[3px] border-current border-t-transparent text-foreground"
                 role="status"
                 aria-label="loading"
               />
             ) : error ? (
-              <p className="font-bold text-red-500">Token invalide ou expiré.</p>
+              <p className="font-bold text-red-500">
+                Token invalide ou expiré.
+              </p>
             ) : (
               <Button onClick={handleConfirm} className="mt-4 w-full">
                 Confirmer la Demande

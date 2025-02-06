@@ -1,4 +1,6 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+import { getApiUrl } from "@/lib/api-url";
+
+const API_BASE_URL = getApiUrl();
 
 // Function to login
 const login = async (formData: {
@@ -6,6 +8,9 @@ const login = async (formData: {
   password: string;
 }): Promise<{ require2FA: boolean; message: string }> => {
   try {
+    console.log('API_BASE_URL:', API_BASE_URL);
+    console.log('Full URL:', `${API_BASE_URL}/auth/login`);
+
     const response = await fetch(`${API_BASE_URL}/auth/login`, {
       method: 'POST',
       headers: {

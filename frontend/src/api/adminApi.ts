@@ -1,8 +1,9 @@
 import { mutate } from 'swr';
 
+import { getApiUrl } from '@/lib/api-url';
 import { AdminSettings } from '@/types/admin.interface';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const API_BASE_URL = getApiUrl();
 
 // Function to update an user profile
 const updateAdminProfile = async (

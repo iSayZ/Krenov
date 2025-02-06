@@ -1,4 +1,6 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+import { getApiUrl } from "@/lib/api-url";
+
+const API_BASE_URL = getApiUrl();
 
 // Custom Error class to include response status
 class ApiError extends Error {

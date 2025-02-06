@@ -7,7 +7,6 @@ import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-
 const ConfirmationSuccess: React.FC = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -65,11 +64,13 @@ const ConfirmationSuccess: React.FC = () => {
       <div className="flex h-screen items-center justify-center bg-gray-100 max-md:px-4">
         <Card className="w-full max-w-md">
           <CardHeader>
-            <CardTitle className="text-lg">Confirmation de la Demande</CardTitle>
+            <CardTitle className="text-lg">
+              Confirmation de la Demande
+            </CardTitle>
             <div className="text-md">
               {isLoading ? (
                 <div
-                  className="text-foreground m-auto inline-block size-12 animate-spin rounded-full border-[3px] border-current border-t-transparent"
+                  className="m-auto inline-block size-12 animate-spin rounded-full border-[3px] border-current border-t-transparent text-foreground"
                   role="status"
                   aria-label="loading"
                 />
