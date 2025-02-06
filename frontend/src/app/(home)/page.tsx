@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Hero from '@/components/home/Hero/Hero';
+import Realisations from '@/components/home/Realisations/Realisations';
 import Services from '@/components/home/Services/Service';
 
 import { getApiUrl } from '@/lib/api-url';
@@ -26,6 +27,7 @@ const App: React.FC = async () => {
     <>
       <Hero />
       <Services />
+      <Realisations />
     </>
   );
 };
