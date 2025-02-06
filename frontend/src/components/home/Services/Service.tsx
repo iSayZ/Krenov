@@ -43,7 +43,7 @@ const Services: React.FC = () => {
             pour répondre à tous vos besoins
           </p>
         </div>
-        <div className="w-full grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid w-full grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
           {services.map((service) => (
             <Card
               key={service.name}

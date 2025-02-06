@@ -6,6 +6,7 @@ import Services from '@/components/home/Services/Service';
 
 import { getApiUrl } from '@/lib/api-url';
 import { Realisation } from '@/types/realisation.interface';
+import Testimonials from '@/components/home/Testimonials/Testimonials';
 
 const API_BASE_URL = getApiUrl();
 
@@ -28,6 +29,7 @@ const App: React.FC = async () => {
       <Hero />
       <Services />
       <Realisations />
+      <Testimonials />
     </>
   );
 };
