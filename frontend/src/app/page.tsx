@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
+import Hero from '@/components/home/Hero';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 import { getApiUrl } from '@/lib/api-url';
@@ -23,10 +24,9 @@ const fetchArticles = async (): Promise<Realisation[]> => {
 const App: React.FC = async () => {
   const articles = await fetchArticles();
 
-  return (
-    <>
-    </>
-  );
+  return <>
+    <Hero />
+  </>;
 };
 
 export default App;

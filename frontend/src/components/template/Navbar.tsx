@@ -1,9 +1,9 @@
-import { Menu } from "lucide-react";
+import { Menu } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
 interface NavItem {
   label: string;
@@ -19,8 +19,8 @@ const navItems: NavItem[] = [
 
 const Navbar = () => {
   return (
-    <nav className="border-border/40 bg-background/95 supports-[backdrop-filter]:bg-background/60 fixed top-0 w-full border-b backdrop-blur">
-      <div className="w-full px-6 flex h-16 items-center justify-between">
+    <nav className="fixed z-50 top-0 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="flex h-16 w-full items-center justify-between px-6">
         {/* Logo */}
         <div className="flex items-center">
           <Link href="/" className="text-xl font-bold">
@@ -33,12 +33,12 @@ const Navbar = () => {
           <ul className="flex space-x-8">
             {navItems.map((item) => (
               <li key={item.href}>
-                <Link 
+                <Link
                   href={item.href}
                   className="group relative text-sm font-medium"
                 >
                   {item.label}
-                  <span className="bg-primary absolute -bottom-1 left-0 h-0.5 w-0 transition-all group-hover:w-full" />
+                  <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-primary transition-all group-hover:w-full" />
                 </Link>
               </li>
             ))}
@@ -47,9 +47,7 @@ const Navbar = () => {
 
         {/* Desktop CTA */}
         <div className="hidden md:flex">
-          <Button>
-            Demander un devis
-          </Button>
+          <Button>Demander un devis</Button>
         </div>
 
         {/* Mobile Navigation */}
@@ -67,14 +65,12 @@ const Navbar = () => {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="group relative text-md font-medium"
+                    className="text-md group relative font-medium"
                   >
                     {item.label}
                   </Link>
                 ))}
-                <Button className="mt-4">
-                  Demander un devis
-                </Button>
+                <Button className="mt-4">Demander un devis</Button>
               </div>
             </SheetContent>
           </Sheet>
