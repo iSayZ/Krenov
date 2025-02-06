@@ -7,7 +7,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const port = process.env.PORT || 3310;
-  
+
   // Enable global Validation Pipe
   app.useGlobalPipes(
     new ValidationPipe({

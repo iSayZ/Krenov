@@ -13,9 +13,7 @@ const API_BASE_URL = getApiUrl();
 
 // Fonction pour récupérer les slugs des réalisations (ISR compatible)
 async function generateStaticParams() {
-  const response = await fetch(
-    `${API_BASE_URL}/realisations/active`
-  );
+  const response = await fetch(`${API_BASE_URL}/realisations/active`);
   const realisations: Realisation[] = await response.json();
 
   // Générer les paramètres pour chaque réalisation
@@ -64,7 +62,7 @@ const RealisationPage = async ({ params }: { params: { slug: string } }) => {
           />
         </AspectRatio>
       </div>
-      <div className="bg-card relative -top-28 m-auto flex w-2/3 flex-col items-center p-12">
+      <div className="relative -top-28 m-auto flex w-2/3 flex-col items-center bg-card p-12">
         <div className="space-y-6">
           <h1 className="w-full text-4xl font-bold">{realisation.title}</h1>
           <div

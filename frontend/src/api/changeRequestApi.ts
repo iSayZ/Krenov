@@ -1,4 +1,4 @@
-import { getApiUrl } from "@/lib/api-url";
+import { getApiUrl } from '@/lib/api-url';
 
 const API_BASE_URL = getApiUrl();
 
