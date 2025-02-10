@@ -1,5 +1,6 @@
 import React from 'react';
 
+import CallToAction from '@/components/home/CallToAction/CallToAction';
 import Hero from '@/components/home/Hero/Hero';
 import Realisations from '@/components/home/Realisations/Realisations';
 import Services from '@/components/home/Services/Service';
@@ -7,7 +8,6 @@ import Testimonials from '@/components/home/Testimonials/Testimonials';
 
 import { getApiUrl } from '@/lib/api-url';
 import { Realisation } from '@/types/realisation.interface';
-import CallToAction from '@/components/home/CallToAction/CallToAction';
 
 const API_BASE_URL = getApiUrl();
 
