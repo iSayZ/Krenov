@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 
 const Realisations: React.FC = () => {
   return (
-    <section className="bg-accent py-24">
+    <section className="bg-accent py-16 md:py-24">
       <div className="flex w-full flex-col items-center px-6">
         <div className="mb-16 text-center">
           <h2 className="mb-4 text-3xl font-bold">Nos Réalisations Récentes</h2>

@@ -47,7 +47,7 @@ const navigation = {
 export default function Footer() {
   return (
     <footer className="bg-background">
-      <div className="mx-auto px-6 pb-8 pt-16 sm:pt-24 lg:px-8 lg:pt-32">
+      <div className="mx-auto px-6 pb-8 pt-16 sm:pt-24 lg:px-8 lg:pt-24">
         <div className="flex flex-col items-center xl:flex-row xl:justify-center">
           <div className="max-w-md space-y-8 text-center xl:text-left">
             <Link href="/" className="text-2xl font-bold text-primary">

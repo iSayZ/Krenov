@@ -25,7 +25,7 @@ const Testimonials: React.FC = () => {
   ];
 
   return (
-    <section className="bg-background py-24">
+    <section className="bg-background py-16 md:py-24">
       <div className="flex w-full flex-col items-center px-6">
         <div className="mb-16 text-center">
           <h2 className="mb-4 text-3xl font-bold">Ce que disent nos clients</h2>
