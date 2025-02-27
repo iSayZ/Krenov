@@ -22,7 +22,7 @@ const navigation = {
     { name: 'Carrières', href: '/carrieres' },
   ],
   legal: [
-    { name: 'Politique de confidentialité', href: '/privacy' },
+    { name: 'Politique de confidentialité', href: '/politique-de-confidentialite' },
     { name: "Conditions d'utilisation", href: '/terms' },
   ],
   social: [
@@ -46,7 +46,7 @@ const navigation = {
 
 export default function Footer() {
   return (
-    <footer className="bg-background">
+    <footer className="bg-background border-t border-muted">
       <div className="mx-auto px-6 pb-8 pt-16 sm:pt-24 lg:px-8 lg:pt-24">
         <div className="flex flex-col items-center xl:flex-row xl:justify-center">
           <div className="max-w-md space-y-8 text-center xl:text-left">
@@ -58,19 +58,26 @@ export default function Footer() {
               résidentielle et commerciale.
             </p>
             <div className="flex flex-col items-center gap-3 xl:items-start">
-              <a href='tel:+33605360786' className="flex items-center gap-2 group">
+              <a
+                href="tel:+33605360786"
+                className="group flex items-center gap-2"
+              >
                 <Phone className="size-5 text-primary" />
                 <span className="text-sm text-muted-foreground transition-colors group-hover:text-foreground">
                   0605360786
                 </span>
               </a>
-              <Link href='/contact' className="flex items-center gap-2 group">
+              <Link href="/contact" className="group flex items-center gap-2">
                 <Mail className="size-5 text-primary" />
                 <span className="text-sm text-muted-foreground transition-colors group-hover:text-foreground">
                   contact@krenov.com
                 </span>
               </Link>
-              <Link target='_blank' href="https://www.google.fr/maps/place/10+Bd+de+la+Libert%C3%A9,+59000+Lille/@50.6374009,3.0493701,17z/data=!3m1!4b1!4m6!3m5!1s0x47c2d5804ac12807:0x6b1a412ed043d51!8m2!3d50.6374009!4d3.051945!16s%2Fg%2F11cs98q6tx?entry=ttu&g_ep=EgoyMDI1MDIyNC4wIKXMDSoJLDEwMjExNDU1SAFQAw%3D%3D" className="flex items-center gap-2 group">
+              <Link
+                target="_blank"
+                href="https://www.google.fr/maps/place/10+Bd+de+la+Libert%C3%A9,+59000+Lille/@50.6374009,3.0493701,17z/data=!3m1!4b1!4m6!3m5!1s0x47c2d5804ac12807:0x6b1a412ed043d51!8m2!3d50.6374009!4d3.051945!16s%2Fg%2F11cs98q6tx?entry=ttu&g_ep=EgoyMDI1MDIyNC4wIKXMDSoJLDEwMjExNDU1SAFQAw%3D%3D"
+                className="group flex items-center gap-2"
+              >
                 <MapPin className="size-5 text-primary" />
                 <span className="text-sm text-muted-foreground transition-colors group-hover:text-foreground">
                   10 Bd de la Liberté, 59000 Lille, France
