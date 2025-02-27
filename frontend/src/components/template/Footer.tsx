@@ -51,7 +51,7 @@ export default function Footer() {
         <div className="flex flex-col items-center xl:flex-row xl:justify-center">
           <div className="max-w-md space-y-8 text-center xl:text-left">
             <Link href="/" className="text-2xl font-bold text-primary">
-              RénoExpert
+              {process.env.NEXT_PUBLIC_APP_NAME}
             </Link>
             <p className="text-sm leading-6 text-muted-foreground">
               Transformez votre espace avec notre expertise en rénovation
@@ -61,19 +61,19 @@ export default function Footer() {
               <div className="flex items-center gap-2">
                 <Phone className="size-5 text-primary" />
                 <span className="text-sm text-muted-foreground">
-                  +1 (514) 123-4567
+                  0605360786
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="size-5 text-primary" />
                 <span className="text-sm text-muted-foreground">
-                  contact@renoexpert.com
+                  contact@krenov.com
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 <MapPin className="size-5 text-primary" />
                 <span className="text-sm text-muted-foreground">
-                  123 Rue de la Rénovation, Montréal, QC
+                  123 Rue de la Liberté, 59000 Lille, France
                 </span>
               </div>
             </div>
@@ -132,8 +132,8 @@ export default function Footer() {
         <div className="mt-16 border-t border-gray-900/10 pt-8 sm:mt-20 lg:mt-24">
           <div className="flex flex-col-reverse items-center gap-8 sm:flex-row sm:justify-between">
             <p className="text-xs leading-5 text-muted-foreground">
-              &copy; 2024 RénoExpert. Tous droits réservés.
-            </p>
+              &copy; 2024 {process.env.NEXT_PUBLIC_APP_NAME}. Tous droits réservés.
+            </p>  
             <div className="flex space-x-6">
               {navigation.social.map((item) => (
                 <Link

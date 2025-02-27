@@ -24,7 +24,7 @@ const Navbar = () => {
         {/* Logo */}
         <div className="flex items-center">
           <Link href="/" className="text-xl font-bold">
-            LOGO
+            {process.env.NEXT_PUBLIC_APP_NAME}
           </Link>
         </div>
 

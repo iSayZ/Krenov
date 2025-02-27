@@ -53,7 +53,7 @@ const Services: React.FC = () => {
               <CardContent className="p-6">
                 {/* <service.icon className="mb-4 size-12 text-primary" /> */}
                 <h3 className="mb-2 text-xl font-semibold">{service.name}</h3>
-                <p className="h-[4.5rem] mb-4 text-muted-foreground line-clamp-3">
+                <p className="mb-4 line-clamp-3 h-[4.5rem] text-muted-foreground">
                   {service.description}
                 </p>
                 <Link

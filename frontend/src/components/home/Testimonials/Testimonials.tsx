@@ -6,7 +6,7 @@ const Testimonials: React.FC = () => {
   const testimonials = [
     {
       content:
-        "L'équipe de RénoExpert a transformé notre cuisine démodée en un espace moderne et fonctionnel. Leur professionnalisme et leur attention aux détails sont remarquables.",
+        `L'équipe de ${process.env.NEXT_PUBLIC_APP_NAME} a transformé notre cuisine démodée en un espace moderne et fonctionnel. Leur professionnalisme et leur attention aux détails sont remarquables.`,
       author: 'Marie Dubois',
       role: 'Propriétaire résidentiel',
     },
@@ -18,7 +18,7 @@ const Testimonials: React.FC = () => {
     },
     {
       content:
-        "De la conception à la réalisation, RénoExpert a su concrétiser notre vision. Une équipe à l'écoute et des résultats qui dépassent nos attentes.",
+        `De la conception à la réalisation, ${process.env.NEXT_PUBLIC_APP_NAME} a su concrétiser notre vision. Une équipe à l'écoute et des résultats qui dépassent nos attentes.`,
       author: 'Sophie Tremblay',
       role: 'Propriétaire résidentiel',
     },
