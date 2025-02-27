@@ -35,7 +35,6 @@ const Testimonials: React.FC = () => {
           {testimonials.map((testimonial, index) => (
             <Card key={index} className="relative">
               <CardContent className="p-6">
-                <Quote className="mb-4 size-8 text-primary" />
                 <div className="mb-4 flex">
                   {[...Array(5)].map((_, i) => (
                     <Star
@@ -44,7 +43,7 @@ const Testimonials: React.FC = () => {
                     />
                   ))}
                 </div>
-                <p className="mb-4 text-muted-foreground">
+                <p className="md:h-[7.5rem] lg:h-[6rem] mb-4 text-muted-foreground">
                   {testimonial.content}
                 </p>
                 <div>
