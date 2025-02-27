@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 
 const CallToAction: React.FC = () => {
   return (
-    <section className="bg-primary/80 py-16 md:py-24 text-primary-foreground">
+    <section className="bg-primary/80 py-16 text-primary-foreground md:py-24">
       <div className="flex w-full flex-col items-center px-6">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="mb-4 text-3xl font-bold">

@@ -1,4 +1,5 @@
-import { Link, ChevronRight, Paintbrush, Bath, Building2 } from 'lucide-react';
+import { ChevronRight, Paintbrush, Bath, Building2 } from 'lucide-react';
+import Link from 'next/link';
 
 import { Card, CardContent } from '@/components/ui/card';
 
@@ -50,9 +51,9 @@ const Services: React.FC = () => {
               className="group cursor-pointer transition-shadow hover:shadow-lg"
             >
               <CardContent className="p-6">
-                <service.icon className="mb-4 size-12 text-primary" />
+                {/* <service.icon className="mb-4 size-12 text-primary" /> */}
                 <h3 className="mb-2 text-xl font-semibold">{service.name}</h3>
-                <p className="mb-4 text-muted-foreground">
+                <p className="h-[4.5rem] mb-4 text-muted-foreground line-clamp-3">
                   {service.description}
                 </p>
                 <Link
