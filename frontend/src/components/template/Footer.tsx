@@ -58,24 +58,24 @@ export default function Footer() {
               résidentielle et commerciale.
             </p>
             <div className="flex flex-col items-center gap-3 xl:items-start">
-              <div className="flex items-center gap-2">
+              <a href='tel:+33605360786' className="flex items-center gap-2 group">
                 <Phone className="size-5 text-primary" />
-                <span className="text-sm text-muted-foreground">
+                <span className="text-sm text-muted-foreground transition-colors group-hover:text-foreground">
                   0605360786
                 </span>
-              </div>
-              <div className="flex items-center gap-2">
+              </a>
+              <Link href='/contact' className="flex items-center gap-2 group">
                 <Mail className="size-5 text-primary" />
-                <span className="text-sm text-muted-foreground">
+                <span className="text-sm text-muted-foreground transition-colors group-hover:text-foreground">
                   contact@krenov.com
                 </span>
-              </div>
-              <div className="flex items-center gap-2">
+              </Link>
+              <Link target='_blank' href="https://www.google.fr/maps/place/10+Bd+de+la+Libert%C3%A9,+59000+Lille/@50.6374009,3.0493701,17z/data=!3m1!4b1!4m6!3m5!1s0x47c2d5804ac12807:0x6b1a412ed043d51!8m2!3d50.6374009!4d3.051945!16s%2Fg%2F11cs98q6tx?entry=ttu&g_ep=EgoyMDI1MDIyNC4wIKXMDSoJLDEwMjExNDU1SAFQAw%3D%3D" className="flex items-center gap-2 group">
                 <MapPin className="size-5 text-primary" />
-                <span className="text-sm text-muted-foreground">
-                  123 Rue de la Liberté, 59000 Lille, France
+                <span className="text-sm text-muted-foreground transition-colors group-hover:text-foreground">
+                  10 Bd de la Liberté, 59000 Lille, France
                 </span>
-              </div>
+              </Link>
             </div>
           </div>
           <hr className="mt-16 block w-2/3 border-gray-900/10 xl:hidden" />

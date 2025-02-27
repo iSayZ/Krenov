@@ -43,7 +43,7 @@ const Testimonials: React.FC = () => {
                     />
                   ))}
                 </div>
-                <p className="md:h-[7.5rem] lg:h-[6rem] mb-4 text-muted-foreground">
+                <p className="mb-4 text-muted-foreground md:h-[7.5rem] lg:h-24">
                   {testimonial.content}
                 </p>
                 <div>
