@@ -131,9 +131,14 @@ export default function Footer() {
         </div>
         <div className="mt-16 border-t border-gray-900/10 pt-8 sm:mt-20 lg:mt-24">
           <div className="flex flex-col-reverse items-center gap-8 sm:flex-row sm:justify-between">
-            <p className="text-xs leading-5 text-muted-foreground">
-              &copy; 2024 {process.env.NEXT_PUBLIC_APP_NAME}. Tous droits réservés.
-            </p>  
+          <p className="text-xs leading-5 text-muted-foreground">
+            &copy; {new Date().getFullYear()} {process.env.NEXT_PUBLIC_APP_NAME}. Tous droits réservés.  
+            Site web conçu et développé par 
+            <Link target='_blank' href="https://www.linkedin.com/in/alexis-estrine/" className="font-semibold underline hover:text-primary ml-1">
+              Alexis Estrine
+            </Link>.
+          </p>
+
             <div className="flex space-x-6">
               {navigation.social.map((item) => (
                 <Link
