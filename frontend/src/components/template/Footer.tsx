@@ -22,8 +22,11 @@ const navigation = {
     { name: 'Carrières', href: '/carrieres' },
   ],
   legal: [
-    { name: 'Politique de confidentialité', href: '/politique-de-confidentialite' },
-    { name: "Conditions d'utilisation", href: '/terms' },
+    {
+      name: 'Politique de confidentialité',
+      href: '/politique-de-confidentialite',
+    },
+    { name: "Conditions d'utilisation", href: '/conditions-utilisation' },
   ],
   social: [
     {
@@ -46,7 +49,7 @@ const navigation = {
 
 export default function Footer() {
   return (
-    <footer className="bg-background border-t border-muted">
+    <footer className="border-t border-muted bg-background">
       <div className="mx-auto px-6 pb-8 pt-16 sm:pt-24 lg:px-8 lg:pt-24">
         <div className="flex flex-col items-center xl:flex-row xl:justify-center">
           <div className="max-w-md space-y-8 text-center xl:text-left">
