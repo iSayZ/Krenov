@@ -106,43 +106,43 @@ export default function Services() {
 
       {/* Services Details */}
       <section id="services">
-            {services.map((service, index) => (
-              <div
-                key={service.name}
-                id={service.id}
-                className={`flex flex-col gap-12 lg:flex-row px-6 py-20 ${
-                  index % 2 === 1 ? 'lg:flex-row-reverse bg-secondary' : ''
-                }`}
-              >
-                <div className="flex-1">
-                  <div className="relative h-[400px] overflow-hidden rounded-lg">
-                    <Image
-                      src={service.image}
-                      alt={service.name}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                </div>
-                <div className="flex-1 space-y-6">
-                  <h2 className="text-3xl font-bold">{service.name}</h2>
-                  <p className="text-lg text-muted-foreground">
-                    {service.description}
-                  </p>
-                  <ul className="space-y-3">
-                    {service.features.map((feature) => (
-                      <li key={feature} className="flex items-center gap-2">
-                        <ChevronRight className="size-4 text-primary" />
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <Button size="lg" asChild>
-                    <Link href="/devis">Demander un devis</Link>
-                  </Button>
-                </div>
+        {services.map((service, index) => (
+          <div
+            key={service.name}
+            id={service.id}
+            className={`flex flex-col gap-12 px-6 py-20 lg:flex-row ${
+              index % 2 === 1 ? 'bg-secondary lg:flex-row-reverse' : ''
+            }`}
+          >
+            <div className="flex-1">
+              <div className="relative h-[400px] overflow-hidden rounded-lg">
+                <Image
+                  src={service.image}
+                  alt={service.name}
+                  fill
+                  className="object-cover"
+                />
               </div>
-            ))}
+            </div>
+            <div className="flex-1 space-y-6">
+              <h2 className="text-3xl font-bold">{service.name}</h2>
+              <p className="text-lg text-muted-foreground">
+                {service.description}
+              </p>
+              <ul className="space-y-3">
+                {service.features.map((feature) => (
+                  <li key={feature} className="flex items-center gap-2">
+                    <ChevronRight className="size-4 text-primary" />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              <Button size="lg" asChild>
+                <Link href="/devis">Demander un devis</Link>
+              </Button>
+            </div>
+          </div>
+        ))}
       </section>
     </div>
   );
