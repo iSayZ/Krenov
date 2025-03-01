@@ -10,27 +10,27 @@ const Services: React.FC = () => {
       description:
         'Transformation totale de votre espace avec une approche clé en main.',
       icon: Paintbrush,
-      href: '/services/renovation-complete',
+      href: '/services#renovation-complete',
     },
     {
       name: 'Cuisine',
       description:
         'Créez la cuisine de vos rêves, alliant fonctionnalité et esthétique.',
       icon: Paintbrush,
-      href: '/services/cuisine',
+      href: '/services#cuisine',
     },
     {
       name: 'Salle de bain',
       description:
         'Modernisez votre salle de bain pour plus de confort et de style.',
       icon: Bath,
-      href: '/services/salle-de-bain',
+      href: '/services#salle-de-bain',
     },
     {
       name: 'Commercial',
       description: 'Solutions sur mesure pour vos espaces commerciaux.',
       icon: Building2,
-      href: '/services/commercial',
+      href: '/services#commercial',
     },
   ];
 
@@ -51,7 +51,6 @@ const Services: React.FC = () => {
               className="group cursor-pointer transition-shadow hover:shadow-lg"
             >
               <CardContent className="p-6">
-                {/* <service.icon className="mb-4 size-12 text-primary" /> */}
                 <h3 className="mb-4 text-xl font-semibold">{service.name}</h3>
                 <p className="mb-6 line-clamp-3 h-[4.5rem] text-muted-foreground">
                   {service.description}
