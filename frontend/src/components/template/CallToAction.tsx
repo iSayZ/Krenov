@@ -5,18 +5,18 @@ import { Button } from '@/components/ui/button';
 
 const CallToAction: React.FC = () => {
   return (
-    <section className="py-16 text-primary-foreground md:py-24 relative">
-  <div className="absolute inset-0 z-0">
-    <Image
-      src="https://images.unsplash.com/photo-1600585152220-90363fe7e115?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-      alt="Services de rénovation"
-      fill
-      className="object-cover"
-      priority
-    />
-    <div className="bg-black/50 absolute inset-0 z-20" />
-  </div>
-  <div className="flex w-full flex-col items-center px-6 relative z-10">
+    <section className="relative py-16 text-primary-foreground md:py-24">
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/assets/images/cta_bg.avif"
+          alt="Services de rénovation"
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 z-20 bg-black/50" />
+      </div>
+      <div className="relative z-10 flex w-full flex-col items-center px-6">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="mb-4 text-3xl font-bold">
             Prêt à transformer votre espace?
