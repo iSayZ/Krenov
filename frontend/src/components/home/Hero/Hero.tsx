@@ -11,10 +11,10 @@ const Hero: React.FC = () => {
         src="/assets/images/background.jpg"
         alt="Rénovation moderne"
         fill
-        className="object-cover"
+        className="object-cover pt-16"
         priority
       />
-      <div className="absolute inset-0 bg-black/20" />
+      <div className="absolute inset-0 bg-black/50 top-16" />
       <div className="absolute inset-0 mt-16 flex items-center justify-center">
         <div className="space-y-6 p-4 text-center">
           <h1 className="max-w-4xl text-4xl font-bold text-white md:text-6xl">
@@ -24,7 +24,7 @@ const Hero: React.FC = () => {
             Des rénovations résidentielles et commerciales sur mesure pour
             donner vie à vos projets
           </p>
-          <Button size="lg" asChild>
+          <Button size="lg" variant="secondary" asChild>
             <Link href="/devis">
               Demander un devis gratuit
               <ChevronRight className="ml-2 size-4" />
