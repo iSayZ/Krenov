@@ -8,7 +8,7 @@ import { Separator } from '@/components/ui/separator';
 
 const TermsOfService: NextPage = () => {
   return (
-    <>
+    <div className='size-full bg-secondary'>
       <Head>
         <title>
           Conditions d'utilisation | {process.env.NEXT_PUBLIC_APP_NAME}
@@ -20,7 +20,7 @@ const TermsOfService: NextPage = () => {
         id="conditions-utilisation"
         className="mx-auto mt-16 max-w-4xl px-4 py-8"
       >
-        <Card className="w-full">
+        <Card className="w-full bg-background">
           <CardHeader className="text-center">
             <CardTitle className="text-3xl font-bold">
               Conditions Générales d'Utilisation
@@ -245,7 +245,7 @@ const TermsOfService: NextPage = () => {
           </CardContent>
         </Card>
       </section>
-    </>
+    </div>
   );
 };
 

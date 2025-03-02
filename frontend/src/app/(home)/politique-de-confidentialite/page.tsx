@@ -8,7 +8,7 @@ import { Separator } from '@/components/ui/separator';
 
 const PrivacyPolicy: NextPage = () => {
   return (
-    <>
+    <div className='size-full bg-secondary'>
       <Head>
         <title>
           Politique de confidentialité | {process.env.NEXT_PUBLIC_APP_NAME}
@@ -17,7 +17,7 @@ const PrivacyPolicy: NextPage = () => {
       </Head>
 
       <section id="privacy" className="mx-auto mt-16 max-w-4xl px-4 py-8">
-        <Card className="w-full">
+        <Card className="w-full bg-background">
           <CardHeader className="text-center">
             <CardTitle className="text-3xl font-bold">
               Politique de Confidentialité
@@ -202,7 +202,7 @@ const PrivacyPolicy: NextPage = () => {
           </CardContent>
         </Card>
       </section>
-    </>
+    </div>
   );
 };
 
