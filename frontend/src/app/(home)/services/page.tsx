@@ -154,13 +154,13 @@ const Services: NextPage = () => {
             </div>
             <div className="flex-1 space-y-6">
               <h2 className="text-3xl font-bold">{service.name}</h2>
-              <p className="text-muted-foreground text-lg">
+              <p className="text-lg text-muted-foreground">
                 {service.description}
               </p>
               <ul className="space-y-3">
                 {service.features.map((feature) => (
                   <li key={feature} className="flex items-center gap-2">
-                    <ChevronRight className="text-primary size-4" />
+                    <ChevronRight className="size-4 text-primary" />
                     <span>{feature}</span>
                   </li>
                 ))}
@@ -174,6 +174,6 @@ const Services: NextPage = () => {
       </section>
     </div>
   );
-}
+};
 
 export default Services;
