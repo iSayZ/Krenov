@@ -10,16 +10,16 @@ import Link from 'next/link';
 
 const navigation = {
   services: [
-    { name: 'Rénovation complète', href: '/services/renovation-complete' },
-    { name: 'Cuisine', href: '/services/cuisine' },
-    { name: 'Salle de bain', href: '/services/salle-de-bain' },
-    { name: 'Commercial', href: '/services/commercial' },
+    { name: 'Rénovation complète', href: '/services#renovation-complete' },
+    { name: 'Cuisine', href: '/services#cuisine' },
+    { name: 'Salle de bain', href: '/services#salle-de-bain' },
+    { name: 'Commercial', href: '/services#commercial' },
   ],
   company: [
-    { name: 'À propos', href: '/about' },
-    { name: 'Blog', href: '/blog' },
+    { name: 'À propos', href: '/a-propos' },
+    { name: 'Réalisations', href: '/realisations' },
     { name: 'Contact', href: '/contact' },
-    { name: 'Carrières', href: '/carrieres' },
+    { name: 'Demander un devis', href: '/demander-un-devis' },
   ],
   legal: [
     {

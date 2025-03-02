@@ -21,8 +21,7 @@ const services = [
     description:
       "Transformation totale de votre espace avec une approche clé en main. Notre équipe prend en charge l'intégralité du projet, de la conception à la réalisation.",
     icon: Paintbrush,
-    image:
-      '/assets/images/services/cover-renovation-complete.webp',
+    image: '/assets/images/services/cover-renovation-complete.webp',
     features: [
       'Planification et design',
       'Gestion de projet complète',
@@ -37,8 +36,7 @@ const services = [
     description:
       "Créez la cuisine de vos rêves, alliant fonctionnalité et esthétique. Nos designers travaillent avec vous pour optimiser l'espace et choisir les meilleurs matériaux.",
     icon: Kitchen,
-    image:
-      '/assets/images/services/cover-cuisine.webp',
+    image: '/assets/images/services/cover-cuisine.webp',
     features: [
       'Design personnalisé',
       'Choix des matériaux et finitions',
@@ -53,8 +51,7 @@ const services = [
     description:
       'Modernisez votre salle de bain pour plus de confort et de style. Nous créons des espaces élégants et fonctionnels adaptés à vos besoins.',
     icon: Bath,
-    image:
-      '/assets/images/services/cover-salle-de-bain.webp',
+    image: '/assets/images/services/cover-salle-de-bain.webp',
     features: [
       'Design contemporain',
       'Douches sur mesure',
@@ -69,8 +66,7 @@ const services = [
     description:
       'Solutions sur mesure pour vos espaces commerciaux. Nous transformons votre lieu de travail en respectant vos contraintes opérationnelles.',
     icon: Building2,
-    image:
-      '/assets/images/services/cover-commercial.webp',
+    image: '/assets/images/services/cover-commercial.webp',
     features: [
       "Aménagement d'espaces de travail",
       'Rénovation de boutiques',
