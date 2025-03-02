@@ -8,7 +8,7 @@ const CallToAction: React.FC = () => {
     <section className="relative py-16 text-primary-foreground md:py-24">
       <div className="absolute inset-0 z-0">
         <Image
-          src="/assets/images/cta_bg.avif"
+          src="/assets/images/template/cta-bg.avif"
           alt="Services de rénovation"
           fill
           className="object-cover"

@@ -82,18 +82,18 @@ const services = [
 ];
 
 export default function Services() {
-
   const searchParams = useSearchParams();
-  
+
   useEffect(() => {
     const handleHash = () => {
       const hash = window.location.hash;
-      
+
       if (hash) {
         setTimeout(() => {
           const element = document.getElementById(hash.substring(1));
           if (element) {
-            const offsetPosition = element.getBoundingClientRect().top + window.scrollY - 64;
+            const offsetPosition =
+              element.getBoundingClientRect().top + window.scrollY - 64;
             window.scrollTo({
               top: offsetPosition,
             });
@@ -101,22 +101,22 @@ export default function Services() {
         }, 100);
       }
     };
-    
+
     handleHash();
-    
+
     window.addEventListener('hashchange', handleHash);
-    
+
     return () => {
       window.removeEventListener('hashchange', handleHash);
     };
   }, [searchParams]);
-  
+
   return (
     <div className="mt-16 flex flex-col">
       {/* Hero Section */}
       <section className="relative h-[60vh]">
         <Image
-          src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=2071&auto=format&fit=crop"
+          src="/assets/images/services/hero-bg.avif"
           alt="Services de rénovation"
           fill
           className="object-cover"
@@ -157,13 +157,13 @@ export default function Services() {
             </div>
             <div className="flex-1 space-y-6">
               <h2 className="text-3xl font-bold">{service.name}</h2>
-              <p className="text-muted-foreground text-lg">
+              <p className="text-lg text-muted-foreground">
                 {service.description}
               </p>
               <ul className="space-y-3">
                 {service.features.map((feature) => (
                   <li key={feature} className="flex items-center gap-2">
-                    <ChevronRight className="text-primary size-4" />
+                    <ChevronRight className="size-4 text-primary" />
                     <span>{feature}</span>
                   </li>
                 ))}
