@@ -7,6 +7,7 @@ import {
   Building2,
   ChevronRight,
 } from 'lucide-react';
+import { NextPage } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -77,7 +78,7 @@ const services = [
   },
 ];
 
-export default function Services() {
+const Services: NextPage = () => {
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -153,13 +154,13 @@ export default function Services() {
             </div>
             <div className="flex-1 space-y-6">
               <h2 className="text-3xl font-bold">{service.name}</h2>
-              <p className="text-lg text-muted-foreground">
+              <p className="text-muted-foreground text-lg">
                 {service.description}
               </p>
               <ul className="space-y-3">
                 {service.features.map((feature) => (
                   <li key={feature} className="flex items-center gap-2">
-                    <ChevronRight className="size-4 text-primary" />
+                    <ChevronRight className="text-primary size-4" />
                     <span>{feature}</span>
                   </li>
                 ))}
@@ -174,3 +175,5 @@ export default function Services() {
     </div>
   );
 }
+
+export default Services;

@@ -1,3 +1,4 @@
+import { NextPage } from 'next';
 import React from 'react';
 
 import Hero from '@/components/home/Hero/Hero';
@@ -22,7 +23,7 @@ const fetchArticles = async (): Promise<Realisation[]> => {
   return response.json();
 };
 
-const App: React.FC = async () => {
+const App: NextPage = async () => {
   const articles = await fetchArticles();
 
   return (
