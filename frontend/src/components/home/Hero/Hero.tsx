@@ -14,7 +14,7 @@ const Hero: React.FC = () => {
         className="object-cover pt-16"
         priority
       />
-      <div className="absolute inset-0 bg-black/50 top-16" />
+      <div className="absolute inset-0 top-16 bg-black/50" />
       <div className="absolute inset-0 mt-16 flex items-center justify-center">
         <div className="space-y-6 p-4 text-center">
           <h1 className="max-w-4xl text-4xl font-bold text-white md:text-6xl">

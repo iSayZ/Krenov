@@ -9,6 +9,8 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 
 import { Button } from '@/components/ui/button';
 
@@ -80,6 +82,35 @@ const services = [
 ];
 
 export default function Services() {
+
+  const searchParams = useSearchParams();
+  
+  useEffect(() => {
+    const handleHash = () => {
+      const hash = window.location.hash;
+      
+      if (hash) {
+        setTimeout(() => {
+          const element = document.getElementById(hash.substring(1));
+          if (element) {
+            const offsetPosition = element.getBoundingClientRect().top + window.scrollY - 64;
+            window.scrollTo({
+              top: offsetPosition,
+            });
+          }
+        }, 100);
+      }
+    };
+    
+    handleHash();
+    
+    window.addEventListener('hashchange', handleHash);
+    
+    return () => {
+      window.removeEventListener('hashchange', handleHash);
+    };
+  }, [searchParams]);
+  
   return (
     <div className="mt-16 flex flex-col">
       {/* Hero Section */}
@@ -126,13 +157,13 @@ export default function Services() {
             </div>
             <div className="flex-1 space-y-6">
               <h2 className="text-3xl font-bold">{service.name}</h2>
-              <p className="text-lg text-muted-foreground">
+              <p className="text-muted-foreground text-lg">
                 {service.description}
               </p>
               <ul className="space-y-3">
                 {service.features.map((feature) => (
                   <li key={feature} className="flex items-center gap-2">
-                    <ChevronRight className="size-4 text-primary" />
+                    <ChevronRight className="text-primary size-4" />
                     <span>{feature}</span>
                   </li>
                 ))}
