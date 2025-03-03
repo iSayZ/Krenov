@@ -19,7 +19,7 @@ const navigation = {
     { name: 'À propos', href: '/a-propos' },
     { name: 'Réalisations', href: '/realisations' },
     { name: 'Contact', href: '/contact' },
-    { name: 'Demander un devis', href: '/demander-un-devis' },
+    { name: 'Demander un devis', href: '/devis' },
   ],
   legal: [
     {

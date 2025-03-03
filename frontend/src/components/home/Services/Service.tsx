@@ -1,11 +1,10 @@
-"use client";
+'use client';
 
 import { ChevronRight, Paintbrush, Bath, Building2 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { Card, CardContent } from '@/components/ui/card';
-
 
 const Services: React.FC = () => {
   const services = [
@@ -45,7 +44,7 @@ const Services: React.FC = () => {
       <div className="flex w-full flex-col items-center px-6">
         <div className="mb-16 text-center">
           <h2 className="mb-4 text-3xl font-bold">Nos Services</h2>
-          <p className="text-muted-foreground mx-auto max-w-2xl">
+          <p className="mx-auto max-w-2xl text-muted-foreground">
             Découvrez notre gamme complète de services de rénovation, conçus
             pour répondre à tous vos besoins
           </p>
@@ -59,12 +58,12 @@ const Services: React.FC = () => {
             >
               <CardContent className="p-6">
                 <h3 className="mb-4 text-xl font-semibold">{service.name}</h3>
-                <p className="text-muted-foreground mb-6 line-clamp-3 h-[4.5rem]">
+                <p className="mb-6 line-clamp-3 h-[4.5rem] text-muted-foreground">
                   {service.description}
                 </p>
                 <Link
                   href={service.href}
-                  className="text-primary inline-flex items-center font-medium group-hover:underline"
+                  className="inline-flex items-center font-medium text-primary group-hover:underline"
                 >
                   En savoir plus
                   <ChevronRight className="ml-1 size-4" />
