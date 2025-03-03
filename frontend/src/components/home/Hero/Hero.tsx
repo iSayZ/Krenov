@@ -8,7 +8,7 @@ const Hero: React.FC = () => {
   return (
     <section className="relative h-screen">
       <Image
-        src="/assets/images/template/background.jpg"
+        src="/assets/images/template/background.avif"
         alt="Rénovation moderne"
         fill
         className="object-cover pt-16"

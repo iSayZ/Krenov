@@ -78,7 +78,7 @@ const services = [
   },
 ];
 
-const Services: NextPage = () => {
+const ServicesPage: NextPage = () => {
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -176,4 +176,4 @@ const Services: NextPage = () => {
   );
 };
 
-export default Services;
+export default ServicesPage;
