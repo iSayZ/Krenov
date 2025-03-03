@@ -47,7 +47,11 @@ const Navbar = () => {
 
         {/* Desktop CTA */}
         <div className="hidden md:flex">
-          <Button>Demander un devis</Button>
+          <Button asChild>
+                  <Link href="/devis">
+                    Demander un devis
+                  </Link>
+                </Button>
         </div>
 
         {/* Mobile Navigation */}
@@ -70,7 +74,11 @@ const Navbar = () => {
                     {item.label}
                   </Link>
                 ))}
-                <Button className="mt-4">Demander un devis</Button>
+                <Button className="mt-4" asChild>
+                  <Link href="/devis">
+                    Demander un devis
+                  </Link>
+                </Button>
               </div>
             </SheetContent>
           </Sheet>
